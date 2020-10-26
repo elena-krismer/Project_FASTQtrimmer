@@ -1,4 +1,17 @@
 import sys
+#to read compresed files
+import gzip
+import re
+imputfile=input("Please, write the name of your file: ")
+typefile= re.search(r'\S*\.gz', imputfile)
+if typefile:
+   with gzip.open(imputfile) as f:
+      for line in f:
+        print(line)
+else:
+   with open(imputfile) as f:
+      for line in f:
+         print(line)
 
 #Autodetect the quality scale of a file (phred+33 or phred+64
 def detect_quality():
