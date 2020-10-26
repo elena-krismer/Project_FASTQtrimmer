@@ -1,5 +1,5 @@
 import sys
-#to read compresed files
+#to read the fastq files
 import gzip
 import re
 imputfile=input("Please, write the name of your file: ")
