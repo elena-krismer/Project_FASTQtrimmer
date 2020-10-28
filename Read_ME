@@ -1,0 +1,54 @@
+
+# Project NGS
+- Outputfile: gzip or 'normal' - call it **XXXX.trim.fastq.gz**
+
+## Things defined by the user:
+- triming on 3' and 5' end
+- mean quality score 
+- length of reads
+- number of N bases 
+
+### def detect_quality():
+The string containing the Q-score gets passed to the function and string gets converted into a list with corresponeding
+ASCII values. The max and min value of the list is used to determine the range and so the Phred score.
+    
+    input: string containing the fourth line
+    returns: phred scale (33/64)
+
+### def trim3_user():
+    input: sequence line and number of trimes according to user input
+    output: trimmed string
+
+
+### def trim3_quality():
+Trim each read from the 3' based on quality, either as minimum (single residue) or mean of moving window.
+
+    input:
+    output:
+
+Trim X nucleotides from the 5' of each read given user input
+### def trim5_user():
+    input:
+    output
+
+These trims from 5' can be done independently of each other in above order.
+### def trim5_quality():
+    input:
+    output:
+
+Filter out reads with a mean quality lower than specified after trimming.
+### def filter_quality():
+    input:
+    output:
+
+Filter out reads that are shorter than specified after trimming.
+### def filter_short():
+    input:
+    output:
+
+Filter out reads that have a more than a specified number of N bases (unknown bases).
+### def filter_bases():
+    input:
+    ouput:
+
+until position 25 no errors -is our file filtered? in @ line Y=filtered,N otherwise

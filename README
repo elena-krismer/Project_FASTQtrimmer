@@ -1,12 +1,16 @@
-def detect_quality():
+
+## Project NGS
+- Outputfile: gzip or 'normal' - call it XXXX.trim.fastq.gz
+
+# def detect_quality():
 The string containing the Q-score gets passed to the function and string gets converted into a list with corresponeding
 ASCII values. The max and min value of the list is used to determine the range and so the Phred score.
     input: string containing the fourth line
     returns: phred scale (33/64)
 
-def trim3_user():
-    input: number to trim
-    output:
+#def trim3_user():
+    input: sequence line and number of trimes according to user input
+    output: trimmed string
 
 # Trim each read from the 3' based on quality, either as minimum (single residue) or mean of moving window.
 def trim3_quality():

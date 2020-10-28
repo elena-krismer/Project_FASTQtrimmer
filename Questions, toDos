@@ -1,0 +1,33 @@
+## Questions and CO
+
+ Maybe read file twice
+- first read: triming - storing in file (creating list with corresponding phred score)
+- second read: filtering (while reading second file counting N bases)
+
+- create a dict which contains N bases with strings 
+    -- read is the key, number of nbases is the value
+- create dict with quality
+
+### open the document several times?
+- open the document several times and perform functions ! performance
+- open once perform all functions?
+
+possibility to use a dict for improvement - but have to read
+
+***to do while reading***
+- save number of n bases in variable - create dict? 
+
+
+###Trimming
+
+Are there any issues that could come up when triming? Anything to keep 
+in mind? 
+
+### Improving runtime 
+find alternatives for loops
+
+### Storing File 
+gzip is preferable improvement in runtime 
+
+### Things to mention in the report
+Whats the difference between Phred scores 
