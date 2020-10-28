@@ -47,7 +47,7 @@ def first_clean(infile, trimfile):
                outfile.write()
 infile.close()
 
-def second_clean(file):
+def second_clean(file): # +pass variables for filter functions
    with open('trimfile', 'r') as trimfile:
       with open('finalfile', 'w') as finalfile:
          for line in trimfile:
@@ -61,9 +61,10 @@ def second_clean(file):
             if line.startswith('+'):
                line_three = line
             qual_line = line
-            if filter_quality(seq_line) == True and filter_bases(seq_line) == True and filter_short(seq_line, threshold_reads) == True:
-               finalfile.write(line_one + seq_line + line_three + qual_line)
-               line_one, seq_line, line_three, qual_line = '', '', '', ''
+            if line_one is not None and seq_line is not None and line_three is not None and qual_line is not None:
+               if filter_quality(seq_line) == True and filter_bases(seq_line) == True and filter_short(seq_line, threshold_reads) == True:
+                  finalfile.write(line_one + seq_line + line_three + qual_line)
+            line_one, seq_line, line_three, qual_line = '', '', '', ''
 
 
 #Autodetect the quality scale of a file (phred+33 or phred+64
@@ -101,6 +102,7 @@ def trim5_quality():
 
 # Filter out reads with a mean quality lower than specified after trimming.
 def filter_quality(qual_line, quality):
+   # probably error because of dtype
    if mean(qual_line) > quality:
       return True
    else:

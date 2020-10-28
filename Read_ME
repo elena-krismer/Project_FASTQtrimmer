@@ -7,6 +7,18 @@
 - mean quality score 
 - length of reads
 - number of N bases 
+### first_clean()
+
+    input: infile, trimfile
+reads all lines into trimfile and performs triming on seq_line and phred_line
+
+
+### second_clean()
+    input: trimfile variables which are required for the filter functions
+saves all lines until the four lines are read
+when all three filters are passed (quality, nbases, length)
+the block will be written into the output file
+afterwards the lines are cleared again
 
 ### def detect_quality():
 The string containing the Q-score gets passed to the function and string gets converted into a list with corresponeding
@@ -38,13 +50,13 @@ These trims from 5' can be done independently of each other in above order.
 
 Filter out reads with a mean quality lower than specified after trimming.
 ### def filter_quality():
-    input:
-    output:
+    input: *qual_line* string containing the phred score and *quality* quality threshold given from user
+    output: *True* when the if-statements applies, else count has to be added to filter variable
 
 Filter out reads that are shorter than specified after trimming.
 ### def filter_short():
-    input:
-    output:
+    input: *seq_line* *threshold_reads* user input
+    output: *True* when if condition applies, else +1 triming variable 
 
 Filter out reads that have a more than a specified number of N bases (unknown bases).
 ### def filter_bases():
