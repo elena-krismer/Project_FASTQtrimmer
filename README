@@ -1,6 +1,8 @@
 def detect_quality():
-    input:
-    output
+The string containing the Q-score gets passed to the function and string gets converted into a list with corresponeding
+ASCII values. The max and min value of the list is used to determine the range and so the Phred score.
+    input: string containing the fourth line
+    returns: phred scale (33/64)
 
 def trim3_user():
     input: number to trim

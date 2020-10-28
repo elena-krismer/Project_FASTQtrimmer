@@ -2,29 +2,31 @@ import sys
 #to read the fastq files
 import gzip
 import re
-imputfile=input("Please, write the name of your file: ")
-typefile= re.search(r'\S*\.gz', imputfile)
+inputfile=input("Please, write the name of your file: ")
+typefile= re.search(r'\S*\.gz', inputfile)
 if typefile:
-   with gzip.open(imputfile) as f:
+   with gzip.open(inputfile) as f:
       for line in f:
         print(line)
 else:
-   with open(imputfile) as f:
+   with open(inputfile) as f:
       for line in f:
          print(line)
 
 #Autodetect the quality scale of a file (phred+33 or phred+64
-def detect_quality():
-# use python cookbook
-# filter whether sanger or illumina?
-# S - Sanger        Phred+33,  raw reads typically (0, 40)
-# X - Solexa        Solexa+64, raw reads typically (-5, 40)
-# I - Illumina 1.3+ Phred+64,  raw reads typically (0, 40)
-# J - Illumina 1.5+ Phred+64,  raw reads typically (3, 41)
-# with 0=unused, 1=unused, 2=Read Segment Quality Control Indicator (bold)
-# (Note: See discussion above).
-# L - Illumina 1.8+ Phred+33,  raw reads typically (0, 41)
-# P - PacBio        Phred+33,  HiFi reads typically (0, 93
+def detect_quality(ascii_string):
+   phred_scale = ''
+   ascii_list = [ord(ascii_value) for ascii_value in ascii_string]
+   # phred 33 range= 33-75
+   if max(ascii_list) <= 75 and min(ascii_list) < 59:
+      phred_scale = 33
+   # phred 64 range = 64 - 106
+   elif max(ascii_list) > 75 and min(ascii_list) >= 64:
+      phred_scale = 64
+   else:
+      print("Error in determining quality scale")
+      sys.exit(1)
+   return phred_scale
 
 # Trim X nucleotides from the 3' of each read given user input
 def trim3_user():
