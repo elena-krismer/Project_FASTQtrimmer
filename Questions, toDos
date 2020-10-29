@@ -25,9 +25,11 @@ in mind?
 
 ### Improving runtime 
 find alternatives for loops
+maybe add datatype to variables for runtime improvement 
 
 ### Storing File 
 gzip is preferable improvement in runtime 
 
 ### Things to mention in the report
 Whats the difference between Phred scores 
+
