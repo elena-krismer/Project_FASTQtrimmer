@@ -17,6 +17,8 @@ possibility to use a dict for improvement - but have to read
 ***to do while reading***
 - save number of n bases in variable - create dict? 
 
+https://github.com/stephenfloor/filter-fastq/blob/master/filter_fastq.py
+
 
 ###Trimming
 

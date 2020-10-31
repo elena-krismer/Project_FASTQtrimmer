@@ -1,3 +1,4 @@
 by adding 
 
-Input from user as global variables
+Input from user as global variables - not sure because of performance
+read file once into list 
