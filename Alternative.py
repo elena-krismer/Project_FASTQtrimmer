@@ -20,7 +20,7 @@ def trim_user(seq_line, trim3, trim5):
     trim_line = trim_line[trim5:]
     return trim_line
 
-# adding function for trimming window
+# adding function for trimming window???
 # problems in determining phred scale  - use maybe elif to check the next read for quality if the first doesnt work
 def detect_quality(ascii_string):
     ascii_list = [ord(ascii_value) for ascii_value in ascii_string]
