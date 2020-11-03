@@ -31,10 +31,11 @@ fun #line added to run the example
 
 
 
-# user input - global or not  - bad for runtime
+# user input - global or not  - bad for runtime ###R= Right I will takes more time I was thinking to do interactive but with a line could be done
 # nt3_input, nt5_input, threshold_reads_input, quality_input, n_bases_input = None, None, None, None, None
 
 # counting triming
+
 
 # filtered reads is this possible as global variable????
 from pip._vendor.certifi.__main__ import args
