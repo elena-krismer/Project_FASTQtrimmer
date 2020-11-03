@@ -4,27 +4,30 @@ import gzip
 import re
 import argparse
 
-#I think the first step would be open the file. I did some changes because the code didn't run but now it works. In the modifications you added I saw that you suggest to save the file in a list, it's added
+#I think the first step would be open the file. I did some changes because the code didn't run but now it works. 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('file')
 args = parser.parse_args()
 
 def open_file(filename):
-   file_list=list()
-   file_listb=list()
-   typefile = re.search(r'\S*\.gz', args.file)
+   typefile = re.search(r'\S*\.gz', args.file)  
    if typefile:
       with gzip.open(args.file) as f:
-         for line in f:
-          file_list.append(line) #is the best way to save the lines??
-      print(file_list) #we can remove it I just printed to see if it works
+         lines=f.readlines()
+         head=[item[:-1] for item in lines[::4]]
+         read=[item[:-1] for item in lines[1::4]]
+         qual=[item[:-1] for item in lines[3::4]]
+         data=dict(zip(read,qual))
+         print(data)      
    else:
       with open(args.file) as f:
-         for line in f:
-          file_listb.append(line)
-      print(file_listb) #we can remove it I just printed to see if it works
-
+         lines=f.readlines()
+         head=[item[:-1] for item in lines[::4]]
+         read=[item[:-1] for item in lines[1::4]]
+         qual=[item[:-1] for item in lines[3::4]]
+         data=dict(zip(read,qual))
+         print(data)
 fun=open_file(args.file) #lines added to run the example
 fun #line added to run the example
 
