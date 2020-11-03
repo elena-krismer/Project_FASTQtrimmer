@@ -4,6 +4,33 @@ import gzip
 import re
 import argparse
 
+#I think the first step would be open the file. I did some changes because the code didn't run but now it works. In the modifications you added I saw that you suggest to save the file in a list, it's added
+
+parser = argparse.ArgumentParser()
+parser.add_argument('file')
+args = parser.parse_args()
+
+def open_file(filename):
+   file_list=list()
+   file_listb=list()
+   typefile = re.search(r'\S*\.gz', args.file)
+   if typefile:
+      with gzip.open(args.file) as f:
+         for line in f:
+          file_list.append(line) #is the best way to save the lines??
+      print(file_list) #we can remove it I just printed to see if it works
+   else:
+      with open(args.file) as f:
+         for line in f:
+          file_listb.append(line)
+      print(file_listb) #we can remove it I just printed to see if it works
+
+fun=open_file(args.file) #lines added to run the example
+fun #line added to run the example
+
+
+
+
 # user input - global or not  - bad for runtime
 # nt3_input, nt5_input, threshold_reads_input, quality_input, n_bases_input = None, None, None, None, None
 
