@@ -4,41 +4,10 @@ import gzip
 import re
 import argparse
 
-#I think the first step would be open the file. I did some changes because the code didn't run but now it works. 
-
-parser = argparse.ArgumentParser()
-parser.add_argument('file')
-args = parser.parse_args()
-
-def open_file(filename):
-   typefile = re.search(r'\S*\.gz', args.file)  
-   if typefile:
-      with gzip.open(args.file) as f:
-         lines=f.readlines()
-         head=[item[:-1] for item in lines[::4]]
-         read=[item[:-1] for item in lines[1::4]]
-         qual=[item[:-1] for item in lines[3::4]]
-         data=dict(zip(read,qual))
-         print(data)      
-   else:
-      with open(args.file) as f:
-         lines=f.readlines()
-         head=[item[:-1] for item in lines[::4]]
-         read=[item[:-1] for item in lines[1::4]]
-         qual=[item[:-1] for item in lines[3::4]]
-         data=dict(zip(read,qual))
-         print(data)
-fun=open_file(args.file) #lines added to run the example
-fun #line added to run the example
-
-
-
-
-# user input - global or not  - bad for runtime ###R= Right I will takes more time I was thinking to do interactive but with a line could be done
+# user input - global or not  - bad for runtime
 # nt3_input, nt5_input, threshold_reads_input, quality_input, n_bases_input = None, None, None, None, None
 
 # counting triming
-
 
 # filtered reads is this possible as global variable????
 from pip._vendor.certifi.__main__ import args
@@ -50,9 +19,28 @@ def trim_user(seq_line, trim3, trim5):
     trim_line = seq_line[trim5:trim3]
     return trim_line
 
+
 # quality score below 20 is considered low quality
 # should user change
-def trim_quality(seq_line, ):
+# the sliding window uses a relatively standard approach. this works by scanning from 5' end of the read and removes 3' end of the read when the a
+# average quality of a group of bases drops below a specified threshold. This prevents a single weak base casusing the removal of subsequent high
+# quality data,while still ensuring that ... (Bolger et al., 2014)
+def trim_quality(seq_line, qual_line, phred):
+    ascii_list = [ord(ascii_value) for ascii_value in qual_line]
+    ascii_str = None
+    if phred == '33':
+        for val in ascii_list:
+            val = int(val)
+            while val in ascii_list > 53:
+                ascii_str += ord(val)
+
+    elif phred == '64':
+        for val in ascii_list:
+            val = int(val)
+            while val in ascii_list > 84:
+                ascii_str += ord(val)
+    # cut the sequence the same length as the quality line
+    return seq_line[0:len(ascii_str)], ascii_str
 
 
 # adding function for trimming window???
@@ -116,53 +104,61 @@ def summary_file(summaryfile, quality, nbases, length):
 
 def run(args):
     file_list = list()
-    # nputfile = input("Please, write the name of your file: ")
-    # typefile = re.search(r'\S*\.gz', inputfile)
-    # if typefile:
-    #     with gzip.open(inputfile) as f:
-    #         for line in f:
-    #             print(line)
-    # else:
-    #     with open(inputfile) as f:
-    #         for line in f:
-    #             print(line)
-    # typefile = re.search(r'\S*\.gz', args.input)  # works filedirectory as string?
-    # if typefile:
-    #     infile = gzip.open(args.input)
-    # else:
-    #     infile = open(args.input)
-    with open(args.input, 'r') as infile:
-        # file_list = [line.append(line) for line in infile]
-        for line in infile:
-            []
-            file_list.append(line)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file')
+    args = parser.parse_args()
+
+    typefile = re.search(r'\S*\.gz', args.input)
+    if typefile:
+        with gzip.open(args.file) as infile:
+            file_list = [file_list.append(line.strip('\n')) for line in infile]
         infile.close()
+    else:
+        with open(args.file) as infile:
+            file_list = [file_list.append(line.strip('\n')) for line in infile]
+    infile.close()
+
+    if file_list[0][0] != '@' or file_list[2][0] != '+' or re.search(r'[^ATGCN]', file_list[1]) is not None:
+        print('Error in fileformat.')
+        sys.exit(1)
 
     # trimming sequence
-    length = len(file_list)
-    pos_seq = 1
-    while pos_seq < length:
+    pos_seq, pos_qual = 1, 3
+    phred = detect_quality(file_list[6])
+    while pos_qual < len(file_list):
         file_list[pos_seq] = trim_user(file_list[pos_seq], args.trim3, args.trim5)
-        pos_seq += 4
-
-    # trimming quality scale
-    pos_qual = 3
-    while pos_qual < length:  # -1 or not?
         file_list[pos_qual] = trim_user(file_list[pos_qual], args.trim3, args.trim5)
+        file_list[pos_seq] = trim_quality(file_list[pos_seq], file_list[pos_qual], phred)[
+            0]  # first return from function
+        file_list[pos_qual] = trim_quality(file_list[pos_seq], file_list[pos_qual], phred)[1]  # second return
+        pos_seq += 4
         pos_qual += 4
-    q_scale = detect_quality(file_list[6])
 
-    pos = 0
+    pos, trimmed = 0, 0
     outputfile = open(args.output)
-    while pos < length:
+    while pos < len(file_list):
         if filter_quality(file_list[pos + 3], args.qual) == True and \
                 filter_bases(file_list[pos + 1], args.nbases) == True and \
                 filter_short(file_list[pos + 1], args.len) == True:
             outputfile.write(file_list[pos] + '\n' + file_list[pos + 1] + '\n' + file_list[pos + 2] +
                              '\n' + file_list[pos + 3] + '\n')
-            pos += 4
+        else:
+            trimmed += 1
+        pos += 4
     outputfile.close()
     summary_file(args.sum_output, args.qual, args.nbases, args.len)
+
+
+def summary_file(summaryfile, quality, nbases, length):
+    with open('summaryfile', 'w') as sum_file:
+        global filter_quality_count, filter_bases_count, filter_short_count
+        filtered = filter_quality_count + filter_bases_count + filter_short_count
+        sum_file.write(
+            "Total number of reads filtered: {0}. {1} reads with a low quality than {2}. {3} reads with more \
+            than {4} bases. {5} reads shorter than {6} nucleotides.".format(filtered,
+                                                                            filter_quality_count, quality,
+                                                                            filter_bases_count, nbases,
+                                                                            filter_short_count, length))
 
 
 def main():
@@ -183,8 +179,9 @@ def main():
     except AttributeError:
         parser.error("too few arguments")
     func(args)
-    #args.func(args)
+    # args.func(args)
 
 
 if __name__ == "__main__":
     main()
+
