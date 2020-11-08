@@ -3,48 +3,32 @@ import statistics
 import gzip
 import re
 import argparse
-
-# user input - global or not  - bad for runtime
-# nt3_input, nt5_input, threshold_reads_input, quality_input, n_bases_input = None, None, None, None, None
-
-# counting triming
-
-# filtered reads is this possible as global variable????
 from pip._vendor.certifi.__main__ import args
-
 
 
 def trim_user(seq_line, trim3, trim5):
     trim_line = seq_line[trim5:trim3]
     return trim_line
 
-# quality score below 20 is considered low quality
-# the sliding window uses a relatively standard approach. this works by scanning from 5' end of the read and removes 3' end of the read when the a
-# average quality of a group of bases drops below a specified threshold. This prevents a single weak base casusing the removal of subsequent high
-# quality data,while still ensuring that ... (Bolger et al., 2014)
-
-
 # trim quality according to quality of single base from 5'
 def trim_quality(seq_line, qual_line, phred):
-    ascii_list = [ord(ascii_chr) for ascii_chr in qual_line]
-    ascii_str, count = None, 0
+    qual_arr, qual_trim, count, pos = bytearray(), bytearray(), 0, 0
+    qual_arr.extend(qual_line)
     if phred == '33':
-        for ascii_val in ascii_list:
-            ascii_val = int(ascii_val)
-            while ascii_val in ascii_list > 53:
-                ascii_str += chr(ascii_val)
-
+        while qual_arr[pos]  > 53:
+            qual_trim.append(qual_arr[pos])
+            pos += 1
     elif phred == '64':
-        for ascii_val in ascii_list:
-            ascii_val = int(ascii_val)
-            while ascii_val in ascii_list > 84:
-                ascii_str += chr(ascii_val)
+        while qual_arr[pos] > 84:
+            qual_trim.append(qual_arr[pos])
+            pos += 1
     # cut the sequence the same length as the quality line
-    seq_trim = seq_line[0:len(ascii_str)]
+    qual_trim = qual_trim.decode('utf-8')
+    seq_trim = seq_line[0:len(qual_trim)]
     # check whether sequence was trimmed for summary file
     if len(seq_line) != len(seq_trim):
         count = 1
-    return seq_trim, ascii_str, count
+    return seq_trim, qual_trim, count
 
 
 # trim with moving window width of 4 bases
@@ -73,6 +57,7 @@ def moving_window(seq_line, qual_line, phred):
 
 # problems in determining phred scale  - use maybe elif to check the next read for quality if the first doesnt work
 def detect_quality(ascii_string):
+    ascii_string = bytearray(b'ascii_string')
     ascii_list = [ord(ascii_value) for ascii_value in ascii_string]
     # phred 33 range= 33-75
     if max(ascii_list) <= 75 and min(ascii_list) < 59:
@@ -94,8 +79,7 @@ def filter_quality(qual_line, quality):
 
 
 def filter_bases(seq_line, n_bases):
-    n_number = 0
-    n_number = (n_number + 1 for base == 'N' in base in seq_line)
+    n_number = seq_line.count('N')
     if n_number < n_bases:
         return True
 
@@ -117,8 +101,8 @@ def run(args):
             file_list = [file_list.append(line.strip('\n')) for line in infile]
         infile.close()
     else:
-         with open(args.file) as infile:
-            file_list = [file_list.append(line.strip('\n')) for line in infile]
+        with open(args.file) as infile:
+                file_list = [file_list.append(line.strip('\n')) for line in infile]
         infile.close()
 
     if file_list[0][0] != '@' or file_list[2][0] != '+' or re.search(r'[^ATGCN]', file_list[1]) is not None:
