@@ -26,7 +26,7 @@ def main():
     file_list = list()
     trim3 = 50
     trim5 = 10
-    with open('BRISCOE_0069_BD18RUACXX_L2_1_pf.fastq.txt', 'r') as infile:
+    with open('../BRISCOE_0069_BD18RUACXX_L2_1_pf.fastq.txt', 'r') as infile:
         file_list = [file_list.append(line.strip('\n')) for line in infile]
     infile.close()
     # trimming sequence
