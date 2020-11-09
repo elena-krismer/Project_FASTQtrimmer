@@ -82,6 +82,8 @@ def filter_bases(seq_line, n_bases):
     n_number = seq_line.count('N')
     if n_number < n_bases:
         return True
+    else:
+        return False
 
 
 def filter_short(seq_line, threshold_reads):
