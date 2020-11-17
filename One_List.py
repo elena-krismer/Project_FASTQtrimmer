@@ -7,27 +7,53 @@ from pip._vendor.certifi.__main__ import args
 
 
 def trim_user(seq_line, trim3, trim5):
-    trim_line = seq_line[trim5:trim3]
+    trim_line = seq_line[trim5:(trim3 + 1)]
     return trim_line
 
 # trim quality according to quality of single base from 5'
 def trim_quality(seq_line, qual_line, phred):
-    qual_arr, qual_trim, count, pos = bytearray(), bytearray(), 0, 0
-    qual_arr.extend(qual_line)
-    if phred == '33':
-        while qual_arr[pos]  > 53:
-            qual_trim.append(qual_arr[pos])
+    qual_arr, qual_trim, count, pos, pos3 = bytearray(), bytearray(), 0, -1, 0
+    qual_arr.extend(map(ord, qual_line))
+    if phred == 33:
+        while pos < (len(qual_arr) - 1):
             pos += 1
-    elif phred == '64':
-        while qual_arr[pos] > 84:
-            qual_trim.append(qual_arr[pos])
+            if qual_arr[pos] > 53:
+                while pos < len(qual_arr):
+                    qual_trim.append(qual_arr[pos])
+                    pos += 1
+        pos = (len(qual_trim) - 1)
+        if qual_trim[pos] < 53:
+            while qual_trim[pos] < 53:
+                pos3 += 1
+                pos -= 1
+
+    elif phred == 64:
+        while pos < (len(qual_arr)):
             pos += 1
+            if qual_arr[pos] > 84:
+                while pos < len(qual_arr):
+                    qual_trim.append(qual_arr[pos])
+                    pos += 1
+        pos = (len(qual_trim) - 1)
+        if qual_trim[pos] < 84:
+            while qual_trim[pos] < 84:
+                pos3 += 1
+                pos -= 1
+
     # cut the sequence the same length as the quality line
-    qual_trim = qual_trim.decode('utf-8')
-    seq_trim = seq_line[0:len(qual_trim)]
-    # check whether sequence was trimmed for summary file
-    if len(seq_line) != len(seq_trim):
+    qual_dec = qual_trim.decode('utf-8')
+    if pos3 != 0:
+        qual_trim = qual_dec[0:-pos3]
+        seq_trim = seq_line[:pos3]
         count = 1
+    else:
+        qual_trim = qual_dec
+
+    if (len(seq_line) - len(qual_dec)) != 0:
+        seq_trim = seq_line[(len(seq_line) - len(qual_dec)):]
+        count = 1
+    else:
+        seq_trim = seq_line
     return seq_trim, qual_trim, count
 
 
@@ -100,11 +126,11 @@ def run(args):
     typefile = re.search(r'\S*\.gz', args.input)
     if typefile:
         with gzip.open(args.file) as infile:
-            file_list = [file_list.append(line.strip('\n')) for line in infile]
+            [file_list.append(line.strip('\n').replace(' ', '')) for line in infile]
         infile.close()
     else:
         with open(args.file) as infile:
-                file_list = [file_list.append(line.strip('\n')) for line in infile]
+            [file_list.append(line.strip('\n').replace(' ', '')) for line in infile]
         infile.close()
 
     if file_list[0][0] != '@' or file_list[2][0] != '+' or re.search(r'[^ATGCN]', file_list[1]) is not None:
