@@ -23,16 +23,9 @@ def detect_quality(ascii_string):
         sys.exit(1)
     return phred_scale
 
-    # def main()
-
-    # testing file format
-    if file_list[0][0] != '@' or file_list[2][0] != '+' or re.search(r'[^ATGCN]', file_list[1]) is not None:
-        print('Error in fileformat.')
-        sys.exit(1)
-
 
 def trim_quality(seq_line, qual_line, phred):
-    qual_arr, qual_trim, count, pos, pos3 = bytearray(), bytearray(), 0, -1, 0
+    qual_arr, qual_trim, count, pos, end3 = bytearray(), bytearray(), 0, -1, 0
     qual_arr.extend(map(ord, qual_line))
     if phred == 33:
         while pos < (len(qual_arr) - 1):
@@ -44,7 +37,7 @@ def trim_quality(seq_line, qual_line, phred):
         pos = (len(qual_trim) - 1)
         if qual_trim[pos] < 53:
             while qual_trim[pos] < 53:
-                pos3 += 1
+                end3 += 1
                 pos -= 1
 
     elif phred == 64:
@@ -57,21 +50,27 @@ def trim_quality(seq_line, qual_line, phred):
         pos = (len(qual_trim) - 1)
         if qual_trim[pos] < 84:
             while qual_trim[pos] < 84:
-                pos3 += 1
+                end3 += 1
                 pos -= 1
 
     # cut the sequence the same length as the quality line
-    qual_dec = qual_trim.decode('utf-8')
-    if pos3 != 0:
-        qual_trim = qual_dec[0:-pos3]
-        seq_trim = seq_line[:pos3]
+    end5 = qual_trim.decode('utf-8')
+    if end3 != 0:
+        qual_trim = end5[0:-end3]
+        seq_trim = seq_line[:end3]
         count = 1
     else:
-        qual_trim = qual_dec
+        qual_trim = end5
 
-    if (len(seq_line) - len(qual_dec)) != 0:
-        seq_trim = seq_line[(len(seq_line) - len(qual_dec)):]
+    if (len(seq_line) - len(end5)) != 0:
+        seq_trim = seq_line[(len(seq_line) - len(end5)):]
         count = 1
     else:
         seq_trim = seq_line
     return seq_trim, qual_trim, count
+
+    # def main()
+    # testing file format
+    if file_list[0][0] != '@' or file_list[2][0] != '+' or re.search(r'[^ATGCN]', file_list[1]) is not None:
+        print('Error in fileformat.')
+        sys.exit(1)
