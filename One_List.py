@@ -40,12 +40,10 @@ def trim_quality(seq_line, qual_line, phred):
         qual_trim = qual_trim[0:-end3]
         seq_line = seq_line[:end3]
         count = 1
-
     # trim 5' end from seq_line
     if (untrimmed_len - len(qual_trim)) != 0:
         seq_line = seq_line[(untrimmed_len - len(qual_trim)):]
         count = 1
-
     return seq_line, qual_trim, count
 
 
