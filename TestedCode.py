@@ -24,50 +24,42 @@ def detect_quality(ascii_string):
     return phred_scale
 
 
+# functions trims quality lower than 20
 def trim_quality(seq_line, qual_line, phred):
     qual_arr, qual_trim, count, pos, end3 = bytearray(), bytearray(), 0, -1, 0
     qual_arr.extend(map(ord, qual_line))
-    if phred == 33:
-        while pos < (len(qual_arr) - 1):
-            pos += 1
-            if qual_arr[pos] > 53:
-                while pos < len(qual_arr):
-                    qual_trim.append(qual_arr[pos])
-                    pos += 1
-        pos = (len(qual_trim) - 1)
-        if qual_trim[pos] < 53:
-            while qual_trim[pos] < 53:
+    # converting quality score from 20 to given phred scale
+    phred_ascii = phred + 20
+    # starting add 5' end reading quality bytearray to new bytearray
+    while pos < (len(qual_arr) - 1):
+        pos += 1
+        if qual_arr[pos] > phred_ascii:
+            while pos < (len(qual_arr) - 1):
+                qual_trim.append(qual_arr[pos])
+                pos += 1
+    # starting add 3' end determining numbers of characters to trim
+    pos = (len(qual_trim) - 1)
+    while pos >= 0:
+        pos -= 1
+        if qual_trim[pos] < phred_ascii:
+            while qual_trim[pos] < phred_ascii:
                 end3 += 1
                 pos -= 1
-
-    elif phred == 64:
-        while pos < (len(qual_arr)):
-            pos += 1
-            if qual_arr[pos] > 84:
-                while pos < len(qual_arr):
-                    qual_trim.append(qual_arr[pos])
-                    pos += 1
-        pos = (len(qual_trim) - 1)
-        if qual_trim[pos] < 84:
-            while qual_trim[pos] < 84:
-                end3 += 1
-                pos -= 1
-
     # cut the sequence the same length as the quality line
-    end5 = qual_trim.decode('utf-8')
+    untrimmed_len = len(seq_line)
+    qual_trim = qual_trim.decode('utf-8')
+    # trim number of characters 3' end seq_line and qual_line
     if end3 != 0:
-        qual_trim = end5[0:-end3]
-        seq_trim = seq_line[:end3]
+        qual_trim = qual_trim[0:-end3]
+        seq_line = seq_line[:end3]
         count = 1
-    else:
-        qual_trim = end5
 
-    if (len(seq_line) - len(end5)) != 0:
-        seq_trim = seq_line[(len(seq_line) - len(end5)):]
+    # trim 5' end from seq_line
+    if (untrimmed_len - len(qual_trim)) != 0:
+        seq_line = seq_line[(untrimmed_len - len(qual_trim)):]
         count = 1
-    else:
-        seq_trim = seq_line
-    return seq_trim, qual_trim, count
+
+    return seq_line, qual_trim, count
 
 
 def filter_quality(qual_line, quality, phred):
