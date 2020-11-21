@@ -97,23 +97,17 @@ def detect_quality(ascii_string):
     return phred_scale
 
 
-def filter_quality(qual_line, quality):
+def filter_quality(qual_line, quality, phred):
     # converting to ascii values
     ascii_list = [ord(ascii_value) for ascii_value in qual_line]
-    if statistics.mean(ascii_list) > quality:
+    # sum quality and phred to get ascii value
+    if statistics.mean(ascii_list) > (quality + phred):
         return True
 
 
-def filter_bases(seq_line, n_bases):
+def filter_bases_length(seq_line, n_bases, threshold_reads):
     n_number = seq_line.count('N')
-    if n_number < n_bases:
-        return True
-    else:
-        return False
-
-
-def filter_short(seq_line, threshold_reads):
-    if len(seq_line) > threshold_reads:
+    if n_number < n_bases and len(seq_line) > threshold_reads:
         return True
 
 
@@ -154,8 +148,7 @@ def run(args):
     outputfile = open(args.output)
     while pos < len(file_list):
         if filter_quality(file_list[pos + 3], args.qual) == True and \
-                filter_bases(file_list[pos + 1], args.nbases) == True and \
-                filter_short(file_list[pos + 1], args.len) == True:
+                filter_bases_length(file_list[pos + 1], args.nbases, args.length) == True:
             outputfile.write(file_list[pos] + '\n' + file_list[pos + 1] + '\n' + file_list[pos + 2] +
                              '\n' + file_list[pos + 3] + '\n')
         else:
@@ -178,7 +171,7 @@ def main():
     parser.add_argument("-trim3", help="Number of nucleotides trimmed on 3' end", type=int, default=0)
     parser.add_argument("-trim5", help="Number of nucleotides trimmed on 5' end", type=int, default=0)
     parser.add_argument("-qual", help='Specifiy min. Quality of reads', type=int, default=0)
-    parser.add_argument("-len", help="Minimum length of reads", type=int, default=0)
+    parser.add_argument("-length", help="Minimum length of reads", type=int, default=0)
     parser.add_argument("-nbases", help="Maximum of unknown bases", type=int, default=1000)
     parser.set_defaults(func=run)
     try:

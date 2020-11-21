@@ -69,6 +69,20 @@ def trim_quality(seq_line, qual_line, phred):
         seq_trim = seq_line
     return seq_trim, qual_trim, count
 
+
+def filter_quality(qual_line, quality, phred):
+    # converting to ascii values
+    ascii_list = [ord(ascii_value) for ascii_value in qual_line]
+    # sum quality and phred to get ascii value
+    if statistics.mean(ascii_list) > (quality + phred):
+        return True
+
+
+def filter_bases_length(seq_line, n_bases, threshold_reads):
+    n_number = seq_line.count('N')
+    if n_number < n_bases and len(seq_line) > threshold_reads:
+        return True
+
     # def main()
     # testing file format
     if file_list[0][0] != '@' or file_list[2][0] != '+' or re.search(r'[^ATGCN]', file_list[1]) is not None:
