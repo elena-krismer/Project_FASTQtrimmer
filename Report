@@ -13,14 +13,32 @@ all three filter-functions (Mean Quality of the read, Number of unknown bases an
 all four lines of the read get read into the output file. In case the read does not pass the test it will be not read into the outputfile
 and counted as 'filtered'.
 
+```{p}
+main()
+    read file into list
+    while read list
+        determine phred: position quality
+        trim position 1(+4)/sequence and 3(+4)/quality
+        trim quality 1(+4)/sequence and 3(+4)/quality
+        count quality trims `
+
+    while reading modified list
+        filter quality, unknown bases, length if True:
+            read first, second, third and fourth line into file
+         else: count as filtered read
+    write summary file with count of filtered and trimmed reads
+```
+
+
 ## 4. Program Design
-## 5. Program Manual
+## 5. Program Manual`
+
 ## 6. Runtime Analysis
 
 The main reasons for a slowdown in our runtime are the multiple function calls and
 s. An alternative approach could be to store the lines in a Numpy Array. 
 An alternative approach to improve runtime performance could be to use packages such as NumPy. Hereby, we would suggest storing
-the lines in a NumPy Array and passing the NumPy Array to the functions, instead of passing each line separately to the function.
+the lines in a NumPy Array and passing the NumPy Array(NumPy Array with Sequence string and NumPy Array with Quality string) to the functions, instead of passing each line separately to the function.
 
 ## 7. Discussion
 ## 8. References``````
