@@ -1,7 +1,7 @@
 # Project
 ## 1. Introduction
 
-The goal of this project is to generate a program, which trims Next-Generation Sequencing data.
+The goal of this project is to generate a program, which trims Next-Generation Sequencing data. 
 
 - purpose of our programm 
 
@@ -12,6 +12,8 @@ The goal of this project is to generate a program, which trims Next-Generation S
 - Where is used/important - Why we need to trim file?
 - Whats phred scale? 
 - types of trimming
+
+![](qscores.gif)
 
 ## 3. Algorithm Design
 
