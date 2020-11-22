@@ -7,6 +7,7 @@ The goal of this project is to generate a program, which trims Next-Generation S
 
 
 ![](BasicAlgorithm_BetterQuality.png)
+
 This program relies on the uniform structure of FASTQ files: The first position the header followed by the sequence, the third line and the quality line. Thus, the file get read into a list and all following
 operations were by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
 In the first step, while iterating over the list with a while function, the trimming is performed and the quality scale determined.
