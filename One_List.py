@@ -102,17 +102,21 @@ def filter_bases_length(seq_line, n_bases, threshold_reads):
 
 def run(args):
     file_list = list()
-    parser = argparse.ArgumentParser()
-    parser.add_argument('file')
-    args = parser.parse_args()
+    infile = args.input
+    qual = args.qual
+    trim3 = args.end3
+    trim5 = args.end5
+    length = args.length
+    nbases = args.nbases
+    outputfile = args.output
 
-    typefile = re.search(r'\S*\.gz', args.input)
+    typefile = re.search(r'\S*\.gz', infile)
     if typefile:
-        with gzip.open(args.file) as infile:
+        with gzip.open(infile) as infile:
             [file_list.append(line.strip('\n').replace(' ', '')) for line in infile]
         infile.close()
     else:
-        with open(args.file) as infile:
+        with open(infile) as infile:
             [file_list.append(line.strip('\n').replace(' ', '')) for line in infile]
         infile.close()
 
@@ -124,8 +128,8 @@ def run(args):
     pos_seq, pos_qual, trimmed = 1, 3, 0
     phred = detect_quality(file_list[6])
     while pos_qual < len(file_list):
-        file_list[pos_seq] = trim_user(file_list[pos_seq], args.trim3, args.trim5)
-        file_list[pos_qual] = trim_user(file_list[pos_qual], args.trim3, args.trim5)
+        file_list[pos_seq] = trim_user(file_list[pos_seq], trim3, trim5)
+        file_list[pos_qual] = trim_user(file_list[pos_qual], trim3, trim5)
         # saving trim_quality() return in variable
         func_return = trim_quality(file_list[pos_seq], file_list[pos_qual], phred)
         file_list[pos_seq], file_list[pos_qual] = func_return[0], func_return[1]
@@ -134,10 +138,10 @@ def run(args):
         pos_qual += 4
 
     pos, filtered = 0, 0
-    outputfile = open(args.output)
+    outputfile = open(output)
     while pos < len(file_list):
-        if filter_quality(file_list[pos + 3], args.qual) == True and \
-                filter_bases_length(file_list[pos + 1], args.nbases, args.length) == True:
+        if filter_quality(file_list[pos + 3], qual) == True and \
+                filter_bases_length(file_list[pos + 1], nbases, length) == True:
             outputfile.write(file_list[pos] + '\n' + file_list[pos + 1] + '\n' + file_list[pos + 2] +
                              '\n' + file_list[pos + 3] + '\n')
         else:
@@ -157,8 +161,8 @@ def main():
     parser.add_argument("-out", help="trimmed fastq filename", dest="output", type=str, required=True)
     parser.add_argument("-sum", help="summaryfilename", dest="sum_output", type=str,
                         default="Summaryfile")  # default or required true or not?
-    parser.add_argument("-trim3", help="Number of nucleotides trimmed on 3' end", type=int, default=0)
-    parser.add_argument("-trim5", help="Number of nucleotides trimmed on 5' end", type=int, default=0)
+    parser.add_argument("-end3", help="Number of nucleotides trimmed on 3' end", type=int, default=0)
+    parser.add_argument("-end5", help="Number of nucleotides trimmed on 5' end", type=int, default=0)
     parser.add_argument("-qual", help='Specifiy min. Quality of reads', type=int, default=0)
     parser.add_argument("-length", help="Minimum length of reads", type=int, default=0)
     parser.add_argument("-nbases", help="Maximum of unknown bases", type=int, default=1000)
@@ -168,7 +172,7 @@ def main():
     except AttributeError:
         parser.error("too few arguments")
     func(args)
-    #args.func(args)
+    # args.func(args)
 
 
 if __name__ == "__main__":
