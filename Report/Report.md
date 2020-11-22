@@ -15,10 +15,14 @@ The goal of this project is to generate a program, which trims Next-Generation S
 
 ![](qscores.gif)
 
+*Figure X* Phred 
+
 ## 3. Algorithm Design
 
 
 ![](BasicAlgorithm_BetterQuality.png)
+
+*Figure X* Algorithm Scheme
 
 This program relies on the uniform structure of FASTQ files: The first position the header followed by the sequence, the third line and the quality line. Thus, the file get read into a list and all following
 operations were by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
@@ -46,9 +50,12 @@ main()
 
 
 ## 4. Program Design
-## 5. Program Manual`
 
-Following program wil trimm and filter your FASTQ file according to quality, length and unknown bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X).
+has to be keeped in mind: different phred scales, structure of a fastq file, simulatenous trimming of quality and sequence line 
+
+## 5. Program Manual
+
+Following program wil trimm and filter your FASTQ file according to quality, length and unknown bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X). The output consist of two outputfiles - a fastq file with filtered and trimmed reads and a summaryfile which contains information about the number of filtered + trimmed reads.
 
 ## To run the program you must specify:
 
@@ -87,12 +94,16 @@ Following command trims 6 bases from each end of the read, filters all reads wit
 ```
 
 
-In case you only want to trimm the reads with a quality lower than 20 from each end, use following command:
+In case you only want to trimm the reads with a quality lower than 20 from each end, this command is enough:
 
 ```{p}
 ./fastqtrimmer.py -in Sample1.fastq -out Sample1_trimmed.fastq
 ```
 
+To get an overview over the commands you can use, use following command:
+```{p}
+./fastqtrimmer.py -h
+```
 
 
 ## 6. Runtime Analysis
@@ -103,4 +114,15 @@ An alternative approach to improve runtime performance could be to use packages 
 the lines in a NumPy Array and passing the NumPy Array(NumPy Array with Sequence string and NumPy Array with Quality string) to the functions, instead of passing each line separately to the function.
 
 ## 7. Discussion
-## 8. References``````
+
+Runtime, a lot of function calls, finding alternative to list list of lists, tuples, arrays,... 
+
+Relying on uniform format of fastq file 
+
+Quality of single residue trimming is 20 cant be changed by user, in further approach make it optional
+
+## 8. References
+## 9. List of Figures
+
+1. Figure: 
+2. Figure:
