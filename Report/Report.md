@@ -27,6 +27,7 @@ The quality score is encrypted using the ascii code into two systems phred 33 an
 
 
 ![](qscores.gif)
+
 *Table 1* Phred+33/+64 scale 
 
 
@@ -73,11 +74,14 @@ main()
 
 ## 4. Program Design
 
+
+
+
 has to be keeped in mind: different phred scales, structure of a fastq file, simulatenous trimming of quality and sequence line 
 
 ## 5. Program Manual
 
-Following program wil trimm and filter your FASTQ file according to quality, length and unknown bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X). The output consist of two outputfiles - a fastq file with filtered and trimmed reads and a summaryfile which contains information about the number of filtered + trimmed reads.
+Following program will trimm and filter your FASTQ file according to quality, length and unknown (N's) bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X). The output consist of two outputfiles - a fastq file with filtered and trimmed reads and a summaryfile which contains information about the number of filtered + trimmed reads.
 
 ## To run the program you must specify:
 
@@ -144,6 +148,7 @@ Relying on uniform format of fastq file
 Quality of single residue trimming is 20 cant be changed by user, in further approach make it optional
 
 ## 8. References
+
 ## 9. List of Figures
 
 1. Figure: 
