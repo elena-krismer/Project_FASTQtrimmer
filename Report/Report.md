@@ -1,7 +1,7 @@
 # Project
 ## 1. Introduction
 
-The goal of this project is to generate a program, which trims Next-Generation Sequencing data. 
+The goal of this project is to generate a program, which trims Next-Generation Sequencing data based on quality. 
 
 - purpose of our programm 
 
@@ -10,12 +10,16 @@ Next Generation Sequencing has played an important role to understand the biolog
 Didion and  colleagues mention that several trimming tools had been developed  however there is not one that simultaneously provides the accuracy, computational efficiency and feature set  to work with the types and volumes of data (Didion,J.P et al., 2017) reason why different tools are still emerging.
 
 
-There are two types of trimming  based on the 1) sequence and  based on 2) quality. The first one is able to cut sequence adapters while the second one nucleotides based on the quality based on a prhed score. Both perspectives use a fastq file, this file is conformed by: 
+There are two types of trimming  based on 1) sequence and 2) quality. The first one is able to cut sequence adapters while the second one nucleotides based on the quality based on a prhed score. Both perspectives use a fastq file, this file is conformed by: 
 
 1.Header with the sequence identifier
 2.The sequence
 3.+ character 
 4.Quality score
+
+![](fastq.png)
+*Figure 1* Fastq format 
+
 
 The quality score is encrypted using the ascii code into two systems phred 33 and 64. The first one adds the 33 into the quality, the second one works in the same way so instead of adding 33 you add 64. For example using the phred+33 a quality of 20 will be represented by “5” who is the 53 number in ASCII code while “T” in +64 system (see the Table 1)
 
@@ -32,7 +36,6 @@ The quality score is encrypted using the ascii code into two systems phred 33 an
 
 
 
-*Figure X* Phred 
 
 ## 3. Algorithm Design
 
