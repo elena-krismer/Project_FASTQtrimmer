@@ -25,3 +25,12 @@ Following program wil trim and filter your FASTQ file according to quality, leng
 - **-qual** The minimum average quality of the read
 - **-length** the minimum length of the read 
 - **-nbases** the minimum of unknown bases
+
+## Addention!
+To make the script executable you must run following line:
+
+```{p}
+chmod +x fastqtrimmer.py
+```
+
+
