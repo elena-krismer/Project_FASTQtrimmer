@@ -13,10 +13,10 @@ Didion and  colleagues mention that several trimming tools had been developed  h
 
 There are two types of trimming  based on 1) sequence and 2) quality. The first one is able to cut sequence adapters while the second one nucleotides based on the quality based on a prhed score. Both perspectives use a fastq file, this file is conformed by: 
 
-*Header with the sequence identifier 1
-*The sequence 2
-*+ character 3
-*Quality score 4
+1. Header with the sequence identifier 
+2. The sequence 
+3. + character 
+4. Quality score 
 
 ![](fastq.png)
 
