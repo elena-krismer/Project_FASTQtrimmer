@@ -6,6 +6,23 @@ The goal of this project is to generate a program, which trims Next-Generation S
 - purpose of our programm 
 
 ## 2. Theory
+Next Generation Sequencing has played an important role to understand the biology mechanisms under a genomics perspective.In the earlies X the price of sequence a genome was  very high but with time, the sequencing cost has decreased and the genomic data production has increased.Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing,  in order to perform analysis downstream it must be pre-processed. There are different pipelines that could be used to preprocess the data some of them share steps like quality check, duplicated removal,  and  trimming reads.Read trimming is the process to remove low quality bases or adapters while preserving the longest high quality part of a NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination and potentially could  reduce the computational time(Didion,J.P et al., 2017; Del Fabbro et al., 2013) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting an  impact in the accuracy of the gene expression quantification(Liao Y and Shi W 2020). 
+Didion and  colleagues mention that several trimming tools had been developed  however there is not one that simultaneously provides the accuracy, computational efficiency and feature set  to work with the types and volumes of data (Didion,J.P et al., 2017) reason why different tools are still emerging.
+
+
+There are two types of trimming  based on the 1) sequence and  based on 2) quality. The first one is able to cut sequence adapters while the second one nucleotides based on the quality based on a prhed score. Both perspectives use a fastq file, this file is conformed by: 
+
+1.Header with the sequence identifier
+2.The sequence
+3.+ character 
+4.Quality score
+
+The quality score is encrypted using the ascii code into two systems phred 33 and 64. The first one adds the 33 into the quality, the second one works in the same way so instead of adding 33 you add 64. For example using the phred+33 a quality of 20 will be represented by “5” who is the 53 number in ASCII code while “T” in +64 system (see the Table 1)
+
+
+![](qscores.gif)
+*Table 1* Phred+33/+64 scale 
+
 
 - Whats next generation sequencing? 
 - Whats a FASTQ File? structure
@@ -13,7 +30,7 @@ The goal of this project is to generate a program, which trims Next-Generation S
 - Whats phred scale? 
 - types of trimming
 
-![](qscores.gif)
+
 
 *Figure X* Phred 
 
