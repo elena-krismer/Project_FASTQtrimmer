@@ -15,7 +15,7 @@ There are two types of trimming  based on 1) sequence and 2) quality. The first 
 
 1. Header with the sequence identifier 
 2. The sequence 
-3. + character 
+3. "+" character 
 4. Quality score 
 
 ![](fastq.png)
@@ -23,7 +23,7 @@ There are two types of trimming  based on 1) sequence and 2) quality. The first 
 *Figure 1* Fastq format 
 
 
-The quality score is encrypted using the ascii code into two systems phred 33 and 64. The first one adds the 33 into the quality, the second one works in the same way so instead of adding 33 you add 64. For example using the phred+33 a quality of 20 will be represented by “5” who is the 53 number in ASCII code while “T” in +64 system (see the Table 1)
+The quality score is encrypted using the ascii code into two systems phred 33 and 64. The first one adds the 33 into the quality, the second one works in the same way so instead of adding 33 you add 64. For example using the phred+33 a quality of 20 will be represented by *“5”* who is the 53 number in ASCII code while *“T”* in +64 system (see the *Table 1*)
 
 
 ![](qscores.gif)
