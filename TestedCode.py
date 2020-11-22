@@ -121,7 +121,7 @@ def run(args):
         pos_qual += 4
 
     pos, filtered = 0, 0
-    with open('output.txt', 'w') as outputfile:
+    with open(outputfile, 'w') as outputfile:
         while pos < (len(file_list) - 1):
             qual_arr = bytearray()
             qual_arr.extend(map(ord, file_list[pos + 3]))
