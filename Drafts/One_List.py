@@ -150,7 +150,7 @@ def run(args):
         pos += 4
     outputfile.close()
 
-    with open('summaryfile', 'w') as sum_file:
+    with open('../summaryfile', 'w') as sum_file:
         sum_file.write(
             "Total number of reads filtered: {0}. Reads trimmed {1}".format(filtered, trimmed))
 

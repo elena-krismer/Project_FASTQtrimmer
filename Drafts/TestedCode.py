@@ -5,9 +5,14 @@ import gzip
 import re
 import argparse
 from datetime import datetime
+import timeit
 
 
-# this is the code with additonal functions
+# trimming user specified 3' and 5' end
+def trim_user(seq_line, trim3, trim5):
+    trim_line = seq_line[trim5:-(trim3 + 1)]
+    return trim_line
+
 
 # detection of phred scale using bytearray
 def detect_quality(ascii_string):
@@ -21,12 +26,6 @@ def detect_quality(ascii_string):
         print("Error in determining quality scale")
         sys.exit(1)
     return phred_scale
-
-
-# trimming user specified 3' and 5' end
-def trim_user(seq_line, trim3, trim5):
-    trim_line = seq_line[trim5:-(trim3 + 1)]
-    return trim_line
 
 
 # functions trims quality lower than 20 from each end
@@ -80,44 +79,6 @@ def filter_bases_length(seq_line, n_bases, threshold_reads):
         return True
 
 
-def trimming_list(file_list, trim3, trim5, phred):
-    pos_seq, pos_qual, trimmed = 1, 3, 0
-    while pos_qual < len(file_list):
-        file_list[pos_seq] = trim_user(file_list[pos_seq], trim3, trim5)
-        file_list[pos_qual] = trim_user(file_list[pos_qual], trim3, trim5)
-        # saving trim_quality() return in variable
-        qual_arr = bytearray()
-        qual_arr.extend(map(ord, file_list[pos_qual]))
-        func_return = trim_quality(file_list[pos_seq], qual_arr, phred)
-        # check whether the whole string got stringed, delete whole read in that case
-        if func_return[0] is not None:
-            file_list[pos_seq], file_list[pos_qual] = func_return[0], func_return[1]
-        else:
-            file_list[(pos_seq - 1):(pos_seq + 2)] = []
-        trimmed += func_return[2]
-        pos_seq += 4
-        pos_qual += 4
-    return file_list, trimmed
-
-
-def write_outputfile(file_list, outputfile, qual, phred, nbases, length):
-    pos, filtered = 0, 0
-    with open(outputfile, 'w') as outputfile:
-        while pos < (len(file_list) - 1):
-            qual_arr = bytearray()
-            qual_arr.extend(map(ord, file_list[pos + 3]))
-            if filter_quality(qual_arr, qual, phred) == True and \
-                    filter_bases_length(file_list[pos + 1], nbases, length) == True:
-                outputfile.write(file_list[pos] + '\n' + file_list[pos + 1] + '\n' + file_list[pos + 2] +
-                                 '\n' + file_list[pos + 3] + '\n')
-            else:
-                # counting filtered reads
-                filtered += 1
-            pos += 4
-    outputfile.close()
-    return filtered
-
-
 # creating summaryfile with number of trimmed and filtered reads
 def write_summary(summaryfile, trimmed, filtered, infile):
     with open(summaryfile, 'w') as sum_file:
@@ -136,21 +97,13 @@ def run(args):
     # reading file into list
     typefile = re.search(r'\S*\.gz', infile)
     if typefile:
-        try:
-            with gzip.open(infile, mode='rt') as infile:
-                [file_list.append(line.strip('\n').replace(' ', '')) for line in infile]
-            infile.close()
-        except IOError as error:
-            print('Can not open gzip file', str(error))
-            sys.exit(1)
+        with gzip.open(infile, mode='rt') as infile:
+            [file_list.append(line.strip('\n').replace(' ', '')) for line in infile]
+        infile.close()
     else:
-        try:
-            with open(infile) as infile:
-                [file_list.append(line.strip('\n').replace(' ', '')) for line in infile]
-            infile.close()
-        except IOError as error:
-            print('Can not open file', str(error))
-            sys.exit(1)
+        with open(infile) as infile:
+            [file_list.append(line.strip('\n').replace(' ', '')) for line in infile]
+        infile.close()
 
     # testing file format
     if file_list[0][0] != '@' or file_list[2][0] != '+' or re.search(r'[^ATGCN]', file_list[1]) is not None:
@@ -163,13 +116,41 @@ def run(args):
     phred = detect_quality(qual_arr)
 
     # trimming list
-    func_return = trimming_list(file_list, trim3, trim5, phred)
-    file_list = func_return[0]
-    trimmed = func_return[1]
+    pos_seq, pos_qual, trimmed = 1, 3, 0
+    while pos_qual < len(file_list):
+        file_list[pos_seq] = trim_user(file_list[pos_seq], trim3, trim5)
+        file_list[pos_qual] = trim_user(file_list[pos_qual], trim3, trim5)
+        # saving trim_quality() return in variable
+        qual_arr = bytearray()
+        qual_arr.extend(map(ord, file_list[pos_qual]))
+        func_return = trim_quality(file_list[pos_seq], qual_arr, phred)
+        # check whether the whole string got stringed, delete whole read in that case
+        if func_return[0] is not None:
+            file_list[pos_seq], file_list[pos_qual] = func_return[0], func_return[1]
+        else:
+            file_list[(pos_seq - 1):(pos_seq + 2)] = []
+        trimmed += func_return[2]
+        pos_seq += 4
+        pos_qual += 4
 
     # filter list, writing in file
-    filtered = write_outputfile(file_list, outputfile, qual, phred, nbases, length)
+    pos, filtered = 0, 0
+    with open(outputfile, 'w') as outputfile:
+        while pos < (len(file_list) - 1):
+            qual_arr = bytearray()
+            qual_arr.extend(map(ord, file_list[pos + 3]))
+            if filter_quality(qual_arr, qual, phred) == True and \
+                    filter_bases_length(file_list[pos + 1], nbases, length) == True:
+                outputfile.write(file_list[pos] + '\n' + file_list[pos + 1] + '\n' + file_list[pos + 2] +
+                                 '\n' + file_list[pos + 3] + '\n')
+            else:
+                # counting filtered reads
+                filtered += 1
+            pos += 4
+    outputfile.close()
+
     write_summary(summaryfile, trimmed, filtered, args.input)
+    print(timeit.default_timer())
 
 
 def main():
