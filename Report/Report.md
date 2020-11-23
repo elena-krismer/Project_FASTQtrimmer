@@ -1,11 +1,35 @@
 # Project
 ## 1. Introduction
 
-The goal of this project is to generate a program, which trims Next-Generation Sequencing data. 
+The goal of this project is to generate a program, which trims Next-Generation Sequencing data based on quality. 
 
 - purpose of our programm 
 
 ## 2. Theory
+Next Generation Sequencing has played an important role to understand the biology mechanisms under a genomics perspective.In the earlies X the price of sequence a genome was  very high but with time, the sequencing cost has decreased and the genomic data production has increased.Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing,  in order to perform analysis downstream it must be pre-processed. There are different pipelines that could be used to preprocess the data some of them share steps like quality check, duplicated removal,  and  trimming reads.Read trimming is the process to remove low quality bases or adapters while preserving the longest high quality part of a NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination and potentially could  reduce the computational time(Didion,J.P *et al*., 2017; Del Fabbro et al., 2013) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting an  impact in the accuracy of the gene expression quantification(Liao Y and Shi W., 2020). 
+
+Didion and  colleagues mention that several trimming tools had been developed  however there is not one that simultaneously provides the accuracy, computational efficiency and feature set  to work with the types and volumes of data (Didion,J.P *et al*., 2017) reason why different tools are still emerging.
+
+
+There are two types of trimming  based on 1) sequence and 2) quality. The first one is able to cut sequence adapters while the second one nucleotides based on the quality based on a prhed score. Both perspectives use a fastq file, this file is conformed by: 
+
+1. Header with the sequence identifier 
+2. The sequence 
+3. "+" character 
+4. Quality score 
+
+![](fastq.png)
+
+*Figure 1* Fastq format 
+
+
+The quality score is encrypted using the ascii code into two systems phred 33 and 64. The first one adds the 33 into the quality, the second one works in the same way so instead of adding 33 you add 64. For example using the phred+33 a quality of 20 will be represented by *“5”* who is the 53 number in ASCII code while *“T”* in +64 system (see the *Table 1*)
+
+
+![](qscores.gif)
+
+*Table 1* Phred+33/+64 scale 
+
 
 - Whats next generation sequencing? 
 - Whats a FASTQ File? structure
@@ -13,9 +37,8 @@ The goal of this project is to generate a program, which trims Next-Generation S
 - Whats phred scale? 
 - types of trimming
 
-![](qscores.gif)
 
-*Figure X* Phred 
+
 
 ## 3. Algorithm Design
 
@@ -51,11 +74,14 @@ main()
 
 ## 4. Program Design
 
+
+
+
 has to be keeped in mind: different phred scales, structure of a fastq file, simulatenous trimming of quality and sequence line 
 
 ## 5. Program Manual
 
-Following program wil trimm and filter your FASTQ file according to quality, length and unknown bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X). The output consist of two outputfiles - a fastq file with filtered and trimmed reads and a summaryfile which contains information about the number of filtered + trimmed reads.
+Following program will trimm and filter your FASTQ file according to quality, length and unknown (N's) bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X). The output consist of two outputfiles - a fastq file with filtered and trimmed reads and a summaryfile which contains information about the number of filtered + trimmed reads.
 
 ## To run the program you must specify:
 
@@ -113,6 +139,25 @@ s. An alternative approach could be to store the lines in a Numpy Array.
 An alternative approach to improve runtime performance could be to use packages such as NumPy. Hereby, we would suggest storing
 the lines in a NumPy Array and passing the NumPy Array(NumPy Array with Sequence string and NumPy Array with Quality string) to the functions, instead of passing each line separately to the function.
 
+To visualize the function calls and get a better understanding for the runtime performance we used the library [Python Call Graph](https://pycallgraph.readthedocs.io/en/master/). A cutout of those results are visible in Figure X. Since the programm passes the strings individually to the functions, the amount of function calls is noticably high. Considering that for creating this scheme a fastq-file with 1000 reads was used and a common fastq file is much bigger, an reduction of these function calls should be strived. Further there is a significant difference between the several trim and filter functions in runtime. Especially, the functions trim_quality() and filter_quality() require a huge amount of time to compute. Comparing those two functions, which both get a bytearray as input and perform stat
+
+![](overview_runtime.png)
+
+*Figure X* Cutout of the scheme generated by PyCallGraph. Script run with a FASTQ file with 1000 reads. 
+
+Figure X. depict
+
+
+
+
+## 7. Discussion
+
+Runtime, a lot of function calls, finding alternative to list list of lists, tuples, arrays,... 
+
+Relying on uniform format of fastq file 
+
+Quality of single residue trimming is 20 cant be changed by user, in further approach make it optional
+We were surprised by the huge amount of runtime the filter_quality function required
 ## 7. Discussion
 
 Runtime, a lot of function calls, finding alternative to list list of lists, tuples, arrays,... 
@@ -122,6 +167,7 @@ Relying on uniform format of fastq file
 Quality of single residue trimming is 20 cant be changed by user, in further approach make it optional
 
 ## 8. References
+
 ## 9. List of Figures
 
 1. Figure: 
