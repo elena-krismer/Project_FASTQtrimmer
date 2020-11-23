@@ -213,7 +213,7 @@ def write_outputfile(file_list, outputfile, qual, phred, nbases, length):
 def write_summary(summaryfile, trimmed, filtered, infile):
     with open(summaryfile, 'w') as sum_file:
         sum_file.write(
-            "# Next Generation Sequencing Trimming \n# Python 3 \n# {0}\n# File: {1}\
+            "# FASTQ trimmer \n# Python 3 \n# {0}\n# File: {1}\
              \nTotal number of reads filtered: {2} \nTotal number of reads trimmed: {3}".format(
                 datetime.now(), infile, filtered, trimmed))
     sum_file.close()
