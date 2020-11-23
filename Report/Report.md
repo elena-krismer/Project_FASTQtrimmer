@@ -13,10 +13,10 @@ Didion and  colleagues mention that several trimming tools had been developed  h
 
 There are two types of trimming  based on 1) sequence and 2) quality. The first one is able to cut sequence adapters while the second one nucleotides based on the quality based on a prhed score. Both perspectives use a fastq file, this file is conformed by: 
 
-1. Header with the sequence identifier 
-2. The sequence 
-3. "+" character 
-4. Quality score 
+1. Header with the sequence identifier and information about the run and the cluster
+2. The sequence (A,C,T, G and N)
+3. "+" character separator 
+4. Base quality score Phred +33 or +64 enconded, represented by ASCII characters
 
 ![](fastq.png)
 
@@ -29,7 +29,8 @@ The quality score is encrypted using the ascii code into two systems phred 33 an
 ![](qscores.gif)
 
 *Table 1* Phred+33/+64 scale 
-
+ 
+ MENTion about the quality/error codde
 
 - Whats next generation sequencing? 
 - Whats a FASTQ File? structure
