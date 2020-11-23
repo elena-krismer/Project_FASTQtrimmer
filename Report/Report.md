@@ -98,8 +98,8 @@ chmod +x fastqtrimmer.py
 
 #### Further arguments are optional:
 
-- **-sum** the name of the summaryfile (will give you a summary of the filtered and trimmed reads) (Defaultname: Summaryfile)
-- **-stat** *dont use this command for trimming* specifiying the name of your statistics output file (details in 5.2. Statistics on FASTQ File)
+- **-sum** the name of the summaryfile (will give you a summary of the filtered and trimmed reads) (Defaultname: Summaryfile.txt)
+- **-stat**  *dont use this command for trimming*  specifiying the name of your statistics output file (details in 5.2. Statistics on FASTQ File)
 
 ##### For Trimming:
 
@@ -113,11 +113,11 @@ chmod +x fastqtrimmer.py
 - **-nbases** the minimum number of unknown bases
 
 ### 5.2. Statistics on FASTQ File
-Alternativelly, to filtering and trimming the FASTQ file this programm has the function to perform statistics on a FASTQ file implemented. This option will provide you a summary of the quality of the reads (average, average quality of the worst and best 10% of the reads), number of reads, the average length of the reads and the total amount of the individual bases. 
+In case you are uncertain about setting the different parameteres a statistics feature is implemented. This option will provide you with a statisitc-summaryfile with information about the quality of the reads (average, average quality of the worst and best 10% of the reads), number of reads, the average length of the reads and the total amount of the individual bases. Thus, with this information provided it will be easier to adjust parameters for trimming and filtering.
 
 To perform statistics you must specify the name of your fastq inputfile (-in) and statistics-outputfile (-stat) and set the main-outputfile to false (-out False). Despite the commands '-in', '-out' and '-stat' not further commands should be used (see 5.3. Examples).
 
-Note: You cannot perform trimming/filtering and statistics in one run.
+*Note*: You cannot perform trimming/filtering and statistics in one run.
 
 
 ### 5.3. Examples:
@@ -130,16 +130,19 @@ Following command trims 6 bases from each end of the read, filters all reads wit
 ```
 
 
-In case you only want to trimm the reads with a quality lower than 20 from each end, this command is enough:
+
+In case you only want to trimm the reads with a quality lower than 20 from each end and filter reads with a quality lower than 20, this command is enough:
 
 ```{p}
 ./fastqtrimmer.py -in Sample1.fastq -out Sample1_trimmed.fastq
 ```
 
+
 Performing statistics on a FASTQ file:
 ```{p}
 ./fastqtrimmer.py -in Sample1.fastq -out False -stat Sample1_Statistics.txt
 ```
+
 
 To get an overview over the commands you can use, use following command:
 ```{p}
@@ -173,11 +176,7 @@ Relying on uniform format of fastq file
 
 Quality of single residue trimming is 20 cant be changed by user, in further approach make it optional
 We were surprised by the huge amount of runtime the filter_quality function required
-## 7. Discussion
 
-Runtime, a lot of function calls, finding alternative to list list of lists, tuples, arrays,... 
-
-Relying on uniform format of fastq file 
 
 Quality of single residue trimming is 20 cant be changed by user, in further approach make it optional
 
