@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import statistics
 import gzip
 import re
 import argparse
@@ -23,17 +22,18 @@ def statistics_numbases(seq_list):
 # this function is only for statistics
 # takes list of bytearray as input, calculating statistics
 def statistic_quality(qual_list):
-    avg_list, length = list(), list()
+    avg_list, len_list = list(), list()
     for item in qual_list:
-        length.append(len(item))
-        avg_list.append(statistics.mean(item))
+        len_list.append(len(item))
+        avg_list.append(sum(item) / len(item))
     # sorting list to get lowest and highest tenth of quality
     avg_list.sort()
-    tenpercent = int(len(avg_list) * 0.1)
-    avg_qual = round(statistics.mean(avg_list))
-    best_ten = round(statistics.mean(avg_list[-(tenpercent - 1):]))
-    worst_ten = round(statistics.mean(avg_list[:(tenpercent - 1)]))
-    entrie_length = round(statistics.mean(length))
+    length = len(avg_list)
+    tenpercent = int(length * 0.1)
+    avg_qual = round(sum(avg_list) / length)
+    best_ten = round(sum(avg_list[-(tenpercent - 1):]) / len(avg_list[-(tenpercent - 1):]))
+    worst_ten = round(sum(avg_list[:(tenpercent - 1)]) / len(avg_list[:(tenpercent - 1)]))
+    entrie_length = round(sum(len_list) / len(len_list))
     return avg_qual, best_ten, worst_ten, entrie_length
 
 
@@ -96,6 +96,7 @@ def fastq_statistics(infile, statisticfile):
 
 
 # detection of phred scale using bytearray
+# takes bytearray as input
 def detect_quality(ascii_string):
     # phred 33 range= 33-75
     if max(ascii_string) <= 75 and min(ascii_string) < 59:
@@ -111,7 +112,9 @@ def detect_quality(ascii_string):
 
 # trimming user specified 3' and 5' end
 def trim_user(seq_line, trim3, trim5):
-    trim_line = seq_line[trim5:-(trim3 + 1)]
+    trim_line = seq_line[trim5:]
+    if trim3 != 0:
+        trim_line = trim_line[:-(trim3)]
     return trim_line
 
 
@@ -151,11 +154,12 @@ def trim_quality(seq_line, qual_arr, phred):
 
 
 # filter according to user specified mean quality - default 20
+# takes bytearray as input
 def filter_quality(qual_arr, quality, phred):
     # sum quality and phred to get ascii value
     phred_ascii = quality + phred
     if len(qual_arr) != 0:
-        if statistics.mean(qual_arr) > phred_ascii:
+        if (sum(qual_arr) / len(qual_arr)) > phred_ascii:
             return True
 
 
@@ -166,6 +170,7 @@ def filter_bases_length(seq_line, n_bases, threshold_reads):
         return True
 
 
+# main function for trimming
 def trimming_list(file_list, trim3, trim5, phred):
     pos_seq, pos_qual, trimmed = 1, 3, 0
     while pos_qual < len(file_list):
