@@ -81,36 +81,46 @@ has to be keeped in mind: different phred scales, structure of a fastq file, sim
 
 ## 5. Program Manual
 
+### 5.1. Trimming and Filtering 
 Following program will trimm and filter your FASTQ file according to quality, length and unknown (N's) bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X). The output consist of two outputfiles - a fastq file with filtered and trimmed reads and a summaryfile which contains information about the number of filtered + trimmed reads.
 
-## To run the program you must specify:
-
-- **-in** the inputfile 
-- **-out** the name of the outputfile 
-
-### Further arguments are optional but are adviced to be specified:
-
-- **-sum** the name of the summaryfile (will give you a summary of the filtered and trimmed reads) (Defaultname: Summaryfile)
-
-#### For Trimming:
-
-- **-end5** the number of bases which should be trimmed from the 5´end
-- **-end3** the number of bases which should be trimmed from the 3' end 
-
-#### For Filter:
-
-- **-qual** The minimum average quality of the read (default: Quality 20)
-- **-length** the minimum length of the read 
-- **-nbases** the minimum of unknown bases
-
-## Addention!
+*Attention!*
 To make the script executable you must run following line:
 
 ```{p}
 chmod +x fastqtrimmer.py
 ```
 
-### Examples:
+#### To run the program you must specify:
+
+- **-in** the inputfile 
+- **-out** the name of the outputfile 
+
+#### Further arguments are optional:
+
+- **-sum** the name of the summaryfile (will give you a summary of the filtered and trimmed reads) (Defaultname: Summaryfile)
+- **-stat** *dont use this command for trimming* specifiying the name of your statistics output file (details in 5.2. Statistics on FASTQ File)
+
+##### For Trimming:
+
+- **-end5** the number of bases which should be trimmed from the 5´end
+- **-end3** the number of bases which should be trimmed from the 3' end 
+
+##### For Filter:
+
+- **-qual** the minimum average quality of the read (default: Quality 20)
+- **-length** the minimum length of the read 
+- **-nbases** the minimum number of unknown bases
+
+### 5.2. Statistics on FASTQ File
+Alternativelly, to filtering and trimming the FASTQ file this programm has the function to perform statistics on a FASTQ file implemented. This option will provide you a summary of the quality of the reads (average, average quality of the worst and best 10% of the reads), number of reads, the average length of the reads and the total amount of the individual bases. 
+
+To perform statistics you must specify the name of your fastq inputfile (-in) and statistics-outputfile (-stat) and set the main-outputfile to false (-out False). Despite the commands '-in', '-out' and '-stat' not further commands should be used (see 5.3. Examples).
+
+Note: You cannot perform trimming/filtering and statistics in one run.
+
+
+### 5.3. Examples:
 
 Following command trims 6 bases from each end of the read, filters all reads with a quality lower than 30, shorter than 50 nucleotides and more than two unknown bases.
 
@@ -124,6 +134,11 @@ In case you only want to trimm the reads with a quality lower than 20 from each 
 
 ```{p}
 ./fastqtrimmer.py -in Sample1.fastq -out Sample1_trimmed.fastq
+```
+
+Performing statistics on a FASTQ file:
+```{p}
+./fastqtrimmer.py -in Sample1.fastq -out False -stat Sample1_Statistics.txt
 ```
 
 To get an overview over the commands you can use, use following command:
