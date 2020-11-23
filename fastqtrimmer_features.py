@@ -27,12 +27,13 @@ def statistic_quality(qual_list):
     for item in qual_list:
         length.append(len(item))
         avg_list.append(statistics.mean(item))
+    # sorting list to get lowest and highest tenth of quality
     avg_list.sort()
-    entrie_length = round(statistics.mean(length))
-    tenpercent = int(len(avg_list) * 0.01)
+    tenpercent = int(len(avg_list) * 0.1)
     avg_qual = round(statistics.mean(avg_list))
     best_ten = round(statistics.mean(avg_list[-(tenpercent - 1):]))
     worst_ten = round(statistics.mean(avg_list[:(tenpercent - 1)]))
+    entrie_length = round(statistics.mean(length))
     return avg_qual, best_ten, worst_ten, entrie_length
 
 
@@ -54,7 +55,7 @@ def statistic_summary(statisticfile, infile, phred, avg_qual, best_ten, worst_te
 
 
 # this function is only for statistics
-# mean function for statistics
+# main function for statistics
 def fastq_statistics(infile, statisticfile):
     qual_list, seq_list = list(), list()
     typefile = re.search(r'\S*\.gz', infile)
@@ -83,12 +84,10 @@ def fastq_statistics(infile, statisticfile):
     infile.close()
     number_entries = len(seq_list)
     phred = detect_quality(qual_list[1])
-
     # applying phred scale to get quality
     func_return = statistic_quality(qual_list)
     avg_qual, best_ten, worst_ten = (func_return[0] - phred), (func_return[1] - phred), (func_return[2] - phred)
     entrie_length = func_return[3]
-
     func_return = statistics_numbases(seq_list)
     n_number, a_number, c_number = func_return[0], func_return[1], func_return[2]
     g_number, t_number = func_return[3], func_return[4]
@@ -219,29 +218,28 @@ def run(args):
     file_list = list()
     infile, outputfile, summaryfile, statisticfile = args.input, args.output, args.sum_output, args.stat_output
     qual, trim3, trim5, length, nbases = args.qual, args.end3, args.end5, args.length, args.nbases
-
+    # feature statistics
     if outputfile == 'False' and statisticfile != 'False':
         fastq_statistics(infile, statisticfile)
+    # main function for trimming starts here
     else:
-        # reading file into list
         typefile = re.search(r'\S*\.gz', infile)
         if typefile:
             try:
-                with gzip.open(infile, mode='rt') as infile:
-                    [file_list.append(line.strip('\n').replace(' ', '')) for line in infile]
-                infile.close()
+                infile = gzip.open(infile, mode='rt')
             except IOError as error:
                 print('Can not open gzip file', str(error))
                 sys.exit(1)
         else:
             try:
-                with open(infile) as infile:
-                    [file_list.append(line.strip('\n').replace(' ', '')) for line in infile]
-                infile.close()
+                infile = open(infile, 'r')
             except IOError as error:
                 print('Can not open file', str(error))
                 sys.exit(1)
-
+        # reading file into list
+        with infile:
+            [file_list.append(line.strip('\n').replace(' ', '')) for line in infile]
+        infile.close()
         # testing file format
         if file_list[0][0] != '@' or file_list[2][0] != '+' or re.search(r'[^ATGCN]', file_list[1]) is not None:
             print('Error in fileformat.')
@@ -251,12 +249,10 @@ def run(args):
         qual_arr = bytearray()
         qual_arr.extend(map(ord, file_list[6]))
         phred = detect_quality(qual_arr)
-
         # trimming list
         func_return = trimming_list(file_list, trim3, trim5, phred)
         file_list = func_return[0]
         trimmed = func_return[1]
-
         # filter list, writing in file
         filtered = write_outputfile(file_list, outputfile, qual, phred, nbases, length)
         write_summary(summaryfile, trimmed, filtered, args.input)
@@ -265,15 +261,15 @@ def run(args):
 def main():
     parser = argparse.ArgumentParser(description="Reads Trimmer for FASTQ file; "
                                                  "Feature: Performing statistics on FASTQ file ")
-    parser.add_argument("-in", help="Filename of the input FASTQ file", dest="input", type=str, required=True)
-    parser.add_argument("-out", help="Filename of the trimmed FASTQ file", dest="output", type=str, required=True)
+    parser.add_argument("-in", help="Filename for the input FASTQ file", dest="input", type=str, required=True)
+    parser.add_argument("-out", help="Filename for the trimmed FASTQ file", dest="output", type=str, required=True)
     parser.add_argument("-sum", help="Summaryfilename", dest="sum_output", type=str, default="Summaryfile.txt")
     parser.add_argument("-stat", help="Statistics for Input FASTQ file, define Filename. "
                                       "You must specify the outputfile as False (-out False) to perform statistics",
                         dest="stat_output", type=str, default="False")
     parser.add_argument("-end3", help="Number of bases trimmed on 3' end", type=int, default=0)
     parser.add_argument("-end5", help="Number of bases trimmed on 5' end", type=int, default=0)
-    parser.add_argument("-qual", help='Specify min. Quality of reads', type=int, default=20)
+    parser.add_argument("-qual", help='Specify min. quality of reads', type=int, default=20)
     parser.add_argument("-length", help="Minimum length of reads", type=int, default=0)
     parser.add_argument("-nbases", help="Maximum of unknown bases", type=int, default=1000)
     parser.set_defaults(func=run)
