@@ -4,6 +4,7 @@ import gzip
 import re
 import argparse
 from datetime import datetime
+import timeit
 
 
 # this functions is only for statistics
@@ -122,27 +123,39 @@ def trim_user(seq_line, trim3, trim5):
 def trim_quality(seq_line, qual_arr, phred):
     end5, count, pos, end3 = 0, 0, 0, 0
     # converting quality score from 20 to given phred scale
-    phred_ascii = phred + 20
-    # starting add 5' end reading quality bytearray to new bytearray
-    if qual_arr[pos] < phred_ascii:
-        while qual_arr[pos] < phred_ascii:
-            end5 += 1
+    phred_ascii = phred + 40
+    # starting 5' end, counting characters to trim
+    for pos in qual_arr:
+        if pos < phred_ascii:
             pos += 1
-    # starting add 3' end determining numbers of characters to trim
+            end5 += 1
+        else:
+            break
+    # starting 3' end
     pos = len(qual_arr)
-    while pos >= 0:
-        pos -= 1
-        if qual_arr[pos] < phred_ascii:
-            while qual_arr[pos] < phred_ascii:
-                end3 += 1
-                pos -= 1
-    # cut the sequence the same length as the quality line
-    # trim number of characters 3' end seq_line and qual_line
+    for pos in qual_arr:
+        if pos < phred_ascii:
+            pos -= 1
+            end3 += 1
+        else:
+            break
+
+    # if qual_arr[pos] < phred_ascii:
+    #   while qual_arr[pos] < phred_ascii:
+    #      end5 += 1
+    #      pos += 1
+    # while pos >= 0:
+    #     pos -= 1
+    #     if qual_arr[pos] < phred_ascii:
+    #         while qual_arr[pos] < phred_ascii:
+    #             end3 += 1
+    #             pos -= 1
+
+    # trim 5' and 3' end, count for summaryfile
     if end3 != 0:
-        qual_arr = qual_arr[0:-end3]
-        seq_line = seq_line[0:-end3]
+        qual_arr = qual_arr[:-end3]
+        seq_line = seq_line[:-end3]
         count = 1
-    # trim 5' end from seq_line
     if end5 != 0:
         qual_arr = qual_arr[end5:]
         seq_line = seq_line[end5:]
@@ -192,12 +205,12 @@ def write_outputfile(file_list, outputfile, qual, phred, nbases, length):
     pos, filtered = 0, 0
     with open(outputfile, 'w') as outputfile:
         while pos < (len(file_list) - 1):
-            qual_arr = bytearray()
-            qual_arr.extend(map(ord, file_list[pos + 3]))
-            if filter_quality(qual_arr, qual, phred) == True and \
+            # qual_arr = bytearray()
+            # qual_arr.extend(map(ord, file_list[pos + 3]))
+            if filter_quality(file_list[pos + 3], qual, phred) == True and \
                     filter_bases_length(file_list[pos + 1], nbases, length) == True:
                 outputfile.write(file_list[pos] + '\n' + file_list[pos + 1] + '\n' + file_list[pos + 2] +
-                                 '\n' + file_list[pos + 3] + '\n')
+                                 '\n' + file_list[pos + 3].decode('utf-8') + '\n')
             else:
                 # counting filtered reads
                 filtered += 1
