@@ -20,7 +20,7 @@ There are two types of trimming based on 1) sequence and 2) quality. The first o
 
 ![](fastq.png)
 
-*Figure 1* *Structural example of a Fastq format 
+*Figure 1-Structural example of a Fastq format*
 
 
 The quality score is encrypted using the ascii code into two systems phred 33 and 64. The first one adds the 33 into the quality, the second one works in the same way so instead of adding 33 you add 64. For example using the phred+33 a quality of 20 will be represented by *“5”* who is the 53 number in ASCII code while *“T”* in +64 system (see the *Table 1*)
@@ -28,9 +28,9 @@ The quality score is encrypted using the ascii code into two systems phred 33 an
 
 ![](qscores.gif)
 
-*Table 1* Phred+33/+64 scale 
+*Table 1 Phred+33/+64 scale*
  
- Every ASCII character represents the error propability of each nucleotide to be correct, the values are from 0 to 1,  as lower the value more certain that the nucleotide is correct while 1 means that the base is certainly wrong ( see *Table 1*). This values closer to 1 in the nucleotide sequence appears like an undeterminated based (represented as 'N'). In order to remove the reads with a specified number of N's and trim low quality at 3' and 5' we present this program.
+ Every ASCII character represents the error propability of each nucleotide to be correct, the values are from 0 to 1,  as lower the value more certain that the nucleotide is correct while 1 means that the base is certainly wrong ( see *Table 1*). This values closer to 1 in the nucleotide sequence appears like an undeterminated based (represented as 'N'). In order to remove the reads with a specified number of N's and trim low quality nucleotides at 3' and 5' we present this program.
  
  
  
@@ -39,7 +39,7 @@ The quality score is encrypted using the ascii code into two systems phred 33 an
 
 ![](BasicAlgorithm_BetterQuality.png)
 
-*Figure X* Algorithm Scheme
+*Figure 2 Algorithm Scheme*
 
 This program relies on the uniform structure of FASTQ files: The first position the header followed by the sequence, the third line and the quality line. Thus, the file get read into a list and all following
 operations were by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
@@ -67,6 +67,7 @@ main()
 
 
 ## 4. Program Design
+T
 
 
 
@@ -78,6 +79,7 @@ has to be keeped in mind: different phred scales, structure of a fastq file, sim
 ### 5.1. Trimming and Filtering 
 Following program will trimm and filter your FASTQ file according to quality, length and unknown (N's) bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X). The output consist of two outputfiles - a fastq file with filtered and trimmed reads and a summaryfile which contains information about the number of filtered + trimmed reads.
 
+<span style="color:red;"> Atention! up</span>
 *Attention!*
 To make the script executable you must run following line:
 
