@@ -8,7 +8,7 @@ The goal of this project is to generate a program, which trims Next-Generation S
 ## 2. Theory
 Next Generation Sequencing has played an important role to understand the biology mechanisms under a genomics perspective.In the earlies X the price of sequence a genome was  very high but with time, the sequencing cost has decreased and the genomic data production has increased.Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing in order to perform analysis downstream it must be pre-processed. There are different pipelines that could be used to preprocess the data some of them share steps like quality check, duplicated removal,  and  trimming reads.Read trimming is the process to remove low quality bases or adapters while preserving the longest high quality part of a NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could  reduce the computational time(Didion,J.P *et al*., 2017; Del Fabbro et al., 2013;  J. Bush S., 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data(Liao Y and Shi W., 2020). 
 
-Didion and colleagues mention that several trimming tools had been developed  however there is not one that simultaneously provides the accuracy, computational efficiency and feature set  to work with the types and volumes of data (Didion,J.P *et al*., 2017) reason why different tools are still emerging. The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic(Bush S., 2020)
+Didion and colleagues mention that several trimming tools had been developed  however there is not one that simultaneously provides the accuracy, computational efficiency and feature set  to work with the types and volumes of data (Didion,J.P *et al*., 2017) reason why different tools are still emerging. The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic(Bush S., 2020).
 
 There are two types of trimming based on 1) sequence and 2) quality. The first one is able to cut sequence adapters while the second one nucleotides based on the quality based on a prhed score. Both perspectives use a fastq file, this file keeps the information of the sequencing and is conformed by: 
 
@@ -67,7 +67,7 @@ main()
 
 
 ## 4. Program Design
-T
+ADD the diagram
 
 
 
@@ -79,11 +79,8 @@ has to be keeped in mind: different phred scales, structure of a fastq file, sim
 ### 5.1. Trimming and Filtering 
 Following program will trimm and filter your FASTQ file according to quality, length and unknown (N's) bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X). The output consist of two outputfiles - a fastq file with filtered and trimmed reads and a summaryfile which contains information about the number of filtered + trimmed reads.
 
-```diff
-+ this text is highlighted in green
-- this text is highlighted in red
-```
-*Attention!*
+
+*Attention* :heavy_exclamation_mark:
 To make the script executable you must run following line:
 
 ```{p}
@@ -169,7 +166,8 @@ Figure X. depict
 
 ## 7. Discussion
 
-Runtime, a lot of function calls, finding alternative to list list of lists, tuples, arrays,... 
+
+Runtime, a lot of function calls, finding alternative to list list of lists, tuples, arrays,... COMPARE WITH EXISTING ALGORITHMS
 
 Relying on uniform format of fastq file 
 
@@ -180,6 +178,10 @@ We were surprised by the huge amount of runtime the filter_quality function requ
 Quality of single residue trimming is 20 cant be changed by user, in further approach make it optional
 
 ## 8. References
+Bush, S. J. (2020). Read trimming has minimal effect on bacterial SNP calling accuracy. *bioRxiv.*
+Del Fabbro, C., Scalabrin, S., Morgante, M., & Giorgi, F. M. (2013). An extensive evaluation of read trimming effects on Illumina NGS data analysis. *PloS one*, 8(12), e85024.
+Didion, J. P., Martin, M., & Collins, F. S. (2017). Atropos: specific, sensitive, and speedy trimming of sequencing reads. *PeerJ*, 5, e3720.
+Liao, Y., & Shi, W. (2020). Read trimming is not required for mapping and quantification of RNA-seq reads at the gene level. *NAR Genomics and Bioinformatics*, 2(3), lqaa068.
 
 ## 9. List of Figures
 
