@@ -135,7 +135,7 @@ Following command trims 6 bases from each end of the read, filters all reads wit
 
 
 ```{p}
-./fastqtrimmer.py -in Sample1.fastq -out Sample1_trimmed.fastq -sum SummarySample1_trimming.txt -end3 6 -end5 6 -qual 30 -length 50 -nbases 2
+./fastqtrimmer.py -in S1.fastq -out S1_trim.fastq -sum S1_trim_summary.txt -end3 6 -end5 6 -qual 30 -length 50 -nbases 2
 ```
 
 
@@ -161,12 +161,22 @@ To get an overview over the commands you can use, use following command:
 
 ## 6. Runtime Analysis
 
+### 6.1.Big O
+Detect_quality = O(1)
+Trimmer = O(n)
+Filter = O(N)
+Summary = O(1)
+
+### 6.2. Additional Analysis
+
 The main reasons for a slowdown in our runtime are the multiple function calls and
 s. An alternative approach could be to store the lines in a Numpy Array. 
 An alternative approach to improve runtime performance could be to use packages such as NumPy. Hereby, we would suggest storing
 the lines in a NumPy Array and passing the NumPy Array(NumPy Array with Sequence string and NumPy Array with Quality string) to the functions, instead of passing each line separately to the function.
 
-To visualize the function calls and get a better understanding for the runtime performance we used the library [Python Call Graph](https://pycallgraph.readthedocs.io/en/master/). A cutout of those results are visible in Figure X. Since the programm passes the strings individually to the functions, the amount of function calls is noticably high. Considering that for creating this scheme a fastq-file with 1000 reads was used and a common fastq file is much bigger, an reduction of these function calls should be strived. Further there is a significant difference between the several trim and filter functions in runtime. Especially, the functions trim_quality() and filter_quality() require a huge amount of time to compute. Comparing those two functions, which both get a bytearray as input and perform stat
+To visualize the function calls and get a better understanding for the runtime performance we used the library [Python Call Graph](https://pycallgraph.readthedocs.io/en/master/). A cutout of those results are visible in Figure X. Since the program passes the strings individually to the functions, the amount of function calls is noticably high. Considering that for creating this scheme a fastq-file with 1000 reads was used and a common fastq file is much bigger, an reduction of these function calls should be strived. Moreover the runtime of trim_quality, is 100x times higher than, the other trim and filter functions. This is a potential point for runtime optimization.
+
+
 ![](pycallgraph_new.png)
 
 ![](overview_runtime.png)
