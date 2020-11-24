@@ -167,6 +167,7 @@ An alternative approach to improve runtime performance could be to use packages 
 the lines in a NumPy Array and passing the NumPy Array(NumPy Array with Sequence string and NumPy Array with Quality string) to the functions, instead of passing each line separately to the function.
 
 To visualize the function calls and get a better understanding for the runtime performance we used the library [Python Call Graph](https://pycallgraph.readthedocs.io/en/master/). A cutout of those results are visible in Figure X. Since the programm passes the strings individually to the functions, the amount of function calls is noticably high. Considering that for creating this scheme a fastq-file with 1000 reads was used and a common fastq file is much bigger, an reduction of these function calls should be strived. Further there is a significant difference between the several trim and filter functions in runtime. Especially, the functions trim_quality() and filter_quality() require a huge amount of time to compute. Comparing those two functions, which both get a bytearray as input and perform stat
+![](pycallgraph_new.png)
 
 ![](overview_runtime.png)
 
