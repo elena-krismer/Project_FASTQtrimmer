@@ -6,9 +6,9 @@ The goal of this project is to generate a program, which trims Next-Generation S
 - purpose of our programm 
 
 ## 2. Theory
-Next Generation Sequencing has played an important role to understand the biology mechanisms under a genomics perspective.In the earlies X the price of sequence a genome was  very high but with time, the sequencing cost has decreased and the genomic data production has increased.Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing in order to perform analysis downstream it must be pre-processed. There are different pipelines that could be used to preprocess the data some of them share steps like quality check, duplicated removal,  and  trimming reads.Read trimming is the process to remove low quality bases or adapters while preserving the longest high quality part of a NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could  reduce the computational time(Didion,J.P *et al*., 2017; Del Fabbro et al., 2013;  J. Bush S., 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data(Liao Y and Shi W., 2020). 
+Next Generation Sequencing has played an important role to understand the biology mechanisms under a genomics perspective. In the earlies X the price of sequence a genome was  very high but with time, the sequencing cost has decreased and the genomic data production has increased.Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing in order to perform analysis downstream it must be pre-processed. There are different pipelines that could be used to preprocess the data some of them share steps like quality check, duplicated removal,  and  trimming reads.Read trimming is the process to remove low quality bases or adapters while preserving the longest high quality part of a NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could  reduce the computational time(Didion et al., 2017; Del Fabbro et al., 2013;  Bush, 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data(Liao et Shi , 2020). 
 
-Didion and colleagues mention that several trimming tools had been developed  however there is not one that simultaneously provides the accuracy, computational efficiency and feature set  to work with the types and volumes of data (Didion,J.P *et al*., 2017) reason why different tools are still emerging. The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic(Bush S., 2020).
+Didion and colleagues mention that several trimming tools had been developed  however there is not one that simultaneously provides the accuracy, computational efficiency and feature set  to work with the types and volumes of data (Didion et al., 2017) reason why different tools are still emerging. The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic(Bush, 2020).
 
 There are two types of trimming based on 1) sequence and 2) quality. The first one is able to cut sequence adapters while the second one nucleotides based on the quality based on a prhed score. Both perspectives use a fastq file, this file keeps the information of the sequencing and is conformed by: 
 
@@ -35,9 +35,8 @@ The quality score is encrypted using the ascii code into two systems phred 33 an
  
  
 ## 3. Algorithm Design
-Running sum algorithms
 
-
+The algorithm uses mainly while structures. Further conditional statements and sequences are used.
 
 
 ![](BasicAlgorithm_BetterQuality.png)
@@ -52,18 +51,29 @@ all three filter-functions (Mean Quality of the read, Number of unknown bases an
 all four lines of the read get read into the output file. In case the read does not pass the test it will be not read into the outputfile
 and counted as 'filtered'.
 
-```{p}
-main()
-    read file into list
-    while read list
-        determine phred: position quality
-        trim position 1(+4)/sequence and 3(+4)/quality
-        trim quality 1(+4)/sequence and 3(+4)/quality
-        count quality trims `
+The programm consist of two major steps:
 
-    while reading modified list
+- **Trimming**: After the file is read into a list the sequence and the corresponding quality line will be trimmed
+ - Trimming Bases: the user specified number of bases will be trimmed from the 5' and 3'end, the same amount of characters will be trimmed from the quality line
+ - Trimming Quality 
+
+```{p}
+    position_sequence = 1
+    positon_quality = 3
+    while read list
+        trimming bases: list[position_sequence, position_quality]
+        trimming quality: list[position_sequence, position_quality]
+        count quality trims `
+     position_sequence += 4
+     position_quality += 4
+```
+
+- **Filtering and Writing in Outputfile**:
+
+```{p}
+    while reading trimmed list
         filter quality, unknown bases, length if True:
-            read first, second, third and fourth line into file
+            write all four lines into file
          else: count as filtered read
     write summary file with count of filtered and trimmed reads
 ```
@@ -71,8 +81,6 @@ main()
 
 ## 4. Program Design
 ADD the diagram
-
-![](progfunct.png)
 
 
 
@@ -85,7 +93,7 @@ has to be keeped in mind: different phred scales, structure of a fastq file, sim
 Following program will trimm and filter your FASTQ file according to quality, length and unknown (N's) bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X). The output consist of two outputfiles - a fastq file with filtered and trimmed reads and a summaryfile which contains information about the number of filtered + trimmed reads.
 
 
-:heavy_exclamation_mark:*Attention* :heavy_exclamation_mark:
+*Attention* :heavy_exclamation_mark:
 To make the script executable you must run following line:
 
 ```{p}
@@ -181,6 +189,20 @@ We were surprised by the huge amount of runtime the filter_quality function requ
 
 
 Quality of single residue trimming is 20 cant be changed by user, in further approach make it optional
+
+- maintance of the programm, changes in phred scale, fastq file format will make the script useless
+- user friendly can be used by everyone who knows how to use a command line
+- robustness semi good extraordinary bad fastq files? - 
+
+The main bottleneck of the program is the detection of the Phred scale. The quality detection is extremely sensitive around the value 75 (=K), which is a quality score of 42 on Phred 33 scale and a quality score of 11 on Phred scale 64. Thus the program will fail, when the quality of the read is either consistently high (on Phred scale 33) or consistently low (on Phred scale 64). Since the quality of the first reads is commonly the lowest we choose the quality of the 100st read (which is in a common FASTQ file still an early position) for detection. In further steps their could be an error handling implemented, which uses the next read in case the quality scale of the first read can not be determined. As an alternative, another algorithm for the phred scale determination should be considered. However, using the 100st position implifies that a very small FASTQ file can not be feed to the program.
+
+Further the algorithm relies on the uniform strucutre of a FASTQ file, any additional lines or blank lines will result in a invalid output or a premature ending of the run. 
+
+Considering the changes in quality scales overtime, the maintance of the progam should be questioned. Any changes in the quality scale or the common format of the FASTQ file will make this program useless. 
+
+The main strength of the program is the easy handling. For every person, who knows how to use a command line.
+
+Additionally, the modularization of the program allows changes(for instance only trimming or filtering of the file) without messing up the program.
 
 ## 8. References
 Bush, S. J. (2020). Read trimming has minimal effect on bacterial SNP calling accuracy. *bioRxiv.*
