@@ -79,7 +79,10 @@ has to be keeped in mind: different phred scales, structure of a fastq file, sim
 ### 5.1. Trimming and Filtering 
 Following program will trimm and filter your FASTQ file according to quality, length and unknown (N's) bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X). The output consist of two outputfiles - a fastq file with filtered and trimmed reads and a summaryfile which contains information about the number of filtered + trimmed reads.
 
-<font color="red">Attention!</font>
+```diff
++ this text is highlighted in green
+- this text is highlighted in red
+```
 *Attention!*
 To make the script executable you must run following line:
 
