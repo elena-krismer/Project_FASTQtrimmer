@@ -35,6 +35,9 @@ The quality score is encrypted using the ascii code into two systems phred 33 an
  
  
 ## 3. Algorithm Design
+Running sum algorithms
+
+
 
 
 ![](BasicAlgorithm_BetterQuality.png)
@@ -69,6 +72,8 @@ main()
 ## 4. Program Design
 ADD the diagram
 
+![](progfunct.png)
+
 
 
 
@@ -80,7 +85,7 @@ has to be keeped in mind: different phred scales, structure of a fastq file, sim
 Following program will trimm and filter your FASTQ file according to quality, length and unknown (N's) bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X). The output consist of two outputfiles - a fastq file with filtered and trimmed reads and a summaryfile which contains information about the number of filtered + trimmed reads.
 
 
-*Attention* :heavy_exclamation_mark:
+:heavy_exclamation_mark:*Attention* :heavy_exclamation_mark:
 To make the script executable you must run following line:
 
 ```{p}
@@ -179,8 +184,11 @@ Quality of single residue trimming is 20 cant be changed by user, in further app
 
 ## 8. References
 Bush, S. J. (2020). Read trimming has minimal effect on bacterial SNP calling accuracy. *bioRxiv.*
+
 Del Fabbro, C., Scalabrin, S., Morgante, M., & Giorgi, F. M. (2013). An extensive evaluation of read trimming effects on Illumina NGS data analysis. *PloS one*, 8(12), e85024.
+
 Didion, J. P., Martin, M., & Collins, F. S. (2017). Atropos: specific, sensitive, and speedy trimming of sequencing reads. *PeerJ*, 5, e3720.
+
 Liao, Y., & Shi, W. (2020). Read trimming is not required for mapping and quantification of RNA-seq reads at the gene level. *NAR Genomics and Bioinformatics*, 2(3), lqaa068.
 
 ## 9. List of Figures
