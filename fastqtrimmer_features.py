@@ -120,37 +120,34 @@ def trim_user(seq_line, trim3, trim5):
 
 # functions trims quality lower than 20 from each end
 def trim_quality(seq_line, qual_arr, phred):
-    qual_trim, count, pos, end3 = bytearray(), 0, -1, 0
+    end5, count, pos, end3 = 0, 0, 0, 0
     # converting quality score from 20 to given phred scale
     phred_ascii = phred + 20
     # starting add 5' end reading quality bytearray to new bytearray
-    while pos < (len(qual_arr) - 1):
-        pos += 1
-        if qual_arr[pos] > phred_ascii:
-            while pos < (len(qual_arr) - 1):
-                qual_trim.append(qual_arr[pos])
-                pos += 1
+    if qual_arr[pos] < phred_ascii:
+        while qual_arr[pos] < phred_ascii:
+            end5 += 1
+            pos += 1
     # starting add 3' end determining numbers of characters to trim
-    pos = (len(qual_trim) - 1)
+    pos = len(qual_arr)
     while pos >= 0:
         pos -= 1
-        if qual_trim[pos] < phred_ascii:
-            while qual_trim[pos] < phred_ascii:
+        if qual_arr[pos] < phred_ascii:
+            while qual_arr[pos] < phred_ascii:
                 end3 += 1
                 pos -= 1
     # cut the sequence the same length as the quality line
-    untrimmed_len = len(seq_line)
-    qual_trim = qual_trim.decode('utf-8')
     # trim number of characters 3' end seq_line and qual_line
     if end3 != 0:
-        qual_trim = qual_trim[0:-end3]
-        seq_line = seq_line[:end3]
+        qual_arr = qual_arr[0:-end3]
+        seq_line = seq_line[0:-end3]
         count = 1
     # trim 5' end from seq_line
-    if (untrimmed_len - len(qual_trim)) != 0:
-        seq_line = seq_line[(untrimmed_len - len(qual_trim)):]
+    if end5 != 0:
+        qual_arr = qual_arr[end5:]
+        seq_line = seq_line[end5:]
         count = 1
-    return seq_line, qual_trim, count
+    return seq_line, qual_arr, count
 
 
 # filter according to user specified mean quality - default 20
@@ -252,7 +249,7 @@ def run(args):
 
         # determining quality scale
         qual_arr = bytearray()
-        qual_arr.extend(map(ord, file_list[6]))
+        qual_arr.extend(map(ord, file_list[402]))
         phred = detect_quality(qual_arr)
         # trimming list
         func_return = trimming_list(file_list, trim3, trim5, phred)
