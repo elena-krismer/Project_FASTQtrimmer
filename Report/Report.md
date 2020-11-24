@@ -6,21 +6,21 @@ The goal of this project is to generate a program, which trims Next-Generation S
 - purpose of our programm 
 
 ## 2. Theory
-Next Generation Sequencing has played an important role to understand the biology mechanisms under a genomics perspective.In the earlies X the price of sequence a genome was  very high but with time, the sequencing cost has decreased and the genomic data production has increased.Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing,  in order to perform analysis downstream it must be pre-processed. There are different pipelines that could be used to preprocess the data some of them share steps like quality check, duplicated removal,  and  trimming reads.Read trimming is the process to remove low quality bases or adapters while preserving the longest high quality part of a NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination and potentially could  reduce the computational time(Didion,J.P *et al*., 2017; Del Fabbro et al., 2013) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting an  impact in the accuracy of the gene expression quantification(Liao Y and Shi W., 2020). 
+Next Generation Sequencing has played an important role to understand the biology mechanisms under a genomics perspective.In the earlies X the price of sequence a genome was  very high but with time, the sequencing cost has decreased and the genomic data production has increased.Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing in order to perform analysis downstream it must be pre-processed. There are different pipelines that could be used to preprocess the data some of them share steps like quality check, duplicated removal,  and  trimming reads.Read trimming is the process to remove low quality bases or adapters while preserving the longest high quality part of a NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could  reduce the computational time(Didion,J.P *et al*., 2017; Del Fabbro et al., 2013;  J. Bush S., 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data(Liao Y and Shi W., 2020). 
 
-Didion and  colleagues mention that several trimming tools had been developed  however there is not one that simultaneously provides the accuracy, computational efficiency and feature set  to work with the types and volumes of data (Didion,J.P *et al*., 2017) reason why different tools are still emerging.
+Didion and colleagues mention that several trimming tools had been developed  however there is not one that simultaneously provides the accuracy, computational efficiency and feature set  to work with the types and volumes of data (Didion,J.P *et al*., 2017) reason why different tools are still emerging. The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic(Bush S., 2020)
 
-
-There are two types of trimming  based on 1) sequence and 2) quality. The first one is able to cut sequence adapters while the second one nucleotides based on the quality based on a prhed score. Both perspectives use a fastq file, this file is conformed by: 
+There are two types of trimming based on 1) sequence and 2) quality. The first one is able to cut sequence adapters while the second one nucleotides based on the quality based on a prhed score. Both perspectives use a fastq file, this file keeps the information of the sequencing and is conformed by: 
 
 1. Header with the sequence identifier and information about the run and the cluster
 2. The sequence (A,C,T, G and N)
-3. "+" character separator 
+3. "+" character separator sometimes followed by the header
 4. Base quality score Phred +33 or +64 enconded, represented by ASCII characters
+
 
 ![](fastq.png)
 
-*Figure 1* Fastq format 
+*Figure 1* *Structural example of a Fastq format 
 
 
 The quality score is encrypted using the ascii code into two systems phred 33 and 64. The first one adds the 33 into the quality, the second one works in the same way so instead of adding 33 you add 64. For example using the phred+33 a quality of 20 will be represented by *“5”* who is the 53 number in ASCII code while *“T”* in +64 system (see the *Table 1*)
@@ -30,17 +30,10 @@ The quality score is encrypted using the ascii code into two systems phred 33 an
 
 *Table 1* Phred+33/+64 scale 
  
- MENTion about the quality/error codde
-
-- Whats next generation sequencing? 
-- Whats a FASTQ File? structure
-- Where is used/important - Why we need to trim file?
-- Whats phred scale? 
-- types of trimming
-
-
-
-
+ Every ASCII character represents the error propability of each nucleotide to be correct, the values are from 0 to 1,  as lower the value more certain that the nucleotide is correct while 1 means that the base is certainly wrong ( see *Table 1*). This values closer to 1 in the nucleotide sequence appears like an undeterminated based (represented as 'N'). In order to remove the reads with a specified number of N's and trim low quality at 3' and 5' we present this program.
+ 
+ 
+ 
 ## 3. Algorithm Design
 
 
