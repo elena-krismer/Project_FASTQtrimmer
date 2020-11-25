@@ -2,7 +2,8 @@
 
 To do/think of/ not forget?
 - which time to we use when writting the theory future, present, conjunktiv; will be filter, should,... i am confused lol 'has to be adjusted to the ohred scle/will be adjust/must be adjusted/is adjusted????
--
+- big o isnt finished but please take a look at it - its so weird 
+
 ## 1. Introduction
 
 Next Generation Sequencing has played an important role to understand the biology mechanisms under a genomics perspective. In the early 2001 the price of sequence a genome was  very high but with time, the sequencing cost has decreased and the genomic data production has increased.Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing in order to perform analysis downstream it must be pre-processed. There are different pipelines that could be used to preprocess the data some of them share steps like quality check, duplicated removal,  and  trimming reads.Read trimming is the process to remove low quality bases or adapters while preserving the longest high quality part of a NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could  reduce the computational time(Didion et al., 2017; Del Fabbro et al., 2013;  Bush, 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data(Liao et Shi , 2020). 
@@ -232,24 +233,38 @@ To get an overview over the commands you can use, use following command:
 ## 6. Runtime Analysis
 
 ### 6.1. Big O
-To evaluate the runtime in Big O terms a small overview over the functions and their complexity:
+To evaluate the runtime in Big O terms a small overview over the functions and there complexity:
 
 ```{p}
     run()
-    
     # O(1)
-    detect_quality
+    open the file 
     
-    # O(n*m)
-    trimming_list
+    # O(n*m), n is number of lines, m is length of lines
+    read into list
+    
+    # O(m)
+    detect_quality - calculation of min and average
     
     # O(n)
+    trimming_list - iteration over list 
+      # O(1) 
+      trim_user - simple indexing
+      # O(m) 
+      trim_quality - iteration over string
+    
+    # O(n*m)
     write_ouputfile
+      # O(m)
+      filter_nbases_length
+      # O(m)
+      filter_quality - calculating average
     
     # O(1)
     write_summaryfile
 ```
 
+m doesn´t matter that much so O(n)? 
 
 ### 6.2. Further Insights
 The main reasons for a slowdown in our runtime are the multiple function calls and
