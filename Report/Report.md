@@ -37,9 +37,6 @@ The main goal of this project is to generate a program, which trims Next-Generat
 - purpose of our programm 
 
 ## 2. Theory
-[Theory - explanation of more theoretical aspects
-The Theory section should contain all the math, deliberations, considerations, insights and high-level decisions that lies at the root of the problem/project. It can be fine to present the core of the idea for your program in a few lines] #what Peter "wants"
-
 As described in the introduction every read in a FASTQ file consists of four lines. This convention is the base of the program. Thus, the file get read into a list and all following operations are perforemd by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
 
 The output of the program consists of two files the trimmed and filtered FASTQ file and the summaryfile, containing the count of trimmed and filtered reads. For trimming it has to be noticed that the position 'x' in the sequence line corresponds to position 'x' in the quality line. Thus when trimming the same amount of characters has to be trimmed from both lines. 
@@ -57,10 +54,8 @@ To not overwhelm the user with to many options, the trimming and quality paramet
 
 where the *i* is the Phred quality of the *i*-th base
 
-##Elena :cherry_blossom::sparkles:
-I was thinking that probably mention that the program could remove adapters not based in the sequence, just in the positions. Because if the user define the # of nucleotides to trimm in the ends he could easily could enter a number of the lenght of the adapters and it could be an advantage that we could mention in the discussion because is not heavy computationally compared with find the sequence (I guess) what do you think? :ear: -YES can you add it? :)
+As part of design, the program can be used to remove sequencing adapters at the ends of the sequences (3' and 5').In order to perform it the user introduce the length of the adapters according.The program is based on two assumptions: the first is that only one adapter exists in the data; the second is that adapter sequences exist only in the read tails, asumptions that are valid for platform sequencers like Illumina HiSeq series, NextSeq series and NovaSeq(Chen, S., et al 2018).The mentioned stragegy is applied due the low computing time compared with the overlapping detection algorithm implemented by programs such as *fastp*, *Trimmomatic, Cutadapt and SOAPnuke*.
 
- 
  
  
 ## 3. Algorithm Design
@@ -285,7 +280,8 @@ Figure X. depict
 
 
 ## 7. Discussion
-mention the plataform files who is able to read
+platforms: add/compare with the  trimming based on adapter 
+
 
 The main bottleneck of the program is the detection of the Phred scale. The quality detection is extremely sensitive around the value 75 (=K), which is a quality score of 42 on Phred 33 scale and a quality score of 11 on Phred scale 64. In case the read has considerably low quality (lower than 11) on a Phred scale 64, the Phred scale will be determined incorrectly as Phred scale 33. Since the quality of the first reads is commonly the lowest we choose the quality of the 100st read (which is in a common FASTQ file still an early position) for detection. In further steps their could be an error handling implemented, which uses the next read in case the quality scale of the first read can not be determined. As an alternative, another algorithm for the phred scale determination should be considered. However, using the 100st position implifies that a very small FASTQ file can not be feed to the program.
 
@@ -301,8 +297,12 @@ The main strength of the program is the easy handling. For every person, who kno
 
 Overall, the program is functional and provides the desired output.
 
+
+
 ## 8. References
 Bush, S. J. (2020). Read trimming has minimal effect on bacterial SNP calling accuracy. *bioRxiv.*
+
+Chen, S., Zhou, Y., Chen, Y., & Gu, J. (2018). fastp: an ultra-fast all-in-one FASTQ preprocessor. *Bioinformatics*, 34(17), i884-i890.
 
 Del Fabbro, C., Scalabrin, S., Morgante, M., & Giorgi, F. M. (2013). An extensive evaluation of read trimming effects on Illumina NGS data analysis. *PloS one*, 8(12), e85024.
 
