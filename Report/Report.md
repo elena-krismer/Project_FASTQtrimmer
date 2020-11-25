@@ -289,15 +289,15 @@ mention the plataform files who is able to read
 
 The main bottleneck of the program is the detection of the Phred scale. The quality detection is extremely sensitive around the value 75 (=K), which is a quality score of 42 on Phred 33 scale and a quality score of 11 on Phred scale 64. In case the read has considerably low quality (lower than 11) on a Phred scale 64, the Phred scale will be determined incorrectly as Phred scale 33. Since the quality of the first reads is commonly the lowest we choose the quality of the 100st read (which is in a common FASTQ file still an early position) for detection. In further steps their could be an error handling implemented, which uses the next read in case the quality scale of the first read can not be determined. As an alternative, another algorithm for the phred scale determination should be considered. However, using the 100st position implifies that a very small FASTQ file can not be feed to the program.
 
-Further the algorithm relies on the uniform strucutre of a FASTQ file, any additional lines or blank lines will result in a invalid output or a premature ending of the run. 
+Further to avoid two iterations over the list, it should be aspired to trim, filter and write into the outputfile in one iteration. However, the current modularization into two seperat steps allows to modify the code, without messing up the program and makes it easier to read, at least to our experience.
+
+The algorithm relies on the uniform strucutre of a FASTQ file, any additional lines or blank lines will result in a invalid output or a premature ending of the run. 
 
 Considering the inconsistent usage of the Phred scale, the maintance of the progam should be questioned. Any changes in the quality scale or the common format of the FASTQ file will make this program useless. 
 
-As visualized in 6.2. the program consists of multiple function calls. To decrease function calls and conceivably improve runtime performance, the usage of other datatypes, like arrays or tuples should be aspired.
+As visualized in 6.2. the program consists of multiple function calls. To decrease function calls and conceivably improve runtime performance, the usage of other datatypes, like arrays or tuples should be aspired. 
 
 The main strength of the program is the easy handling. For every person, who knows how to use a command line.
-
-Additionally, the modularization of the program allows changes(for instance only trimming or filtering of the file) without messing up the program.
 
 Overall, the program is functional and provides the desired output.
 
