@@ -62,7 +62,7 @@ def fastq_statistics(infile, statisticfile):
     typefile = re.search(r'\S*\.gz', infile)
     if typefile:
         try:
-            infile = open(infile, mode='rt')
+            infile = gzip.open(infile, mode='rt')
         except IOError as error:
             print('Can not open gzip file', str(error))
             sys.exit(1)
@@ -98,12 +98,12 @@ def fastq_statistics(infile, statisticfile):
 
 # detection of phred scale using bytearray
 # takes bytearray as input
-def detect_quality(ascii_string):
+def detect_quality(qual_arr):
     # phred 33 range= 33-75
-    if max(ascii_string) <= 75 and min(ascii_string) < 59:
+    if sum(qual_arr) / len(qual_arr) < 75:
         phred_scale = 33
     # phred 64 range = 64 - 106
-    elif max(ascii_string) > 75 and min(ascii_string) >= 64:
+    elif max(qual_arr) >= 75:
         phred_scale = 64
     else:
         print("Error in determining quality scale")
@@ -112,10 +112,10 @@ def detect_quality(ascii_string):
 
 
 # trimming user specified 3' and 5' end
-def trim_user(seq_line, trim3, trim5):
-    trim_line = seq_line[trim5:]
-    if trim3 != 0:
-        trim_line = trim_line[:-(trim3)]
+def trim_user(seq_line, end3, end5):
+    trim_line = seq_line[end5:]
+    if end3 != 0:
+        trim_line = trim_line[:-end3]
     return trim_line
 
 
@@ -123,23 +123,22 @@ def trim_user(seq_line, trim3, trim5):
 def trim_quality(seq_line, qual_arr, phred):
     end5, count, pos, end3 = 0, 0, 0, 0
     # converting quality score from 20 to given phred scale
-    phred_ascii = phred + 40
+    phred_ascii = phred + 20
     # starting 5' end, counting characters to trim
     for pos in qual_arr:
         if pos < phred_ascii:
-            pos += 1
             end5 += 1
+            pos += 1
         else:
             break
     # starting 3' end
-    pos = len(qual_arr)
+    pos = (len(qual_arr) - 1)
     for pos in qual_arr:
         if pos < phred_ascii:
-            pos -= 1
             end3 += 1
+            pos -= 1
         else:
             break
-
     # if qual_arr[pos] < phred_ascii:
     #   while qual_arr[pos] < phred_ascii:
     #      end5 += 1
@@ -150,7 +149,6 @@ def trim_quality(seq_line, qual_arr, phred):
     #         while qual_arr[pos] < phred_ascii:
     #             end3 += 1
     #             pos -= 1
-
     # trim 5' and 3' end, count for summaryfile
     if end3 != 0:
         qual_arr = qual_arr[:-end3]
@@ -232,7 +230,7 @@ def write_summary(summaryfile, trimmed, filtered, infile):
 def run(args):
     file_list = list()
     infile, outputfile, summaryfile, statisticfile = args.input, args.output, args.sum_output, args.stat_output
-    qual, trim3, trim5, length, nbases = args.qual, args.end3, args.end5, args.length, args.nbases
+    qual, end3, end5, length, nbases = args.qual, args.end3, args.end5, args.length, args.nbases
     # feature statistics
     if outputfile == 'False' and statisticfile != 'False':
         fastq_statistics(infile, statisticfile)
@@ -262,15 +260,16 @@ def run(args):
 
         # determining quality scale
         qual_arr = bytearray()
-        qual_arr.extend(map(ord, file_list[402]))
+        qual_arr.extend(map(ord, file_list[7]))
         phred = detect_quality(qual_arr)
         # trimming list
-        func_return = trimming_list(file_list, trim3, trim5, phred)
+        func_return = trimming_list(file_list, end3, end5, phred)
         file_list = func_return[0]
         trimmed = func_return[1]
         # filter list, writing in file
         filtered = write_outputfile(file_list, outputfile, qual, phred, nbases, length)
         write_summary(summaryfile, trimmed, filtered, args.input)
+        print(timeit.timeit())
 
 
 def main():
