@@ -107,7 +107,7 @@ The Program Design section explains the high-level structure of the program - wh
 
 - **Reading into a list**
 
-- **Determining Phred Scale**
+- **Determining Phred Scale**: the input is the quality line as bytearray from 100st read.
 ```{p}
     detect_quality()
      if mean(ASCII value) < 75:
@@ -132,6 +132,7 @@ The 'main' trimming function (trimming_list) passes the strings to the function 
 
 ```{p}
     def trim_quality()
+    adjusting quality with phred scale 
      for positon in bytearray:
       position < quality:
       
