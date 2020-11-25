@@ -4,7 +4,6 @@ import gzip
 import re
 import argparse
 from datetime import datetime
-import timeit
 
 
 # this functions is only for statistics
@@ -179,11 +178,11 @@ def filter_bases_length(seq_line, n_bases, threshold_reads):
 
 
 # main function for trimming
-def trimming_list(file_list, trim3, trim5, phred):
+def trimming_list(file_list, end3, end5, phred):
     pos_seq, pos_qual, trimmed = 1, 3, 0
     while pos_qual < len(file_list):
-        file_list[pos_seq] = trim_user(file_list[pos_seq], trim3, trim5)
-        file_list[pos_qual] = trim_user(file_list[pos_qual], trim3, trim5)
+        file_list[pos_seq] = trim_user(file_list[pos_seq], end3, end5)
+        file_list[pos_qual] = trim_user(file_list[pos_qual], end3, end5)
         # saving trim_quality() return in variable
         qual_arr = bytearray()
         qual_arr.extend(map(ord, file_list[pos_qual]))
@@ -269,7 +268,6 @@ def run(args):
         # filter list, writing in file
         filtered = write_outputfile(file_list, outputfile, qual, phred, nbases, length)
         write_summary(summaryfile, trimmed, filtered, args.input)
-        print(timeit.timeit())
 
 
 def main():
