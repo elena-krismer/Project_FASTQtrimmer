@@ -1,12 +1,7 @@
 # Project
 ## 1. Introduction
 
-The goal of this project is to generate a program, which trims Next-Generation Sequencing data based on quality. 
-
-- purpose of our programm 
-
-## 2. Theory
-Next Generation Sequencing has played an important role to understand the biology mechanisms under a genomics perspective. In the earlies X the price of sequence a genome was  very high but with time, the sequencing cost has decreased and the genomic data production has increased.Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing in order to perform analysis downstream it must be pre-processed. There are different pipelines that could be used to preprocess the data some of them share steps like quality check, duplicated removal,  and  trimming reads.Read trimming is the process to remove low quality bases or adapters while preserving the longest high quality part of a NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could  reduce the computational time(Didion et al., 2017; Del Fabbro et al., 2013;  Bush, 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data(Liao et Shi , 2020). 
+Next Generation Sequencing has played an important role to understand the biology mechanisms under a genomics perspective. In the early 2001 the price of sequence a genome was  very high but with time, the sequencing cost has decreased and the genomic data production has increased.Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing in order to perform analysis downstream it must be pre-processed. There are different pipelines that could be used to preprocess the data some of them share steps like quality check, duplicated removal,  and  trimming reads.Read trimming is the process to remove low quality bases or adapters while preserving the longest high quality part of a NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could  reduce the computational time(Didion et al., 2017; Del Fabbro et al., 2013;  Bush, 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data(Liao et Shi , 2020). 
 
 Didion and colleagues mention that several trimming tools had been developed  however there is not one that simultaneously provides the accuracy, computational efficiency and feature set  to work with the types and volumes of data (Didion et al., 2017) reason why different tools are still emerging. The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic(Bush, 2020).
 
@@ -30,13 +25,33 @@ The quality score is encrypted using the ascii code into two systems phred 33 an
 
 *Table 1 Phred+33/+64 scale*
  
- Every ASCII character represents the error propability of each nucleotide to be correct, the values are from 0 to 1,  as lower the value more certain that the nucleotide is correct while 1 means that the base is certainly wrong ( see *Table 1*). This values closer to 1 in the nucleotide sequence appears like an undeterminated based (represented as 'N'). In order to remove the reads with a specified number of N's and trim low quality nucleotides at 3' and 5' we present this program.
+ Every ASCII character represents the error propability of each nucleotide to be correct, the values are from 0 to 1,  as lower the value more certain that the nucleotide is correct while 1 means that the base is certainly wrong ( see *Table 1*). This values closer to 1 in the nucleotide sequence appears like an undeterminated based (represented as 'N'). In order to remove the reads with a specified number of N's and trim low quality nucleotides at 3' and 5' we present this project.
+
+The main goal of this project is to generate a program, which trims Next-Generation Sequencing data from different platforms such as Roche 454, Illumina, Ion Torrent, Nanopore and PacBio based on quality. ##after proing with those sets I will keep or remove
+
+- purpose of our programm 
+
+## 2. Theory
+[Theory - explanation of more theoretical aspects
+The Theory section should contain all the math, deliberations, considerations, insights and high-level decisions that lies at the root of the problem/project. It can be fine to present the core of the idea for your program in a few lines] #what Peter "wants"
+
+The program is based on two trimming steps.The first one remove a user-defined number of nucleotides at 3' and 5' sense, according to a phred value (P= *default= 20*), the second step sum the quality of each base  then is divided by the length sequence keep the one with the P value: 
+
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;Filter=\frac{sum(i+1)}{readlength}{>P}" />
+
+
+where the *i* is the Phred quality of the *i*-th base
+
+##Elena :cherry_blossom::sparkles:
+I was thinking that probably mention that the program could remove adapters not based in the sequence, just in the positions. Because if the user define the # of nucleotides to trimm in the ends he could easily could enter a number of the lenght of the adapters and it could be an advantage that we could mention in the discussion because is not heavy computationally compared with find the sequence (I guess) what do you think? :ear:
+
  
  
  
 ## 3. Algorithm Design
 
-The algorithm uses mainly while structures. Further conditional statements and sequences are used.
+The algorithm uses mainly while structures. Further conditional statements and sequences are used. 
 
 
 ![](BasicAlgorithm_BetterQuality.png)
@@ -80,7 +95,8 @@ The programm consist of two major steps:
 
 
 ## 4. Program Design
-ADD the diagram
+
+The Program Design section explains the high-level structure of the program - where is what happening. Main variables can be mentioned together with their function. Functions can be explained. Pseudo code putting it all together can be relevant. It should be noted that writing a translation of the code into text does not read well nor give rise to understanding.
 
 
 
@@ -93,7 +109,7 @@ has to be keeped in mind: different phred scales, structure of a fastq file, sim
 Following program will trimm and filter your FASTQ file according to quality, length and unknown (N's) bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X). The output consist of two outputfiles - a fastq file with filtered and trimmed reads and a summaryfile which contains information about the number of filtered + trimmed reads.
 
 
-*Attention* :heavy_exclamation_mark:
+:warning:*Attention* :heavy_exclamation_mark:
 To make the script executable you must run following line:
 
 ```{p}
@@ -135,7 +151,7 @@ Following command trims 6 bases from each end of the read, filters all reads wit
 
 
 ```{p}
-./fastqtrimmer.py -in S1.fastq -out S1_trim.fastq -sum S1_trim_summary.txt -end3 6 -end5 6 -qual 30 -length 50 -nbases 2
+./fastqtrimmer.py -in Sample1.fastq -out Sample1_trimmed.fastq -sum SummarySample1_trimming.txt -end3 6 -end5 6 -qual 30 -length 50 -nbases 2
 ```
 
 
@@ -161,22 +177,12 @@ To get an overview over the commands you can use, use following command:
 
 ## 6. Runtime Analysis
 
-### 6.1.Big O
-Detect_quality = O(1)
-Trimmer = O(n)
-Filter = O(N)
-Summary = O(1)
-
-### 6.2. Additional Analysis
-
 The main reasons for a slowdown in our runtime are the multiple function calls and
 s. An alternative approach could be to store the lines in a Numpy Array. 
 An alternative approach to improve runtime performance could be to use packages such as NumPy. Hereby, we would suggest storing
 the lines in a NumPy Array and passing the NumPy Array(NumPy Array with Sequence string and NumPy Array with Quality string) to the functions, instead of passing each line separately to the function.
 
-To visualize the function calls and get a better understanding for the runtime performance we used the library [Python Call Graph](https://pycallgraph.readthedocs.io/en/master/). A cutout of those results are visible in Figure X. Since the program passes the strings individually to the functions, the amount of function calls is noticably high. Considering that for creating this scheme a fastq-file with 1000 reads was used and a common fastq file is much bigger, an reduction of these function calls should be strived. Moreover the runtime of trim_quality, is 100x times higher than, the other trim and filter functions. This is a potential point for runtime optimization.
-
-
+To visualize the function calls and get a better understanding for the runtime performance we used the library [Python Call Graph](https://pycallgraph.readthedocs.io/en/master/). A cutout of those results are visible in Figure X. Since the programm passes the strings individually to the functions, the amount of function calls is noticably high. Considering that for creating this scheme a fastq-file with 1000 reads was used and a common fastq file is much bigger, an reduction of these function calls should be strived. Further there is a significant difference between the several trim and filter functions in runtime. Especially, the functions trim_quality() and filter_quality() require a huge amount of time to compute. Comparing those two functions, which both get a bytearray as input and perform stat
 ![](pycallgraph_new.png)
 
 ![](overview_runtime.png)
@@ -191,7 +197,9 @@ Figure X. depict
 ## 7. Discussion
 
 
-Runtime, a lot of function calls, finding alternative to list list of lists, tuples, arrays,... COMPARE WITH EXISTING ALGORITHMS
+Runtime, a lot of function calls, finding alternative to list list of lists, tuples, arrays,... 
+
+mention the plataform files who is able to read
 
 Relying on uniform format of fastq file 
 
