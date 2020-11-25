@@ -67,7 +67,7 @@ I was thinking that probably mention that the program could remove adapters not 
 The algorithm uses mainly while structures. Further conditional statements and sequences are used. 
 
 
-![](BasicAlgorithm_BetterQuality.png)
+![](flowchart_update.png)
 
 *Figure 2 Algorithm Scheme*
 
