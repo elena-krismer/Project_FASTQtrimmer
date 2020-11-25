@@ -1,4 +1,8 @@
 # Project
+
+To do/think of/ not forget?
+- which time to we use when writting the theory future, present, conjunktiv; will be filter, should,... i am confused lol 'has to be adjusted to the ohred scle/will be adjust/must be adjusted/is adjusted????
+-
 ## 1. Introduction
 
 Next Generation Sequencing has played an important role to understand the biology mechanisms under a genomics perspective. In the early 2001 the price of sequence a genome was  very high but with time, the sequencing cost has decreased and the genomic data production has increased.Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing in order to perform analysis downstream it must be pre-processed. There are different pipelines that could be used to preprocess the data some of them share steps like quality check, duplicated removal,  and  trimming reads.Read trimming is the process to remove low quality bases or adapters while preserving the longest high quality part of a NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could  reduce the computational time(Didion et al., 2017; Del Fabbro et al., 2013;  Bush, 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data(Liao et Shi , 2020). 
@@ -35,15 +39,16 @@ The main goal of this project is to generate a program, which trims Next-Generat
 [Theory - explanation of more theoretical aspects
 The Theory section should contain all the math, deliberations, considerations, insights and high-level decisions that lies at the root of the problem/project. It can be fine to present the core of the idea for your program in a few lines] #what Peter "wants"
 
-As described in the introduction every read in a FASTQ file consists of four lines. This convention is the base of the program.
+As described in the introduction every read in a FASTQ file consists of four lines. This convention is the base of the program. Thus, the file get read into a list and all following operations are perforemd by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
 
-The output of the programm consists of two files the trimmed and filtered FASTQ file and the summaryfile, containing the count of trimmed and filtered reads. For trimming it has to be noticed that the position 'x' in the sequence line corresponds to poistion 'x' in the quality line. Thus when trimming the same amount of characters has to be trimmed from both lines. Therefore, the sequence and quality line are passed together to the trimming functions. To keep track of the trimmed reads the trimming function will return either 0 or 1, which will be summed up.
+The output of the program consists of two files the trimmed and filtered FASTQ file and the summaryfile, containing the count of trimmed and filtered reads. For trimming it has to be noticed that the position 'x' in the sequence line corresponds to position 'x' in the quality line. Thus when trimming the same amount of characters has to be trimmed from both lines. Therefore, the sequence and quality line are passed together to the trimming functions. To keep track of the trimmed reads the trimming function will return additively either 0 or 1, which will be summed up.
 
-The final outputfile should only contain reads with a defined maximum of unknown bases, minimum average quality and minimum lenght of the sequence. The sequence/quality line must therefore meet all three criteria. Only than the read, will be written in the outputfile, else the read is counted as 'filtered' for the summaryfile.
+The final outputfile should only contain reads with a defined maximum of unknown bases, minimum average quality and minimum lenght of the sequence. The sequence/quality line must therefore meet all three criteria. When the filters are passed the four positions of the read will are called and written into the ouputfile, else the read is counted as 'filtered' for the summaryfile.
+
+In addition for filtering and trimming the quality score has to be adjusted to the Phred scale. Therefore, the observed Phred scale gets passed to the functions for conversion.
 
 The program is based on two trimming steps.The first one remove a user-defined number of nucleotides at 3' and 5' sense, according to a phred value (P= *default= 20*), the second step sum the quality of each base  then is divided by the length sequence keep the one with the P value: 
 
-To make the program user friendly, the trimming and quality parameters are optional.
 To not overwhelm the user with to many options, the trimming and quality parameters are optional.
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;Filter=\frac{sum(i+1)}{readlength}{>P}" />
