@@ -41,11 +41,11 @@ The Theory section should contain all the math, deliberations, considerations, i
 
 As described in the introduction every read in a FASTQ file consists of four lines. This convention is the base of the program. Thus, the file get read into a list and all following operations are perforemd by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
 
-The output of the program consists of two files the trimmed and filtered FASTQ file and the summaryfile, containing the count of trimmed and filtered reads. For trimming it has to be noticed that the position 'x' in the sequence line corresponds to position 'x' in the quality line. Thus when trimming the same amount of characters has to be trimmed from both lines. Therefore, the sequence and quality line are passed together to the trimming functions. To keep track of the trimmed reads the trimming function will return additively either 0 or 1, which will be summed up.
+The output of the program consists of two files the trimmed and filtered FASTQ file and the summaryfile, containing the count of trimmed and filtered reads. For trimming it has to be noticed that the position 'x' in the sequence line corresponds to position 'x' in the quality line. Thus when trimming the same amount of characters has to be trimmed from both lines. 
 
 The final outputfile should only contain reads with a defined maximum of unknown bases, minimum average quality and minimum lenght of the sequence. The sequence/quality line must therefore meet all three criteria. When the filters are passed the four positions of the read will are called and written into the ouputfile, else the read is counted as 'filtered' for the summaryfile.
 
-In addition for filtering and trimming the quality score has to be adjusted to the Phred scale. Therefore, the observed Phred scale gets passed to the functions for conversion.
+In addition for filtering and trimming the quality score has to be adjusted to the determined Phred scale. 
 
 The program is based on two trimming steps.The first one remove a user-defined number of nucleotides at 3' and 5' sense, according to a phred value (P= *default= 20*), the second step sum the quality of each base  then is divided by the length sequence keep the one with the P value: 
 
@@ -103,11 +103,19 @@ The programm consist of two major steps:
 ### 4.1. Main
 The Program Design section explains the high-level structure of the program - where is what happening. Main variables can be mentioned together with their function. Functions can be explained. Pseudo code putting it all together can be relevant. It should be noted that writing a translation of the code into text does not read well nor give rise to understanding.
 
+```{p}
+    run()
+    detect_quality
+    trimming_list
+    write_ouputfile
+    write_summaryfile
+```
+
 ##### Main steps:
 
 - **Reading into a list**
 
-- **Determining Phred Scale**: the input is the quality line as bytearray from 100st read.
+- **Determining Phred Scale**: input is the quality line as bytearray from 100st read.
 ```{p}
     detect_quality()
      if mean(ASCII value) < 75:
@@ -130,13 +138,7 @@ The 'main' trimming function (trimming_list) passes the strings to the function 
       position_quality += 4
 ```
 
-```{p}
-    def trim_quality()
-    adjusting quality with phred scale 
-     for positon in bytearray:
-      position < quality:
-      
-```
+
 
 - **Filtering and Writing in Outputfile**:
 
@@ -150,7 +152,8 @@ The 'main' trimming function (trimming_list) passes the strings to the function 
 ```
 
 has to be keeped in mind: different phred scales, structure of a fastq file, simulatenous trimming of quality and sequence line 
-
+Therefore, the sequence and quality line are passed together to the trimming functions. To keep track of the trimmed reads the trimming function will return additively either 0 or 1, which will be summed up.
+Therefore, the observed Phred scale gets passed to the functions for conversion.
 ### 4.2. Statistics
 
 ## 5. Program Manual
@@ -229,6 +232,24 @@ To get an overview over the commands you can use, use following command:
 ## 6. Runtime Analysis
 
 ### 6.1. Big O
+To evaluate the runtime in Big O terms a small overview over the functions and their complexity:
+
+```{p}
+    run()
+    
+    # O(1)
+    detect_quality
+    
+    # O(n*m)
+    trimming_list
+    
+    # O(n)
+    write_ouputfile
+    
+    # O(1)
+    write_summaryfile
+```
+
 
 ### 6.2. Further Insights
 The main reasons for a slowdown in our runtime are the multiple function calls and
@@ -255,7 +276,7 @@ The main bottleneck of the program is the detection of the Phred scale. The qual
 
 Further the algorithm relies on the uniform strucutre of a FASTQ file, any additional lines or blank lines will result in a invalid output or a premature ending of the run. 
 
-Considering the incosistent usage of the Phred scale, the maintance of the progam should be questioned. Any changes in the quality scale or the common format of the FASTQ file will make this program useless. 
+Considering the inconsistent usage of the Phred scale, the maintance of the progam should be questioned. Any changes in the quality scale or the common format of the FASTQ file will make this program useless. 
 
 As visualized in 6.2. the program consists of multiple function calls. To decrease function calls and conceivably improve runtime performance, the usage of other datatypes, like arrays or tuples should be aspired.
 
