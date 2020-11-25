@@ -96,9 +96,51 @@ The programm consist of two major steps:
      position_quality += 4
 ```
 
+
+
+## 4. Program Design
+
+### 4.1. Main
+The Program Design section explains the high-level structure of the program - where is what happening. Main variables can be mentioned together with their function. Functions can be explained. Pseudo code putting it all together can be relevant. It should be noted that writing a translation of the code into text does not read well nor give rise to understanding.
+
+##### Main steps:
+
+- **Reading into a list**
+
+- **Determining Phred Scale**
+```{p}
+    detect_quality()
+     if mean(ASCII value) < 75:
+      phred_scale = 33
+     elif max(ASCII value) >= 75:
+      phred_scale = 64
+```
+
+- **Trimming**:
+The 'main' trimming function (trimming_list) passes the strings to the function trim_user and trim_quality. The function trim_user slices the given number of characters from the input strings. Trim_quality takes the quality line (converted to a bytearray) and the sequence line as input.
+```{p}
+    def trimming_list()
+     position_sequence = 1
+     positon_quality = 3
+     while read list
+        trim_user: trimming bases list[position_sequence, position_quality]
+        trim_quality: list[position_sequence, position_quality]
+        count quality trims `
+      position_sequence += 4
+      position_quality += 4
+```
+
+```{p}
+    def trim_quality()
+     for positon in bytearray:
+      position < quality:
+      
+```
+
 - **Filtering and Writing in Outputfile**:
 
 ```{p}
+    write_outputfile()
     while reading trimmed list
         filter quality, unknown bases, length if True:
             write all four lines into file
@@ -106,15 +148,9 @@ The programm consist of two major steps:
     write summary file with count of filtered and trimmed reads
 ```
 
-
-## 4. Program Design
-
-The Program Design section explains the high-level structure of the program - where is what happening. Main variables can be mentioned together with their function. Functions can be explained. Pseudo code putting it all together can be relevant. It should be noted that writing a translation of the code into text does not read well nor give rise to understanding.
-
-
-
-
 has to be keeped in mind: different phred scales, structure of a fastq file, simulatenous trimming of quality and sequence line 
+
+### 4.2. Statistics
 
 ## 5. Program Manual
 This program allows you to filter and trim your FASTQ file. Additonally, a feautre will provide you a overview over your FASTQ file, like average quality and number of unknown bases.
