@@ -32,7 +32,7 @@ The quality score is encrypted using the ascii code into two systems phred 33 an
  
  Every ASCII character represents the error propability of each nucleotide to be correct, the values are from 0 to 1,  as lower the value more certain that the nucleotide is correct while 1 means that the base is certainly wrong ( see *Table 1*). This values closer to 1 in the nucleotide sequence appears like an undeterminated based (represented as 'N'). In order to remove the reads with a specified number of N's and trim low quality nucleotides at 3' and 5' we present this project.
 
-The main goal of this project is to generate a program, which trims Next-Generation Sequencing data from different platforms such as Roche 454, Illumina, Ion Torrent, Nanopore and PacBio based on quality. ##after proing with those sets I will keep or remove
+The main goal of this project is to generate a program, which trims Next-Generation Sequencing data from  Illumina based on quality.  
 
 - purpose of our programm 
 
@@ -226,7 +226,7 @@ To get an overview over the commands you can use, use following command:
 
 
 ## 6. Runtime Analysis
-
+ note for myself :snail: see more examples
 ### 6.1. Big O
 To evaluate the runtime in Big O terms a small overview over the functions and there complexity:
 
@@ -280,10 +280,8 @@ Figure X. depict
 
 
 ## 7. Discussion
-platforms: add/compare with the  trimming based on adapter 
-
-
-The main bottleneck of the program is the detection of the Phred scale. The quality detection is extremely sensitive around the value 75 (=K), which is a quality score of 42 on Phred 33 scale and a quality score of 11 on Phred scale 64. In case the read has considerably low quality (lower than 11) on a Phred scale 64, the Phred scale will be determined incorrectly as Phred scale 33. Since the quality of the first reads is commonly the lowest we choose the quality of the 100st read (which is in a common FASTQ file still an early position) for detection. In further steps their could be an error handling implemented, which uses the next read in case the quality scale of the first read can not be determined. As an alternative, another algorithm for the phred scale determination should be considered. However, using the 100st position implifies that a very small FASTQ file can not be feed to the program.
+platforms: add/compare with the  trimming based on adapter  file another formats 
+One of the biggest liminatios is that the program works using files from Illumina, it is not able to read files from 454, Nano, SOLID or PacBio due the quality detection.The main bottleneck of the program is the detection of the Phred scale. The quality detection is extremely sensitive around the value 75 (=K), which is a quality score of 42 on Phred 33 scale and a quality score of 11 on Phred scale 64. In case the read has considerably low quality (lower than 11) on a Phred scale 64, the Phred scale will be determined incorrectly as Phred scale 33. Since the quality of the first reads is commonly the lowest we choose the quality of the 100st read (which is in a common FASTQ file still an early position) for detection. In further steps their could be an error handling implemented, which uses the next read in case the quality scale of the first read can not be determined. As an alternative, another algorithm for the phred scale determination should be considered. However, using the 100st position implifies that a very small FASTQ file can not be feed to the program.
 
 Further to avoid two iterations over the list, it should be aspired to trim, filter and write into the outputfile in one iteration. However, the current modularization into two seperat steps allows to modify the code, without messing up the program and makes it easier to read, at least to our experience.
 
@@ -292,6 +290,8 @@ The algorithm relies on the uniform strucutre of a FASTQ file, any additional li
 Considering the inconsistent usage of the Phred scale, the maintance of the progam should be questioned. Any changes in the quality scale or the common format of the FASTQ file will make this program useless. 
 
 As visualized in 6.2. the program consists of multiple function calls. To decrease function calls and conceivably improve runtime performance, the usage of other datatypes, like arrays or tuples should be aspired. 
+
+The implementation of the ends trimming based on the length is an advantage because is faster than the overlapping detection algorithm but, if is not well known the correct adapter size it could carry a proble removing less or more nucleotides turning the program less precise.
 
 The main strength of the program is the easy handling. For every person, who knows how to use a command line.
 
