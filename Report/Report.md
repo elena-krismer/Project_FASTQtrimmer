@@ -61,41 +61,23 @@ As part of design, the program can be used to remove sequencing adapters at the 
  
 ## 3. Algorithm Design
 
-The algorithm uses mainly while structures. Further conditional statements and sequences are used. 
+This programming uses these programming structures:
+- Sequences
+- Binary Selection
+- Repetiton
 
+The general idea of the algorithm is to transfrom the input file into a list, and while iterating in step of four over the list performing several operations on the elements on the list. By using binary selection the list elements are either written into the 'main' outputfile or counted for the secondary outputfile. The main algorithm is represented in Figure *X*.
 
 ![](flowchart_update.png)
 
 *Figure 2 Algorithm Scheme*
 
-This program relies on the uniform structure of FASTQ files: The first position the header followed by the sequence, the third line and the quality line. Thus, the file get read into a list and all following
-operations were by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
-In the first step, while iterating over the list with a while function, the trimming is performed and the quality scale determined.
-After these modifications the reads are filtered. Whereby, the lines are passed to the functions which return Boolean Values. Only when
-all three filter-functions (Mean Quality of the read, Number of unknown bases and the minimum length of the read) pass the test, thus return a True value, 
-all four lines of the read get read into the output file. In case the read does not pass the test it will be not read into the outputfile
-and counted as 'filtered'.
-
-The programm consist of two major steps:
-
-- **Trimming**: After the file is read into a list the sequence and the corresponding quality line will be trimmed
- - Trimming Bases: the user specified number of bases will be trimmed from the 5' and 3'end, the same amount of characters will be trimmed from the quality line
- - Trimming Quality 
-
-```{p}
-    position_sequence = 1
-    positon_quality = 3
-    while read list
-        trimming bases: list[position_sequence, position_quality]
-        trimming quality: list[position_sequence, position_quality]
-        count quality trims `
-     position_sequence += 4
-     position_quality += 4
-```
-
+*Note*: The binary selection between the trim/filter and the statistic operation are not mentioned.
 
 
 ## 4. Program Design
+
+This program relies on the uniform structure of FASTQ files: The first position the header followed by the sequence, the third line and the quality line. Thus, the file get read into a list and all following
 
 ### 4.1. Main
 
@@ -110,9 +92,10 @@ After the arguments of the user got passed to the run-function, following steps 
 - **Determining Phred Scale**: input is the quality line as bytearray from 100st read.
 ```{p}
     detect_quality()
-     if mean(ASCII value) < 75:
+     if mean(ASCII decimals) < 75:
       phred_scale = 33
-     elif max(ASCII value) >= 75:
+     elif max(ASCII decimals
+     ) >= 75:
       phred_scale = 64
 ```
 
@@ -166,11 +149,14 @@ The 'main' trimming function (trimming_list) passes the strings to the function 
     write summary file with count of filtered and trimmed reads
 ```
 
-Following procedures should be mentioned explicetlly, as they are fundamental for a valid output:
+**Following procedures should be mentioned explicetlly, as they are fundamental for a valid output:**
 
 - The determined Phred scale gets passed to the trim_quality and filter_quality function to adjust the quality score.
+
 - The sequence and the quality line always get passed together to the trimming functions, to avoid a shift in quality score of the bases.
+
 - During the first iteration over the list, the quality line will be converted to a bytearray and will only be translated in to an ASCII character string when the read gets written into the outputfile.
+
 
 ### 4.2. Statistics
 Additonally, to the trimming function the program has a statisitc function implemented. This operation provides instead of a trimmed and filtered FASTQ file, a statistics-summary file for the given FASTQ file. Containing: the mean quality of a read, the  mean quality of the top and worst 10% (**find better definition**), the average spot length, as well as the amount of bases and the total number of reads.
