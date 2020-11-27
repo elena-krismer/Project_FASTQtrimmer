@@ -228,54 +228,20 @@ To get an overview over the commands you can use, use following command:
 ## 6. Runtime Analysis
 
 ### 6.1. Big O
-To evaluate the runtime in Big O terms a small overview over the functions and there complexity is defined in the following table
+To evaluate the runtime in Big O terms a small overview over the functions and there complexity is defined in the following table.Most of the structures implemented shown linear time, it means that every single element from the input is visited exactly once, *O(n)* times. As the size of the input, N, grows our algorithm's run time scales exactly with the size of the input
 
 | Function            | Big O analysis  |
 | ------------------- | --------- |
-| [Open a file](#4-Program-Design)  |   run() <br /># O(1) <br /> open the file |
-| [Reading into a list](#4-Program-Design) |  # O(n*m) <br />  n is number of lines <br /> m is length of lines read into list|
-| [Detect quality](#4-Program-Design)   |   # O(m) <br /> detect_quality <br /> calculation of min and average|
-| [Trimming](#4-Program-Design) | # O(n) <br /> trimming_list - iteration over list <br /> # O(1) <br /> trim_user - simple indexing <br /> # O(m) <br /> trim_quality - iteration over|
-| [Write output](#4-Program-Design) | # O(n*m) <br /> write_ouputfile <br /># O(m) <br /> filter_nbases_length <br /># O(m) <br /> filter_quality - calculating average |
-| [Write summery](#4-Program-Design)   | # O(1) <br /> write_summaryfile |
+| [Reading into a list](#4-Program-Design)  | *O(n)*   |
+| [detect_quality()](#4-Program-Design)   |   *O(n)*  |
+| [trimming_list()](#4-Program-Design) | *O(n)* |
+| [trim_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(2n)* reduced to  *O(n)* |
+| [filter_bases_length()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
+| [write_outputfile()](#4-Program-Design) | *O(n)* |
+| [write summary](#4-Program-Design)   | *O(1)* |
 
 
 
-
-
-
-
-
-```{p}
-    run()
-    # O(1)
-    open the file 
-    
-    # O(n*m), n is number of lines, m is length of lines
-    read into list
-    
-    # O(m)
-    detect_quality - calculation of min and average
-    
-    # O(n)
-    trimming_list - iteration over list 
-      # O(1) 
-      trim_user - simple indexing
-      # O(m) 
-      trim_quality - iteration over string
-    
-    # O(n*m)
-    write_ouputfile
-      # O(m)
-      filter_nbases_length
-      # O(m)
-      filter_quality - calculating average
-    
-    # O(1)
-    write_summaryfile
-```
-
-m doesn´t matter that much so O(n)? 
 
 ### 6.2. Further Insights
 The main reasons for a slowdown in our runtime are the multiple function calls and
