@@ -3,43 +3,40 @@
 To do/think of/ not forget?
 - which time to we use when writting the theory future, present, conjunktiv; will be filter, should,... i am confused lol 'has to be adjusted to the ohred scle/will be adjust/must be adjusted/is adjusted????
 - big o isnt finished but please take a look at it - its so weird 
-- 
 
 ## 1. Introduction
 
-Next Generation Sequencing has played an important role to understand the biology mechanisms under a genomics perspective. In the early 2001 the price of sequence a genome was  very high but with time, the sequencing cost has decreased and the genomic data production has increased. Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing in order to perform analysis downstream it must be pre-processed. There are different pipelines that could be used to preprocess the data some of them share steps like quality check, duplicated removal,  and  trimming reads. Read trimming is the process to remove low quality bases or adapters while preserving the longest high quality part of a NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could  reduce the computational time (Didion et al., 2017; Del Fabbro et al., 2013;  Bush, 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data (Liao et Shi , 2020). 
+Next Generation Sequencing has played an important role to understand the biology mechanisms under a genomics perspective. In the early 2001 the price of sequence a genome was  very high but with time, the sequencing cost has decreased and the genomic data production has increased.Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing in order to perform analysis downstream it must be pre-processed. There are different pipelines that could be used to preprocess the data some of them share steps like quality check, duplicated removal,  and  trimming reads.Read trimming is the process to remove low quality bases or adapters while preserving the longest high quality part of a NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could  reduce the computational time(Didion et al., 2017; Del Fabbro et al., 2013;  Bush, 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data(Liao et Shi , 2020). 
 
-Didion and colleagues mention that several trimming tools had been developed  however there is not one that simultaneously provides the accuracy, computational efficiency and feature set  to work with the types and volumes of data (Didion et al., 2017) reason why different tools are still emerging. The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic (Bush, 2020).
+Didion and colleagues mention that several trimming tools had been developed  however there is not one that simultaneously provides the accuracy, computational efficiency and feature set  to work with the types and volumes of data (Didion et al., 2017) reason why different tools are still emerging. The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic(Bush, 2020).
 
-There are two types of trimming based on 1) sequence and 2) quality. The first one is able to cut sequence adapters while the second one nucleotides based on the quality based on a Prhed score. Both perspectives use a fastq file, this file keeps the information of the sequencing and is conformed by: 
+There are two types of trimming based on 1) sequence and 2) quality. The first one is able to cut sequence adapters while the second one nucleotides based on the quality based on a prhed score. Both perspectives use a fastq file, this file keeps the information of the sequencing and is conformed by: 
 
 1. Header with the sequence identifier and information about the run and the cluster
-2. The raw sequence (A,C,T, G and N)
+2. The sequence (A,C,T, G and N)
 3. "+" character separator sometimes followed by the header
-4. Base quality score Phred +33 or +64 enconded, represented by ASCII symbols
+4. Base quality score Phred +33 or +64 enconded, represented by ASCII characters
 
 
 ![](fastq.png)
 
-*Figure 1-Structural example of a Fastq format* -
+*Figure 1-Structural example of a Fastq format*
 
 
-The quality score is encrypted using the ASCII code into two systems Phred +33 and +64. '33' and  '64' represent the first value in the scales, a quality score of 0, encoded as bytes (33 ASCII character = !; 64 ASCII character = @). The conversion between these two scales is relatively easy, as the quality score in encoded as decimals on Phred +64 scale, is always 33 higher than the quality score encoded in decimals on the Phred +33 scale. For example using the Phred +33 a quality of 20 will be represented by *“5”* which is the 53 number in ASCII code while *“T”* in +64 system (see the *Table 1*)
+The quality score is encrypted using the ascii code into two systems phred 33 and 64. The first one adds the 33 into the quality, the second one works in the same way so instead of adding 33 you add 64. For example using the phred+33 a quality of 20 will be represented by *“5”* who is the 53 number in ASCII code while *“T”* in +64 system (see the *Table 1*)
 
 
 ![](qscores.gif)
 
-*Table 1 Phred+33/+64 scale* - **add source**
+*Table 1 Phred+33/+64 scale*
  
-Every ASCII character represents the error propability of each nucleotide to be correct, the values are from 0 to 1,  as lower the value more certain that the nucleotide is correct, while 1 means that the base is certainly wrong ( see *Table 1*). Bases with a quality score close to 1 are seen as an undeterminated based and represented as 'N'.
+ Every ASCII character represents the error propability of each nucleotide to be correct, the values are from 0 to 1,  as lower the value more certain that the nucleotide is correct while 1 means that the base is certainly wrong ( see *Table 1*). This values closer to 1 in the nucleotide sequence appears like an undeterminated based (represented as 'N'). In order to remove the reads with a specified number of N's and trim low quality nucleotides at 3' and 5' we present this project.
 
-The quality, length and number of reads have an tremendous effect on the final results of experiments. Since the desired 'quality/quantity ratio' of the reads is depending on the further approach, we generated the program 'fastqtrimmer.py'.
+The main goal of this project is to generate a program, which trims Next-Generation Sequencing data from  Illumina based on quality.  
 
-This program allows to trim and filter Next-Generation Sequencing data from  Illumina platforms. Whereby, the  trimming and filtering parameters, quality, number of unknown bases and read length, can be defined by the user.
-
+- purpose of our programm 
 
 ## 2. Theory
-
 As described in the introduction every read in a FASTQ file consists of four lines. This convention is the base of the program. Thus, the file get read into a list and all following operations are perforemd by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
 
 The output of the program consists of two files the trimmed and filtered FASTQ file and the summaryfile, containing the count of trimmed and filtered reads. For trimming it has to be noticed that the position 'x' in the sequence line corresponds to position 'x' in the quality line. Thus when trimming the same amount of characters has to be trimmed from both lines. 
@@ -48,6 +45,8 @@ The final outputfile should only contain reads with a defined maximum of unknown
 
 In addition for filtering and trimming the quality score has to be adjusted to the determined Phred scale. 
 
+The program is based on two trimming steps.The first one remove a user-defined number of nucleotides at 3' and 5' sense, according to a phred value (P= *default= 20*), the second step sum the quality of each base  then is divided by the length sequence keep the one with the P value: 
+
 To not overwhelm the user with to many options, the trimming and quality parameters are optional.
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;Filter=\frac{sum(i+1)}{readlength}{>P}" />
@@ -55,74 +54,84 @@ To not overwhelm the user with to many options, the trimming and quality paramet
 
 where the *i* is the Phred quality of the *i*-th base
 
-As part of design, the program can be used to remove sequencing adapters at the ends of the sequences (3' and 5').In order to perform it the user introduce the length of the adapters according.The program is based on two assumptions: the first is that only one adapter exists in the data; the second is that adapter sequences exist only in the read tails, asumptions that are valid for platform sequencers like Illumina HiSeq series, NextSeq series and NovaSeq (Chen et al., 2018).The mentioned stragegy is applied due the low computing time compared with the overlapping detection algorithm implemented by programs such as *fastp*, *Trimmomatic, Cutadapt and SOAPnuke*.
+As part of design, the program can be used to remove sequencing adapters at the ends of the sequences (3' and 5').In order to perform it the user introduce the length of the adapters according.The program is based on two assumptions: the first is that only one adapter exists in the data; the second is that adapter sequences exist only in the read tails, asumptions that are valid for platform sequencers like Illumina HiSeq series, NextSeq series and NovaSeq(Chen, S., et al 2018).The mentioned stragegy is applied due the low computing time compared with the overlapping detection algorithm implemented by programs such as *fastp*, *Trimmomatic, Cutadapt and SOAPnuke*.
 
  
  
 ## 3. Algorithm Design
 
-This programming uses these programming structures:
-- Sequences
-- Binary Selection
-- Repetiton
+The algorithm uses mainly while structures. Further conditional statements and sequences are used. 
 
-The general idea of the algorithm is to transfrom the input file into a list, and while iterating in step of four over the list performing several operations on the elements on the list. By using binary selection the list elements are either written into the 'main' outputfile or counted for the secondary outputfile. The main algorithm is represented in Figure *X*.
 
 ![](flowchart_update.png)
 
 *Figure 2 Algorithm Scheme*
 
-*Note*: The binary selection between the trim/filter and the statistic operation are not mentioned.
+This program relies on the uniform structure of FASTQ files: The first position the header followed by the sequence, the third line and the quality line. Thus, the file get read into a list and all following
+operations were by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
+In the first step, while iterating over the list with a while function, the trimming is performed and the quality scale determined.
+After these modifications the reads are filtered. Whereby, the lines are passed to the functions which return Boolean Values. Only when
+all three filter-functions (Mean Quality of the read, Number of unknown bases and the minimum length of the read) pass the test, thus return a True value, 
+all four lines of the read get read into the output file. In case the read does not pass the test it will be not read into the outputfile
+and counted as 'filtered'.
+
+The programm consist of two major steps:
+
+- **Trimming**: After the file is read into a list the sequence and the corresponding quality line will be trimmed
+ - Trimming Bases: the user specified number of bases will be trimmed from the 5' and 3'end, the same amount of characters will be trimmed from the quality line
+ - Trimming Quality 
+
+```{p}
+    position_sequence = 1
+    positon_quality = 3
+    while read list
+        trimming bases: list[position_sequence, position_quality]
+        trimming quality: list[position_sequence, position_quality]
+        count quality trims `
+     position_sequence += 4
+     position_quality += 4
+```
+
 
 
 ## 4. Program Design
 
-This program relies on the uniform structure of FASTQ files: The first position the header followed by the sequence, the third line and the quality line. Thus, the file get read into a list and all following
-
 ### 4.1. Main
+The Program Design section explains the high-level structure of the program - where is what happening. Main variables can be mentioned together with their function. Functions can be explained. Pseudo code putting it all together can be relevant. It should be noted that writing a translation of the code into text does not read well nor give rise to understanding.
+
+```{p}
+    run()
+    detect_quality
+    trimming_list
+    write_ouputfile
+    write_summaryfile
+```
 
 ##### Main steps:
 
-To create a command line interface the argparse library is used. To run the program the user must define the FASTQ filename and the name of the ouputfile. All further commands are optional and the minimum quality is specified as 20.
-After the arguments of the user got passed to the run-function, following steps are conducted:
-
 - **Reading into a list**
-
 
 - **Determining Phred Scale**: input is the quality line as bytearray from 100st read.
 ```{p}
     detect_quality()
-     if mean(ASCII decimals) < 75:
+     if mean(ASCII value) < 75:
       phred_scale = 33
-     elif max(ASCII decimals
-     ) >= 75:
+     elif max(ASCII value) >= 75:
       phred_scale = 64
 ```
 
 - **Trimming**:
 The 'main' trimming function (trimming_list) passes the strings to the function trim_user and trim_quality. The function trim_user slices the given number of characters from the input strings. Trim_quality takes the quality line (converted to a bytearray) and the sequence line as input.
-
 ```{p}
     def trimming_list()
      position_sequence = 1
      positon_quality = 3
-     while read list in an interval of four
-         convert ASCII characters to bytearray
-         trim_user: trimming bases list[position_sequence, position_quality]
-         convert ASCII string to bytearray
-         trim_quality: list[position_sequence, position_quality]
-         count quality trims `
-     
-     def trim_user()
-         slice characters from sequence and and bytearray
-     
-     def trim_quality()
-         use determined phred scale to convert minimum quality score
-         iterate over bytearray
-            count number of characters to trim from 5' end
-            count number of characters to trim from 3' end
-         slice sequence and bytearray
-         count trimming    
+     while read list
+        trim_user: trimming bases list[position_sequence, position_quality]
+        trim_quality: list[position_sequence, position_quality]
+        count quality trims `
+      position_sequence += 4
+      position_quality += 4
 ```
 
 
@@ -130,67 +139,18 @@ The 'main' trimming function (trimming_list) passes the strings to the function 
 - **Filtering and Writing in Outputfile**:
 
 ```{p}
-    def write_outputfile()
-    while reading trimmed list in interval of four:
-          def filter_quality
-            adjust quality score to phred scale, calculate mean of bytearray string
-            when average bigger than quality score return True
-          def filter_unkown_bases_length
-            count 'N', determinte length
-            return True
-         
-         if all filters return True:
-           convert bytearray to ASCII string
-           write all four lines of read into outputfile
-
+    write_outputfile()
+    while reading trimmed list
+        filter quality, unknown bases, length if True:
+            write all four lines into file
          else: count as filtered read
-         
-    def write_summaryfile()     
     write summary file with count of filtered and trimmed reads
 ```
 
-**Following procedures should be mentioned explicetlly, as they are fundamental for a valid output:**
-
-- The determined Phred scale gets passed to the trim_quality and filter_quality function to adjust the quality score.
-
-- The sequence and the quality line always get passed together to the trimming functions, to avoid a shift in quality score of the bases.
-
-- During the first iteration over the list, the quality line will be converted to a bytearray and will only be translated in to an ASCII character string when the read gets written into the outputfile.
-
-
+has to be keeped in mind: different phred scales, structure of a fastq file, simulatenous trimming of quality and sequence line 
+Therefore, the sequence and quality line are passed together to the trimming functions. To keep track of the trimmed reads the trimming function will return additively either 0 or 1, which will be summed up.
+Therefore, the observed Phred scale gets passed to the functions for conversion.
 ### 4.2. Statistics
-Additonally, to the trimming function the program has a statisitc function implemented. This operation provides instead of a trimmed and filtered FASTQ file, a statistics-summary file for the given FASTQ file. Containing: the mean quality of a read, the  mean quality of the top and worst 10% (**find better definition**), the average spot length, as well as the amount of bases and the total number of reads.
-This operation will only be contuct, when it is explicitelly specified by the user (see 5. Program Manual).
-
-```{p}
-    run(takes argparse arguments)
-    if outputfile false
-       statistics
-    
-    fastq_statistics()
-      open file read into
-        sequence_list
-        quality_list
-    
-    detect_quality()
-    
-    statistics_numbases(sequence_list)
-       count bases in sequence_list
-       pass results to fastq_statistics
-    
-    statistic_quality(quality_list - as bytearray)
-         create list with length of read
-         create list with average quality
-       sort average_quality_list
-       slice lower and upper tenpercent of the list and calculate mean
-       calculate mean with length_of_read_list
-       pass results to fastq_statistics
-     
-    fastq_statistics()
-       write summary
-       
-```
-
 
 ## 5. Program Manual
 This program allows you to filter and trim your FASTQ file. Additonally, a feautre will provide you a overview over your FASTQ file, like average quality and number of unknown bases.
@@ -221,7 +181,7 @@ chmod +x fastqtrimmer.py
 - **-end5** the number of bases which should be trimmed from the 5´end
 - **-end3** the number of bases which should be trimmed from the 3' end 
 
-##### For Filtering:
+##### For Filter:
 
 - **-qual** the minimum average quality of the read (default: Quality 20)
 - **-length** the minimum length of the read 
@@ -246,7 +206,6 @@ Following command trims 6 bases from each end of the read, filters all reads wit
 
 
 
-
 In case you only want to trimm the reads with a quality lower than 20 from each end and filter reads with a quality lower than 20, this command is enough:
 
 ```{p}
@@ -254,12 +213,10 @@ In case you only want to trimm the reads with a quality lower than 20 from each 
 ```
 
 
-
 Performing statistics on a FASTQ file:
 ```{p}
 ./fastqtrimmer.py -in Sample1.fastq -out False -stat Sample1_Statistics.txt
 ```
-
 
 
 To get an overview over the commands you can use, use following command:
@@ -269,9 +226,25 @@ To get an overview over the commands you can use, use following command:
 
 
 ## 6. Runtime Analysis
- note for myself :snail: see more examples
+
 ### 6.1. Big O
-To evaluate the runtime in Big O terms a small overview over the functions and there complexity:
+To evaluate the runtime in Big O terms a small overview over the functions and there complexity is defined in the following table
+
+| Function            | Big O analysis  |
+| ------------------- | --------- |
+| ![](fileop.png)   |   run() <br /># O(1) <br /> open the file |
+| ![](readfile.png)  |  # O(n*m) <br />  n is number of lines <br /> m is length of lines read into list|
+| ![](qualdet.PNG)   |   # O(m) <br /> detect_quality <br /> calculation of min and average|
+| ![](trimmain.PNG) <br /> ![](trimpred.PNG) <br /> ![](trimingusr.PNG) | # O(n) <br /> trimming_list - iteration over list <br /> # O(1) <br /> trim_user - simple indexing <br /> # O(m) <br /> trim_quality - iteration over|
+| ![](nqual.PNG)    | # O(n*m) <br /> write_ouputfile <br /># O(m) <br /> filter_nbases_length <br /># O(m) <br /> filter_quality - calculating average |
+| ![](output.PNG)    | # O(1) <br /> write_summaryfile |
+
+
+
+
+
+
+
 
 ```{p}
     run()
@@ -323,14 +296,11 @@ Figure X. depict
 
 
 ## 7. Discussion
-platforms: add/compare with the  trimming based on adapter  file another formats 
-One of the biggest liminatios is that the program works using files from Illumina, it is not able to read files from 454, Nano, SOLID or PacBio due the quality detection.
-
-The main bottleneck of the program is the detection of the Phred scale. The quality detection is extremely sensitive around the value 75 (=K), which is a quality score of 42 on Phred 33 scale and a quality score of 11 on Phred scale 64. In case the read has considerably low quality (lower than 11) on a Phred scale 64, the Phred scale will be determined incorrectly as Phred scale 33. Since the quality of the first reads is commonly the lowest we choose the quality of the 100st read (which is in a common FASTQ file still an early position) for detection. In further steps there could be an error handling implemented, which uses the next read in case the quality scale of the first read can not be determined. As an alternative, another algorithm for the phred scale determination should be considered. However, using the 100st position implifies that a very small FASTQ file can not be feed to the program.
+One of the biggest liminatios is that the program works using files from Illumina, it is not able to read files from 454, Nano, SOLID or PacBio due the quality detection.The main bottleneck of the program is the detection of the Phred scale. The quality detection is extremely sensitive around the value 75 (=K), which is a quality score of 42 on Phred 33 scale and a quality score of 11 on Phred scale 64. In case the read has considerably low quality (lower than 11) on a Phred scale 64, the Phred scale will be determined incorrectly as Phred scale 33. Since the quality of the first reads is commonly the lowest we choose the quality of the 100st read (which is in a common FASTQ file still an early position) for detection. In further steps their could be an error handling implemented, which uses the next read in case the quality scale of the first read can not be determined. As an alternative, another algorithm for the phred scale determination should be considered. However, using the 100st position implifies that a very small FASTQ file can not be feed to the program.
 
 Further to avoid two iterations over the list, it should be aspired to trim, filter and write into the outputfile in one iteration. However, the current modularization into two seperat steps allows to modify the code, without messing up the program and makes it easier to read, at least to our experience.
 
-The algorithm relies on the uniform structure of a FASTQ file, any additional lines or blank lines will result in a invalid output or a premature ending of the run. 
+The algorithm relies on the uniform strucutre of a FASTQ file, any additional lines or blank lines will result in a invalid output or a premature ending of the run. 
 
 Considering the inconsistent usage of the Phred scale, the maintance of the progam should be questioned. Any changes in the quality scale or the common format of the FASTQ file will make this program useless. 
 
