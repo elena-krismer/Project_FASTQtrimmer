@@ -232,7 +232,7 @@ To evaluate the runtime in Big O terms a small overview over the functions and t
 
 | Function            | Big O analysis  |
 | ------------------- | --------- |
-| ![](fileop.png)   |   run() <br /># O(1) <br /> open the file |
+| [Reading into a list](## 4. Program Design)  |   run() <br /># O(1) <br /> open the file |
 | ![](readfile.png)  |  # O(n*m) <br />  n is number of lines <br /> m is length of lines read into list|
 | ![](qualdet.PNG)   |   # O(m) <br /> detect_quality <br /> calculation of min and average|
 | ![](trimmain.PNG) <br /> ![](trimpred.PNG) <br /> ![](trimingusr.PNG) | # O(n) <br /> trimming_list - iteration over list <br /> # O(1) <br /> trim_user - simple indexing <br /> # O(m) <br /> trim_quality - iteration over|
