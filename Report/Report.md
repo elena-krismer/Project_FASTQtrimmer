@@ -232,12 +232,12 @@ To evaluate the runtime in Big O terms a small overview over the functions and t
 
 | Function            | Big O analysis  |
 | ------------------- | --------- |
-| [Reading into a list](#4.Program-Design)  |   run() <br /># O(1) <br /> open the file |
-| ![](readfile.png)  |  # O(n*m) <br />  n is number of lines <br /> m is length of lines read into list|
-| ![](qualdet.PNG)   |   # O(m) <br /> detect_quality <br /> calculation of min and average|
-| ![](trimmain.PNG) <br /> ![](trimpred.PNG) <br /> ![](trimingusr.PNG) | # O(n) <br /> trimming_list - iteration over list <br /> # O(1) <br /> trim_user - simple indexing <br /> # O(m) <br /> trim_quality - iteration over|
-| ![](nqual.PNG)    | # O(n*m) <br /> write_ouputfile <br /># O(m) <br /> filter_nbases_length <br /># O(m) <br /> filter_quality - calculating average |
-| ![](output.PNG)    | # O(1) <br /> write_summaryfile |
+| [Open a file](#4-Program-Design)  |   run() <br /># O(1) <br /> open the file |
+| [Reading into a list](#4-Program-Design) |  # O(n*m) <br />  n is number of lines <br /> m is length of lines read into list|
+| [Detect quality](#4-Program-Design)   |   # O(m) <br /> detect_quality <br /> calculation of min and average|
+| [Trimming](#4-Program-Design) | # O(n) <br /> trimming_list - iteration over list <br /> # O(1) <br /> trim_user - simple indexing <br /> # O(m) <br /> trim_quality - iteration over|
+| [Write output](#4-Program-Design) | # O(n*m) <br /> write_ouputfile <br /># O(m) <br /> filter_nbases_length <br /># O(m) <br /> filter_quality - calculating average |
+| [Write summery](#4-Program-Design)   | # O(1) <br /> write_summaryfile |
 
 
 
