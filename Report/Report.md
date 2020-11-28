@@ -1,9 +1,11 @@
 # Project
 
 To do/think of/ not forget?
-- which time to we use when writting the theory future, present, conjunktiv; will be filter, should,... i am confused lol 'has to be adjusted to the ohred scle/will be adjust/must be adjusted/is adjusted????
-- big o isnt finished but please take a look at it - its so weird - nicceeee table :)
+- which time to we use when writting the theory future, present, conjunktiv; will be filter, should,... i am confused lol 'has to be adjusted to the ohred scle/will be adjust/must be adjusted/is adjusted????  
+- big o isnt finished but please take a look at it - its so weird - nicceeee table :): *The Big O looks wierd but it's just evaluated by function I like the end you add the summ good idea!!! :3 I read those post and for me was so cool very well explained. I changed the o(n*m) because at the end it hast two for and the form is like O(2n) reduced to O(n) it´s like one example here: https://stackabuse.com/big-o-notation-and-algorithm-analysis-with-python-examples/  the other useful page is: https://skerritt.blog/big-o/*
 - yesterday was a merge conflict - we have to write the program design in pseudocode - i have added the pseudocode from yesterday, peter mentioned last time we shouldnt but the raw code in the report
+-yesterday I run the program with the peter file and I got a problem with the quality. I used another file I tested with the two programs and it runs (using another file) so I added into the directory, I''l move to the correct directory test
+
 
 ## 1. Introduction
 
@@ -29,7 +31,7 @@ The quality score is encrypted using the ASCII code into two systems Phred +33 a
 
 ![](qscores.gif)
 
-*Table 1 Phred+33/+64 scale* - **add source**
+*Table 1 Phred+33/+64 scale* - **usearchv11 page**
  
 Every ASCII character represents the error propability of each nucleotide to be correct, the values are from 0 to 1,  as lower the value more certain that the nucleotide is correct, while 1 means that the base is certainly wrong ( see *Table 1*). Bases with a quality score close to 1 are seen as an undeterminated based and represented as 'N'.
 
@@ -266,7 +268,7 @@ To evaluate the runtime in Big O terms a small overview over the functions and t
 | [Reading into a list](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)  | *O(n)*   | 
 | [detect_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)   |   *O(1)*  | 
 | [trimming_list()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
-| [trim_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n*m)* reduced to  *O(n)* |
+| [trim_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(2n)* reduced to  *O(n)* |
 | [filter_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
 | [filter_bases_length()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
 | [write_outputfile()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
@@ -326,6 +328,7 @@ Del Fabbro, C., Scalabrin, S., Morgante, M., & Giorgi, F. M. (2013). An extensiv
 Didion, J. P., Martin, M., & Collins, F. S. (2017). Atropos: specific, sensitive, and speedy trimming of sequencing reads. *PeerJ*, 5, e3720.
 
 Liao, Y., & Shi, W. (2020). Read trimming is not required for mapping and quantification of RNA-seq reads at the gene level. *NAR Genomics and Bioinformatics*, 2(3), lqaa068.
+usearch page: https://drive5.com/usearch/manual/quality_score.html
 
 ## 9. List of Figures
 
