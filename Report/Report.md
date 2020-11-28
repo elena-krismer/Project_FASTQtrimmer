@@ -2,8 +2,8 @@
 
 To do/think of/ not forget?
 - which time to we use when writting the theory future, present, conjunktiv; will be filter, should,... i am confused lol 'has to be adjusted to the ohred scle/will be adjust/must be adjusted/is adjusted????
-- big o isnt finished but please take a look at it - its so weird 
-- yesterday was a merge conflict - we have to write the program design in pseudocode - i have added the pseudocode from yesterday
+- big o isnt finished but please take a look at it - its so weird - nicceeee table :)
+- yesterday was a merge conflict - we have to write the program design in pseudocode - i have added the pseudocode from yesterday, peter mentioned last time we shouldnt but the raw code in the report
 
 ## 1. Introduction
 
@@ -259,19 +259,20 @@ To get an overview over the commands you can use, use following command:
 ## 6. Runtime Analysis
 
 ### 6.1. Big O
-To evaluate the runtime in Big O terms a small overview over the functions and there complexity is defined in the following table.Most of the structures implemented shown linear time, it means that every single element from the input is visited exactly once, *O(n)* times. As the size of the input, N, grows our algorithm's run time scales exactly with the size of the input.
+To evaluate the runtime in Big O terms a small overview over the functions and there complexity is defined in the following table. Most of the structures implemented shown linear time, it means that every single element from the input is visited exactly once, *O(n)* times. As the size of the input, N, grows our algorithm's run time scales exactly with the size of the input. N hearby indicate the number of lines/reads and m the length of the read.
 
-| Function            | Big O analysis  |
+| Function            | Big O analysis  |  Notes  |
 | ------------------- |     :---:    |
-| [Reading into a list](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)  | *O(n)*   |
-| [detect_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)   |   *O(n)*  |
+| [Reading into a list](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)  | *O(n)*   | |
+| [detect_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)   |   *O(1)*  | |
 | [trimming_list()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
-| [trim_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(2n)* reduced to  *O(n)* |
+| [trim_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n*m)* reduced to  *O(n)* |
+| [filter_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
 | [filter_bases_length()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
 | [write_outputfile()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
 | [write_summary()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)   | *O(1)* |
 
-*Table 2* Big O analysis in the main functions ofr the program
+*Table 2* Big O analysis in the main functions of the program. Where n is the number of lines, and m the length of the read.
 
 
 
