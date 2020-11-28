@@ -10,17 +10,19 @@
 
 ### 5. [Program Manual](#5)
 
-	#### 5.1 [Main](#5.1)
+#### 5.1 [Main](#5.1)
 
-	#### 5.2 [Statistics](#5.2)
+#### 5.2 [Statistics](#5.2)
 	
-	#### 5.3 [Examples](#5.3)
+#### 5.3 [Examples](#5.3)
+
 
 ### 6. [Runtime Analysis](#6)
 
-	#### 6.1 [Big O](#6.1)
+#### 6.1 [Big O](#6.1)
 
-	#### 6.2 [Visuale Profiling](#6.2)
+#### 6.2 [Visuale Profiling](#6.2)
+	
 
 ### 7. [Conclusion](#7)
 
