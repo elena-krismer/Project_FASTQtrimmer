@@ -318,6 +318,16 @@ Overall, the program is functional and provides the desired output.
 
 
 
+Further, a Big-O complexity of *O(n)* is considered a not-ideal, but desirable complexity. Instead of a linear increase of the runtime, a logarithmic increase should be aspired. However we doubt that there is an applicable logarithimic algorithm design for this approach. 
+
+The usage of a dynamically-typed language, like Python comes with the disadvantage each element of a bad runtime performance. To improve the runtime in further steps the usage of NumPy arrays instead of lists could be used.
+The program is written in the dynamically-typed language Python, which means no explicetlz declaration of variabe is required but also implements that each variable contains extra inforamtion about there datatype. Thus, each element in our list contains its own infomration like the reference count and the datatype. As an alternative approach a libray such as NumPy could be used. As all lines in a FASTQ file are strings, storing them in a fixed-type array (NumPy array) could increase efficency. Hereby, we would suggest storing the lines in a NumPy Array and passing the NumPy Array(NumPy Array with Sequence string and NumPy Array with Quality string) to the functions, instead of passing each line separately to the function. This would also increase the numerous function calls (visualized 6.2.).
+
+The main strength of the program is the easy handling. For every person, who knows how to use a command line.
+
+Additionally, the modularization of the program allows changes(for instance only trimming or filtering of the file) without messing up the program.
+
+
 ## 8. References
 Bush, S. J. (2020). Read trimming has minimal effect on bacterial SNP calling accuracy. *bioRxiv.*
 
