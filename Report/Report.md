@@ -41,12 +41,12 @@ To do/think of/ not forget?
 
 ## 1. Introduction<a name="1">
 
-Next-Generation Sequencing has played an important role to understand the biology mechanisms from a genomics perspective. In the early 2000s, the price of sequence a genome was very high but with time, the sequencing cost has decreased and the genomic data production has increased. Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing to perform analysis downstream it must be pre-processed. Different pipelines could be used to preprocess the data some of them share steps like a quality check, duplicated removal,  and trimming reads. Read trimming is the process to remove low-quality bases or adapters while preserving the longest high-quality part of an NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could reduce the computational time (Didion et al., 2017; Del Fabbro et al., 2013;  Bush, 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data (Liao et Shi, 2020). 
+Next-Generation Sequencing has played an important role in understanding the biology mechanisms from a genomics perspective. In the early 2000s, the price of sequence a genome was immense but with time, with the decreasinh *kkk* the sequencing cost has decreased and the genomic data production has increased. Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing to perform analysis downstream it must be pre-processed. Different pipelines could be used to preprocess the data some of them share steps like a quality check, duplicated removal,  and trimming reads. Read trimming is the process to remove low-quality bases or adapters while preserving the longest high-quality part of an NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could reduce the computational time (Didion et al., 2017; Del Fabbro et al., 2013;  Bush, 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data (Liao et Shi, 2020). 
 
 
-Didion and colleagues mention that several trimming tools had been developed however there is not one that simultaneously provides the accuracy, computational efficiency, and feature set to work with the types and volumes of data (Didion et al., 2017) reason why different tools are still emerging. The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic (Bush, 2020).
+Didion and colleagues mention that several trimming tools had been developed however were ablre to provide the accuracy there is not one that simultaneously provides the accuracy, computational efficiency, and feature set to work with the types and volumes of data (Didion et al., 2017) reason why different tools are still emerging. The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic (Bush, 2020).
 
-There are two types of trimming based on 1) sequence and 2) quality. The first one can cut sequence adapters while the second one nucleotides based on the quality based on a Phred score. Both perspectives use a FASTQ file, this file keeps the information of the sequencing and is conformed by: 
+There are two types of trimming based on 1) sequence and 2) quality. The first one can cut sequence adapters while the second one is based on the quality based on a Phred score. Both perspectives use a FASTQ file, which keeps the information of the sequencing and is conformed by: 
 
 1. Header with the sequence identifier and information about the run and the cluster
 2. The raw sequence (A,C,T, G and N)
@@ -66,11 +66,11 @@ The quality score is encrypted using the ASCII code into two systems Phred +33 a
 
 *Table 1 Phred+33/+64 scale* - **source:usearchv11 page**
  
-Every ASCII character represents the error probability of each nucleotide to be correct, the values are from 0 to 1, as lower the value more certain that the nucleotide is correct, while 1 means that the base is certainly wrong ( see *Table 1*). Bases with a quality score close to 1 are seen as an undetermined based and represented as 'N'.
+Every ASCII character represents the error probability of each nucleotide to be correct, the valuesrange from 0 to 1., as lower the value more certain that the nucleotide is correct, while 1 means that the base is certainly wrong ( see *Table 1*). Bases with a quality score close to 1 are seen as an undetermined base and represented as 'N'.
 		
 The quality, length, and the number of reads have a tremendous effect on the final results of experiments. Since the desired 'quality/quantity ratio' of the reads is depending on the further approach, we generated the program 'fastqtrimmer.py'.
 		
-This program allows to trim and filter Next-Generation Sequencing data from Illumina platforms. Whereby, the trimming and filtering parameters, quality, number of unknown bases and read length, can be defined by the user.
+This program allows to trim and filter Next-Generation Sequencing data from Illumina platforms. Whereby, the trimming and filtering parameters (quality, number of unknown bases and read length) can be defined by the user.
 
 
 
@@ -106,27 +106,27 @@ For this program, a linear algorithm is used and the following programming struc
 - Binary Selection
 - Repetition
 
-The general idea of the algorithm is to transform the input file into a list, and while iterating in the step of four over the list performing several operations on the elements on the list. By using binary selection the list elements are either written into the 'main' output file or counted for the secondary output file. The main algorithm is represented in Figure *X*.
+The general idea of the algorithm is to transform the input file into a list, and while iterating in steps of four over the list performing several operations on the elements on the list. By using binary selection, the list elements are either written into the 'main' output file or counted for the secondary output file. The main algorithm is represented in Figure *X*.
 
 ![](flowchart_update.png)
 
 *Figure 2-Algorithm Scheme*
 
-*Note*: The binary selection between the trim/filter and the statistic operation are not mentioned.
+*Note*: The binary selection between the trim/filter and the statistic operation is not mentioned.
 
 ## 4.Program Design <a name="4">
 
 This program is written in Python.
 
-### 4.1. Main <a name="4.1">
+### 4.1. <essentialMain part <a name="4.1">
 
 ##### Main steps:
 To create a command-line interface the argparse library is used. To run the program the user must define the FASTQ filename and the name of the output file. All further commands are optional and the minimum quality is specified as 20.
 After the arguments of the user got passed to the run-function, the following steps are conducted:
 
-- **Reading into a list**: after reading the file the lines are storaged into a list.
+- **Reading into a list**: after reading the file the lines are stored into a list.
 
-- **Determining Phred Scale**: input is the quality line as bytearray from 100st read.
+- **Determining Phred Scale**: input is the quality line as bytearray from 100th read.
 ```{p}
     detect_quality()
      	if mean(ASCII decimals) < 75:
@@ -189,10 +189,10 @@ After the arguments of the user got passed to the run-function, the following st
 - During the first iteration over the list, the quality line will be converted to a bytearray and will only be translated into an ASCII character string when the read gets written into the output file.
 
 ### 4.2. Statistics <a name="4.2">
-Additionally, to the trimming function, the program has a statistic function implemented. This operation provides instead of a trimmed and filtered FASTQ file, a statistics-summary file for the given FASTQ file. Containing: the mean quality of a read, the mean quality of the top and calculate the worst 10% of the reads (**find better definition**), the average spot length, as well as the number of bases and the total number of reads.
+Additionally to the trimming function, the program has a statistic function implemented. This operation provides instead of a trimmed and filtered FASTQ file a statistics-summary file for the given FASTQ file. Containing: the mean quality of a read, the mean quality of the best tenth and worst tenth of the reads and calculate the worst 10% of the reads (**find better definition**), the average spot length, as well as the number of bases and the total number of reads.
 This operation will only be conducted when it is explicitly specified by the user (see 5. Program Manual).
 
-- **Statistics**: this function provides the average of quality in the reads, the best and the worst 10% of the reads according to the quality.
+- **Statistics**
 
 ```{p}
     run(takes argparse arguments)
@@ -226,10 +226,10 @@ This operation will only be conducted when it is explicitly specified by the use
 
 
 ## 5. Program Manual <a name="5">
-This program allows you to filter and trim your FASTQ file. Additionally, a feature will provide you an overview of your FASTQ file, like average quality and number of unknown bases.
+This program allows you to filter and trim your FASTQ file. Additionally, a feature will provide an overview of your FASTQ file, like average quality and number of unknown bases.
 
 ### 5.1. Trimming and Filtering <a name="5.1">
-The following program will trim and filter your FASTQ file according to quality, length and unknown (N's) bases. The trimming based on quality will trim the ends of the read lower than a quality of 20. To run the program you must provide a FASTQ file in the standard FASTQ format (see Chapter 5.3). Compressed as well as uncompressed files can be feed to the program. The output consists of two output files - a FASTQ file with filtered and trimmed reads and a summary file which contains information about the number of filtered + trimmed reads.
+The following program will trim and filter your FASTQ file according to quality, length and unknown (N's) bases. '' The trimming based on quality, will trim the ends of the read lower than a quality of 20. '' To run the program you have to provide a FASTQ file in the standard FASTQ format (see Chapter 5.3). Compressed as well as uncompressed files can be fed to the program. The output consists of two output files - a FASTQ file with filtered and trimmed reads and a summary file which contains information about the number of filtered + trimmed reads.
 
 *Attention* :heavy_exclamation_mark: :warning:
 To make the script executable you must run following line:
@@ -238,15 +238,15 @@ To make the script executable you must run following line:
 chmod +x fastqtrimmer.py
 ```
 
-#### To run the program you must specify:
+#### To run the program you have to specify:
 
-- **-in** the inputfile 
-- **-out** the name of the outputfile 
+- **-in** the input file 
+- **-out** the name of the output file 
 
 #### Further arguments are optional:
 
-- **-sum** the name of the summaryfile (will give you a summary of the filtered and trimmed reads) (Defaultname: Summaryfile.txt)
-- **-stat**  *dont use this command for trimming*  specifiying the name of your statistics output file (details in 5.2. Statistics on FASTQ File)
+- **-sum** the name of the summary file (will give you a summary of the filtered and trimmed reads) (Defaultname: Summaryfile.txt)
+- **-stat** ( *dont use this command for trimming* ) specifiying the name of your statistics output file (details in 5.2. Statistics on FASTQ File)
 
 ##### For Trimming:
 
@@ -260,9 +260,9 @@ chmod +x fastqtrimmer.py
 - **-nbases** the minimum number of unknown bases
 
 ### 5.2. Statistics on FASTQ File <a name="5.2">
-In case you are uncertain about setting the different parameters a statistics feature is implemented. This option will provide you with a statistic-summary file with information about the quality of the reads (average, the average quality of the worst and best 10% of the reads), the number of reads, the average length of the reads, and the total amount of the individual bases. Thus, with this information provided it will be easier to adjust parameters for trimming and filtering.
+In case you are uncertain about setting the different parameters, a statistics feature is implemented. This option will provide a statistic-summary file with information about the quality of the reads (average, the average quality of the worst and best 10% of the reads), the number of reads, the average length of the reads, and the total amount of the individual bases. Thus, with this information provided, it will be easier to adjust parameters for trimming and filtering.
 
-To perform statistics you must specify the name of your FASTQ input file (-in) and statistics-output file (-stat) and set the main-output file to false (-out False). Despite the commands '-in', '-out' and '-stat' not further commands should be used (see 5.3. Examples).
+To perform statistics you have to specify the name of your FASTQ input file (-in) and statistics-output file (-stat) and set the main-output file to false (-out False). Despite the commands '-in', '-out' and '-stat', no further commands should be used (see 5.3. Examples).
 
 *Note*: You cannot perform trimming/filtering and statistics in one run.
 
@@ -278,7 +278,7 @@ Following command trims 6 bases from each end of the read, filters all reads wit
 
 
 
-In case you only want to trimm the reads with a quality lower than 20 from each end and filter reads with a quality lower than 20, this command is enough:
+In case you only want to trim the reads with a quality lower than 20 from each end and filter reads with a quality lower than 20, this command is enough:
 
 ```{p}
 ./fastqtrimmer.py -in Sample1.fastq -out Sample1_trimmed.fastq
@@ -300,7 +300,7 @@ To get an overview over the commands you can use, use following command:
 ## 6. Runtime Analysis <a name="6">
 
 ### 6.1. Big O <a name="6.1">
-To evaluate the runtime in Big O terms a small overview of the functions and their complexity is defined in the following table. Most of the structures implemented shown linear time, which means that every single element from the input is visited exactly once, *O(n)* times. As the size of the input, N, grows our algorithm's run time scales exactly with the size of the input. N hereby indicate the number of lines/reads and m the length of the read.
+To evaluate the runtime in Big O terms a small overview of the functions, their complexity is defined in the following table. Most of the structures implemented shown linear time, which means that every single element from the input is visited exactly once, *O(n)* times. As the size of the input, N, grows our algorithm's run time scales exactly with the size of the input. N hereby indicates the number of lines/reads and m the length of the read.
 
 | Function            | Big O analysis  |  
 | ------------------- |     :---:    |
@@ -321,7 +321,7 @@ O(n + 1 + n + 2n + n + n + n + 1) = *O(n)*
 The length of a read, has a minor impact on the running time, thus can be ignored. The major factor for a linear increase in runtime is the number of lines (n)
 
 
-### 6.2. Visuale Profiling <a name="6.2">
+### 6.2. Visual Profiling <a name="6.2">
 
 To visualize the function calls and to get a better understanding for the runtime performance, we used the library [Python Call Graph](https://pycallgraph.readthedocs.io/en/master/). A cutout of those results is visible in Figure X. 
 
@@ -330,17 +330,18 @@ The trim and filter functions, do not distinguish significantly in runtime. The 
 Since the programm passes the strings individually to the functions, the amount of function calls is noticably high.
 
 ![](pycallgraph_25.11.png)
-*Figure 3-Cutout of the scheme generated by PyCallGraph. Script run with a FASTQ file with 1000 reads.*
+
+*Figure 3-Cutout of the scheme generated by PyCallGraph. Script ran with a FASTQ file with 1000 reads.*
 
 
 ## 7. Discussion <a name="7">
-One of the biggest limitations is that the program works using files from Illumina, it is not able to read files from 454, Nano, SOLID, or PacBio due to quality detection.
+One of the biggest limitations is that the program works using files from Illumina, it is not able to read files from 454, Nano, SOLID, or PacBio platforms due to quality detection.
 
-The main bottleneck of the program is the detection of the Phred scale. The quality detection is extremely sensitive around the value 75 (=K), which is a quality score of 42 on Phred +33 scale and a quality score of 11 on Phred +64 scale. In case the read has considerably low quality (lower than 11) on a Phred scale 64, the Phred scale will be determined incorrectly as Phred scale 33. Since the quality of the first reads is commonly the lowest we choose the quality of the 100th read (which is in a common FASTQ file still an early position) for detection. In further steps, there could be an error handling implemented, which uses the next read in case the quality scale of the first read can not be determined. As an alternative, another algorithm for the Phred scale determination should be considered. However, using the 100th position implies that a very small FASTQ file can not be feed to the program.
+The main bottleneck of the program is the detection of the Phred scale. The quality detection is extremely sensitive around the value 75 (= K), which is a quality score of 42 on Phred +33 scale and a quality score of 11 on Phred +64 scale. In case the read has considerably low quality (lower than 11) on a Phred scale +64, the Phred scale will be determined incorrectly as Phred scale +33. Since the quality of the first reads is commonly the lowest, we chose the quality of the 100th read (which is in a common FASTQ file still an early position) for detection. In further steps, there could be an error handling implemented, which uses the next read in case the quality scale of the first read can not be determined. As an alternative, another algorithm for the Phred scale determination should be considered. However, using the 100th position implies that a very small FASTQ file can not be fed to the program.
 
 Further, a Big-O complexity of *O(n)* is considered a not-ideal, but desirable complexity. Instead of a linear increase of the runtime, a logarithmic increase should be aspired. However, we doubt that there is an applicable logarithmic algorithm design for this approach. 
 
-The program is written in the dynamically-typed language Python, which means no explicit declaration of a variable is required but also implements that each variable contains extra information about their datatype. Thus, each element in our list contains its own information like the reference count and the datatype. As an alternative approach, a library such as NumPy could be used. As all lines in a FASTQ file are strings, storing them in a fixed-type array (NumPy array) could increase efficiency. Hereby, we would suggest storing the lines in a NumPy Array and passing the NumPy Array(NumPy Array with Sequence string and NumPy Array with Quality string) to the functions, instead of passing each line separately to the function (VanderPlas, 2016). This would also decrease the numerous function calls (visualized 6.2.).
+The program is written in the dynamically-typed language Python, which means no explicit declaration of a variable is required but also implements that each variable contains extra information about their datatype. Thus, each element in our list contains its own information like the reference count and the datatype. As an alternative approach, a library such as NumPy could be used. As all lines in a FASTQ file are strings, storing them in a fixed-type array (NumPy Array) could increase efficiency. Hereby, we would suggest storing the lines in a NumPy Array and passing the NumPy Array (NumPy Array with Sequence string and NumPy Array with Quality string) to the functions, instead of passing each line separately to the function (VanderPlas, 2016). This would also decrease the numerous function calls (visualized in 6.2.).
 
 The main strength of the program is the easy handling. For every person, who knows how to use a command line.
 
