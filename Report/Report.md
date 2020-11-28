@@ -261,10 +261,10 @@ To get an overview over the commands you can use, use following command:
 ### 6.1. Big O
 To evaluate the runtime in Big O terms a small overview over the functions and there complexity is defined in the following table. Most of the structures implemented shown linear time, it means that every single element from the input is visited exactly once, *O(n)* times. As the size of the input, N, grows our algorithm's run time scales exactly with the size of the input. N hearby indicate the number of lines/reads and m the length of the read.
 
-| Function            | Big O analysis  |  Notes  |
+| Function            | Big O analysis  |  
 | ------------------- |     :---:    |
-| [Reading into a list](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)  | *O(n)*   | |
-| [detect_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)   |   *O(1)*  | |
+| [Reading into a list](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)  | *O(n)*   | 
+| [detect_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)   |   *O(1)*  | 
 | [trimming_list()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
 | [trim_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n*m)* reduced to  *O(n)* |
 | [filter_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
@@ -273,6 +273,11 @@ To evaluate the runtime in Big O terms a small overview over the functions and t
 | [write_summary()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)   | *O(1)* |
 
 *Table 2* Big O analysis in the main functions of the program. Where n is the number of lines, and m the length of the read.
+*Note*: This table only represents the an overview over the O-complexity.
+
+O(n + 1 + n + n*m + n + n + n + 1) = *O(n)*
+
+The length of a read (m), has a minor impact on the running time, thus can be ignored. The major factor for an linear increase in runtime is the number of lines (n).
 
 
 
