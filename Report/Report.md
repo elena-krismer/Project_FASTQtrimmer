@@ -1,4 +1,30 @@
-# Project
+# Project FASTQ trimmer
+
+## 1. [Introduction](#1)
+
+## 2. [Theory](#2)
+
+## 3. [Algorithm Design](#3)
+
+## 4. [Program Design](#4)
+
+## 5. [Program Manual](#5)
+
+### 5.1 [Main](#5.1)
+
+### 5.2 [Statistics](#5.2)
+
+## 6. [Runtime Analysis](#6)
+
+## 6.1 [Big O](#6.1)
+
+## 6.2 [Visuale Profiling](#6.2)
+
+## 7. [Conclusion](#7)
+
+## 8. [Reference](#8)
+
+
 
 To do/think of/ not forget?
 - which time to we use when writting the theory future, present, conjunktiv; will be filter, should,... i am confused lol 'has to be adjusted to the ohred scle/will be adjust/must be adjusted/is adjusted????  
@@ -9,7 +35,7 @@ To do/think of/ not forget?
 - should put the whole picture or a cutout in 6.2.? i am not sure if the whole picture is clear
 
 
-## 1. Introduction
+## 1. Introduction<a name="1">
 
 Next-Generation Sequencing has played an important role to understand the biology mechanisms from a genomics perspective. In the early 2000s, the price of sequence a genome was very high but with time, the sequencing cost has decreased and the genomic data production has increased. Generating data became easier but not the computational storage and data analysis. This output genomic data is raw and contains error sequencing to perform analysis downstream it must be pre-processed. Different pipelines could be used to preprocess the data some of them share steps like a quality check, duplicated removal,  and trimming reads. Read trimming is the process to remove low-quality bases or adapters while preserving the longest high-quality part of an NGS read. Trimming step led to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could reduce the computational time (Didion et al., 2017; Del Fabbro et al., 2013;  Bush, 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data (Liao et Shi, 2020). 
 
@@ -42,7 +68,7 @@ The quality, length, and the number of reads have a tremendous effect on the fin
 		
 This program allows to trim and filter Next-Generation Sequencing data from Illumina platforms. Whereby, the trimming and filtering parameters, quality, number of unknown bases and read length, can be defined by the user.
 
-## 2. Theory
+## 2. Theory <a name="2">
 As described in the introduction every read in a FASTQ file consists of four lines. This convention is the base of the program. Thus, the file gets read into a list and all following operations are performed by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
 
 The output of the program consists of two files the trimmed and filtered FASTQ file and the summary file, containing the count of trimmed and filtered reads. For trimming it has to be noticed that the position 'x' in the sequence line corresponds to position 'x' in the quality line. Thus when trimming the same amount of characters has to be trimmed from both lines. 
