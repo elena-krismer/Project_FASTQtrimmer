@@ -61,7 +61,7 @@ def fastq_statistics(infile, statisticfile):
     typefile = re.search(r'\S*\.gz', infile)
     if typefile:
         try:
-            infile = open(infile, mode='rt')
+            infile = gzip.open(infile, mode='rt')
         except IOError as error:
             print('Can not open gzip file', str(error))
             sys.exit(1)
@@ -97,12 +97,12 @@ def fastq_statistics(infile, statisticfile):
 
 # detection of phred scale using bytearray
 # takes bytearray as input
-def detect_quality(ascii_string):
+def detect_quality(qual_arr):
     # phred 33 range= 33-75
-    if max(ascii_string) <= 75 and min(ascii_string) < 59:
+    if sum(qual_arr) / len(qual_arr) < 75:
         phred_scale = 33
     # phred 64 range = 64 - 106
-    elif max(ascii_string) > 75 and min(ascii_string) >= 64:
+    elif max(qual_arr) >= 75:
         phred_scale = 64
     else:
         print("Error in determining quality scale")
@@ -111,46 +111,53 @@ def detect_quality(ascii_string):
 
 
 # trimming user specified 3' and 5' end
-def trim_user(seq_line, trim3, trim5):
-    trim_line = seq_line[trim5:]
-    if trim3 != 0:
-        trim_line = trim_line[:-(trim3)]
+def trim_user(seq_line, end3, end5):
+    trim_line = seq_line[end5:]
+    if end3 != 0:
+        trim_line = trim_line[:-end3]
     return trim_line
 
 
 # functions trims quality lower than 20 from each end
 def trim_quality(seq_line, qual_arr, phred):
-    qual_trim, count, pos, end3 = bytearray(), 0, -1, 0
+    end5, count, pos, end3 = 0, 0, 0, 0
     # converting quality score from 20 to given phred scale
     phred_ascii = phred + 20
-    # starting add 5' end reading quality bytearray to new bytearray
-    while pos < (len(qual_arr) - 1):
-        pos += 1
-        if qual_arr[pos] > phred_ascii:
-            while pos < (len(qual_arr) - 1):
-                qual_trim.append(qual_arr[pos])
-                pos += 1
-    # starting add 3' end determining numbers of characters to trim
-    pos = (len(qual_trim) - 1)
-    while pos >= 0:
-        pos -= 1
-        if qual_trim[pos] < phred_ascii:
-            while qual_trim[pos] < phred_ascii:
-                end3 += 1
-                pos -= 1
-    # cut the sequence the same length as the quality line
-    untrimmed_len = len(seq_line)
-    qual_trim = qual_trim.decode('utf-8')
-    # trim number of characters 3' end seq_line and qual_line
+    # starting 5' end, counting characters to trim
+    for pos in qual_arr:
+        if pos < phred_ascii:
+            end5 += 1
+            pos += 1
+        else:
+            break
+    # starting 3' end
+    pos = (len(qual_arr) - 1)
+    for pos in qual_arr:
+        if pos < phred_ascii:
+            end3 += 1
+            pos -= 1
+        else:
+            break
+    # if qual_arr[pos] < phred_ascii:
+    #   while qual_arr[pos] < phred_ascii:
+    #      end5 += 1
+    #      pos += 1
+    # while pos >= 0:
+    #     pos -= 1
+    #     if qual_arr[pos] < phred_ascii:
+    #         while qual_arr[pos] < phred_ascii:
+    #             end3 += 1
+    #             pos -= 1
+    # trim 5' and 3' end, count for summaryfile
     if end3 != 0:
-        qual_trim = qual_trim[0:-end3]
-        seq_line = seq_line[:end3]
+        qual_arr = qual_arr[:-end3]
+        seq_line = seq_line[:-end3]
         count = 1
-    # trim 5' end from seq_line
-    if (untrimmed_len - len(qual_trim)) != 0:
-        seq_line = seq_line[(untrimmed_len - len(qual_trim)):]
+    if end5 != 0:
+        qual_arr = qual_arr[end5:]
+        seq_line = seq_line[end5:]
         count = 1
-    return seq_line, qual_trim, count
+    return seq_line, qual_arr, count
 
 
 # filter according to user specified mean quality - default 20
@@ -171,11 +178,11 @@ def filter_bases_length(seq_line, n_bases, threshold_reads):
 
 
 # main function for trimming
-def trimming_list(file_list, trim3, trim5, phred):
+def trimming_list(file_list, end3, end5, phred):
     pos_seq, pos_qual, trimmed = 1, 3, 0
     while pos_qual < len(file_list):
-        file_list[pos_seq] = trim_user(file_list[pos_seq], trim3, trim5)
-        file_list[pos_qual] = trim_user(file_list[pos_qual], trim3, trim5)
+        file_list[pos_seq] = trim_user(file_list[pos_seq], end3, end5)
+        file_list[pos_qual] = trim_user(file_list[pos_qual], end3, end5)
         # saving trim_quality() return in variable
         qual_arr = bytearray()
         qual_arr.extend(map(ord, file_list[pos_qual]))
@@ -195,12 +202,12 @@ def write_outputfile(file_list, outputfile, qual, phred, nbases, length):
     pos, filtered = 0, 0
     with open(outputfile, 'w') as outputfile:
         while pos < (len(file_list) - 1):
-            qual_arr = bytearray()
-            qual_arr.extend(map(ord, file_list[pos + 3]))
-            if filter_quality(qual_arr, qual, phred) == True and \
+            # qual_arr = bytearray()
+            # qual_arr.extend(map(ord, file_list[pos + 3]))
+            if filter_quality(file_list[pos + 3], qual, phred) == True and \
                     filter_bases_length(file_list[pos + 1], nbases, length) == True:
                 outputfile.write(file_list[pos] + '\n' + file_list[pos + 1] + '\n' + file_list[pos + 2] +
-                                 '\n' + file_list[pos + 3] + '\n')
+                                 '\n' + file_list[pos + 3].decode('utf-8') + '\n')
             else:
                 # counting filtered reads
                 filtered += 1
@@ -222,7 +229,7 @@ def write_summary(summaryfile, trimmed, filtered, infile):
 def run(args):
     file_list = list()
     infile, outputfile, summaryfile, statisticfile = args.input, args.output, args.sum_output, args.stat_output
-    qual, trim3, trim5, length, nbases = args.qual, args.end3, args.end5, args.length, args.nbases
+    qual, end3, end5, length, nbases = args.qual, args.end3, args.end5, args.length, args.nbases
     # feature statistics
     if outputfile == 'False' and statisticfile != 'False':
         fastq_statistics(infile, statisticfile)
@@ -252,10 +259,10 @@ def run(args):
 
         # determining quality scale
         qual_arr = bytearray()
-        qual_arr.extend(map(ord, file_list[6]))
+        qual_arr.extend(map(ord, file_list[7]))
         phred = detect_quality(qual_arr)
         # trimming list
-        func_return = trimming_list(file_list, trim3, trim5, phred)
+        func_return = trimming_list(file_list, end3, end5, phred)
         file_list = func_return[0]
         trimmed = func_return[1]
         # filter list, writing in file
