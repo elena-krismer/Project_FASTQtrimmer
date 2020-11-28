@@ -38,6 +38,8 @@ To do/think of/ not forget?
 
 - should put the whole picture or a cutout in 6.2.? i am not sure if the whole picture is clear
 
+- work on theory part
+
 
 ## 1. Introduction<a name="1">
 
@@ -340,7 +342,7 @@ The main bottleneck of the program is the detection of the Phred scale. The qual
 
 Further, a Big-O complexity of *O(n)* is considered a not-ideal, but desirable complexity. Instead of a linear increase of the runtime, a logarithmic increase should be aspired. However, we doubt that there is an applicable logarithmic algorithm design for this approach. 
 
-The program is written in the dynamically-typed language Python, which means no explicit declaration of a variable is required but also implements that each variable contains extra information about their datatype. Thus, each element in our list contains its own information like the reference count and the datatype. As an alternative approach, a library such as NumPy could be used. As all lines in a FASTQ file are strings, storing them in a fixed-type array (NumPy array) could increase efficiency. Hereby, we would suggest storing the lines in a NumPy Array and passing the NumPy Array(NumPy Array with Sequence string and NumPy Array with Quality string) to the functions, instead of passing each line separately to the function (VanderPlas, 2016). This would also decrease the numerous function calls (visualized 6.2.).
+The program is written in the dynamically-typed language Python, which means no explicit declaration of a variable is required but also implements that each variable contains extra information about their datatype. Thus, each element in our list contains its own information like the reference count and the datatype. As an alternative approach, a library such as NumPy could be used. As all lines in a FASTQ file are strings, storing them in a fixed-type array (NumPy Array) could increase efficiency. Hereby, we would suggest storing the lines in a NumPy Array and passing the NumPy Array(NumPy Array with sequence strings and NumPy Array with quality strings) to the functions, instead of passing each line separately to the function (VanderPlas, 2016). This would also decrease the numerous function calls (visualized 6.2.).
 
 The main strength of the program is the easy handling. For every person, who knows how to use a command line.
 
