@@ -291,7 +291,7 @@ The length of a read, has a minor impact on the running time, thus can be ignore
 
 To visualize the function calls and to get a better understanding for the runtime performance, we used the library [Python Call Graph](https://pycallgraph.readthedocs.io/en/master/). A cutout of those results is visible in Figure X. 
 
-The trim and filter functions, do not distinguish significantly in runtime. The most complex operation, containing if/else statements and iteration is implemented in the trim_quality function and has the poorest runtime performance out of those four functions. As this is also the most complex function according to Big-O terms *O(2n)* (but still *O(n)*), an enhancement in this function will be beneficial. The 'cheapest' functions detetct_quality and write_summary will also remain that fast with bigger FASTQ files, as they have a Big-O complexity of *O(n)*.
+The trim and filter functions, do not distinguish significantly in runtime. The most complex operation, containing if/else statements and iteration is implemented in the trim_quality function and has the poorest runtime performance out of those four functions. As this is also the most complex function according to Big-O terms *O(2n)* (but still *O(n)*), an enhancement in this function will be beneficial. The 'cheapest' functions detetct_quality and write_summary will also remain that fast with bigger FASTQ files, as they have a Big-O complexity of *O(1)*.
 
 Since the programm passes the strings individually to the functions, the amount of function calls is noticably high.
 
