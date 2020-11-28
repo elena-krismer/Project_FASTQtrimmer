@@ -360,6 +360,7 @@ Del Fabbro, C., Scalabrin, S., Morgante, M., & Giorgi, F. M. (2013). An extensiv
 Didion, J. P., Martin, M., & Collins, F. S. (2017). Atropos: specific, sensitive, and speedy trimming of sequencing reads. *PeerJ*, 5, e3720.
 
 Liao, Y., & Shi, W. (2020). Read trimming is not required for mapping and quantification of RNA-seq reads at the gene level. *NAR Genomics and Bioinformatics*, 2(3), lqaa068.
+
 usearch page: https://drive5.com/usearch/manual/quality_score.html
 
 VanderPlas, J. (2016) Python Data Science Handbook. *O'Reilly Media*.
