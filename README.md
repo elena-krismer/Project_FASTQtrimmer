@@ -1,6 +1,6 @@
 # Project_NGS_1.0.0
 
-The following program wil trimm and filter your FASTQ file according to quality, length and unknown bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter [1](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/Report/Report.md#1-Introduction)).
+The following program wil trimm and filter your FASTQ file according to quality, length and unknown bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter [1](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/Report/Report.md#Project)).
 
 ## To run the program you must specify:
 
