@@ -34,8 +34,6 @@ The quality score is encrypted using the ascii code into two systems phred 33 an
 
 The main goal of this project is to generate a program, which trims Next-Generation Sequencing data from  Illumina based on quality.  
 
-- purpose of our programm 
-
 ## 2. Theory
 As described in the introduction every read in a FASTQ file consists of four lines. This convention is the base of the program. Thus, the file get read into a list and all following operations are perforemd by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
 
@@ -65,7 +63,7 @@ The algorithm uses mainly while structures. Further conditional statements and s
 
 ![](flowchart_update.png)
 
-*Figure 2 Algorithm Scheme*
+*Figure 2-Algorithm Scheme*
 
 This program relies on the uniform structure of FASTQ files: The first position the header followed by the sequence, the third line and the quality line. Thus, the file get read into a list and all following
 operations were by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
@@ -95,7 +93,6 @@ The programm consist of two major steps:
 
 
 ## 4.Program Design
-
 ### 4.1. Main
 The Program Design section explains the high-level structure of the program - where is what happening. Main variables can be mentioned together with their function. Functions can be explained. Pseudo code putting it all together can be relevant. It should be noted that writing a translation of the code into text does not read well nor give rise to understanding.
 
@@ -109,7 +106,12 @@ The Program Design section explains the high-level structure of the program - wh
 
 ##### Main steps:
 
-- **Reading into a list**
+- **Reading into a list**: after reading the file the lines are storaged into a list.
+```{p}
+  with infile:
+      [file_list.append(line.strip('\n').replace(' ', '')) for line in infile]
+  infile.close()
+```
 
 - **Determining Phred Scale**: input is the quality line as bytearray from 100st read.
 ```{p}
@@ -120,8 +122,7 @@ The Program Design section explains the high-level structure of the program - wh
       phred_scale = 64
 ```
 
-- **Trimming**:
-The 'main' trimming function (trimming_list) passes the strings to the function trim_user and trim_quality. The function trim_user slices the given number of characters from the input strings. Trim_quality takes the quality line (converted to a bytearray) and the sequence line as input.
+- **Trimming**: The 'main' trimming function (trimming_list) passes the strings to the function trim_user and trim_quality. The function trim_user slices the given number of characters from the input strings. Trim_quality takes the quality line (converted to a bytearray) and the sequence line as input.
 ```{p}
     def trimming_list()
      position_sequence = 1
@@ -151,6 +152,40 @@ has to be keeped in mind: different phred scales, structure of a fastq file, sim
 Therefore, the sequence and quality line are passed together to the trimming functions. To keep track of the trimmed reads the trimming function will return additively either 0 or 1, which will be summed up.
 Therefore, the observed Phred scale gets passed to the functions for conversion.
 ### 4.2. Statistics
+In order to provide useful information to execute the trimming process, we present an extension of the program. This extension provides basic statistics of the FASTQ file such as nucleotide counting, quiality and average read lenght. 
+- **Nuceotide counting**: the input of the function is the list with the sequences. Using this list every base will count in each sequence and storage in a variable. 
+
+```{p}
+def statistics_numbases(seq_list):
+    n_number, a_number, c_number, g_number, t_number = 0, 0, 0, 0, 0
+    for item in seq_list:
+        n_number += item.count('N')
+        a_number += item.count('A')
+        c_number += item.count('C')
+        g_number += item.count('G')
+        t_number += item.count('T')
+    return n_number, a_number, c_number, g_number, t_number
+```
+
+- **Statistics**: this function provide the average of quality in the reads, the best and the worst 10% of the reads accoring to the quiality.
+
+```{p}
+def statistic_quality(qual_list):
+    avg_list, len_list = list(), list()
+    for item in qual_list:
+        len_list.append(len(item))
+        avg_list.append(sum(item) / len(item))
+    # sorting list to get lowest and highest tenth of quality
+    avg_list.sort()
+    length = len(avg_list)
+    tenpercent = int(length * 0.1)
+    avg_qual = round(sum(avg_list) / length)
+    best_ten = round(sum(avg_list[-(tenpercent - 1):]) / len(avg_list[-(tenpercent - 1):]))
+    worst_ten = round(sum(avg_list[:(tenpercent - 1)]) / len(avg_list[:(tenpercent - 1)]))
+    entrie_length = round(sum(len_list) / len(len_list))
+    return avg_qual, best_ten, worst_ten, entrie_length
+```
+
 
 ## 5. Program Manual
 This program allows you to filter and trim your FASTQ file. Additonally, a feautre will provide you a overview over your FASTQ file, like average quality and number of unknown bases.
@@ -159,7 +194,7 @@ This program allows you to filter and trim your FASTQ file. Additonally, a feaut
 Following program will trimm and filter your FASTQ file according to quality, length and unknown (N's) bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter X). Compressed as well as uncompressed files can be feed to the program. The output consist of two outputfiles - a fastq file with filtered and trimmed reads and a summaryfile which contains information about the number of filtered + trimmed reads.
 
 
-:warning:*Attention* :heavy_exclamation_mark:
+*Attention* :heavy_exclamation_mark: :warning:
 To make the script executable you must run following line:
 
 ```{p}
@@ -228,18 +263,18 @@ To get an overview over the commands you can use, use following command:
 ## 6. Runtime Analysis
 
 ### 6.1. Big O
-To evaluate the runtime in Big O terms a small overview over the functions and there complexity is defined in the following table.Most of the structures implemented shown linear time, it means that every single element from the input is visited exactly once, *O(n)* times. As the size of the input, N, grows our algorithm's run time scales exactly with the size of the input
+To evaluate the runtime in Big O terms a small overview over the functions and there complexity is defined in the following table.Most of the structures implemented shown linear time, it means that every single element from the input is visited exactly once, *O(n)* times. As the size of the input, N, grows our algorithm's run time scales exactly with the size of the input.
 
 | Function            | Big O analysis  |
-| ------------------- | --------- |
-| [Reading into a list](#4-Program-Design)  | *O(n)*   |
-| [detect_quality()](#4-Program-Design)   |   *O(n)*  |
-| [trimming_list()](#4-Program-Design) | *O(n)* |
+| ------------------- |     :---:    |
+| [Reading into a list](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)  | *O(n)*   |
+| [detect_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)   |   *O(n)*  |
+| [trimming_list()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
 | [trim_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(2n)* reduced to  *O(n)* |
 | [filter_bases_length()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
-| [write_outputfile()](#4-Program-Design) | *O(n)* |
-| [write summary](#4-Program-Design)   | *O(1)* |
-
+| [write_outputfile()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
+| [write summary](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)   | *O(1)* |
+*Table 2* Big O analysis in the main functions ofr the program
 
 
 
@@ -254,9 +289,9 @@ To visualize the function calls and get a better understanding for the runtime p
 
 ![](overview_runtime.png)
 
-*Figure X* Cutout of the scheme generated by PyCallGraph. Script run with a FASTQ file with 1000 reads. 
+*Figure 3-Cutout of the scheme generated by PyCallGraph. Script run with a FASTQ file with 1000 reads.*
 
-Figure X. depict
+*Figure 4-Depict*
 
 
 
@@ -293,5 +328,7 @@ Liao, Y., & Shi, W. (2020). Read trimming is not required for mapping and quanti
 
 ## 9. List of Figures
 
-1. Figure: 
-2. Figure:
+1. Figure: Structural example of a Fastq format
+2. Figure: Algorithm Scheme
+3. Figure:Cutout of the scheme generated by PyCallGraph. Script run with a FASTQ file with 1000 reads
+4. Figure:Depict
