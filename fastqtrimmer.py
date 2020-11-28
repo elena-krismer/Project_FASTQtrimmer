@@ -181,13 +181,14 @@ def filter_bases_length(seq_line, n_bases, threshold_reads):
 def trimming_list(file_list, end3, end5, phred):
     pos_seq, pos_qual, trimmed = 1, 3, 0
     while pos_qual < len(file_list):
-        file_list[pos_seq] = trim_user(file_list[pos_seq], end3, end5)
-        file_list[pos_qual] = trim_user(file_list[pos_qual], end3, end5)
-        # saving trim_quality() return in variable
+        # conversion to bytearray
         qual_arr = bytearray()
         qual_arr.extend(map(ord, file_list[pos_qual]))
+        file_list[pos_seq] = trim_user(file_list[pos_seq], end3, end5)
+        file_list[pos_qual] = trim_user(qual_arr, end3, end5)
+        # saving trim_quality() return in variable
         func_return = trim_quality(file_list[pos_seq], qual_arr, phred)
-        # check whether the whole string got stringed, delete whole read in that case
+        # check whether the whole string got trimmed, delete whole read in that case
         if func_return[0] is not None:
             file_list[pos_seq], file_list[pos_qual] = func_return[0], func_return[1]
         else:
@@ -202,8 +203,6 @@ def write_outputfile(file_list, outputfile, qual, phred, nbases, length):
     pos, filtered = 0, 0
     with open(outputfile, 'w') as outputfile:
         while pos < (len(file_list) - 1):
-            # qual_arr = bytearray()
-            # qual_arr.extend(map(ord, file_list[pos + 3]))
             if filter_quality(file_list[pos + 3], qual, phred) == True and \
                     filter_bases_length(file_list[pos + 1], nbases, length) == True:
                 outputfile.write(file_list[pos] + '\n' + file_list[pos + 1] + '\n' + file_list[pos + 2] +
