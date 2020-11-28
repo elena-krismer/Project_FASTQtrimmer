@@ -1,10 +1,11 @@
 # Project
 
 To do/think of/ not forget?
-- which time to we use when writting the theory future, present, conjunktiv; will be filter, should,... i am confused lol 'has to be adjusted to the ohred scle/will be adjust/must be adjusted/is adjusted????
-- big o isnt finished but please take a look at it - its so weird - nicceeee table :)
+- which time to we use when writting the theory future, present, conjunktiv; will be filter, should,... i am confused lol 'has to be adjusted to the ohred scle/will be adjust/must be adjusted/is adjusted????  
+- big o isnt finished but please take a look at it - its so weird - nicceeee table :): *The Big O looks wierd but it's just evaluated by function I like the end you add the summ good idea!!! :3 I read those post and for me was so cool very well explained. I changed the o(n*m) because at the end it hast two for and the form is like O(2n) reduced to O(n) it´s like one example here: https://stackabuse.com/big-o-notation-and-algorithm-analysis-with-python-examples/  the other useful page is: https://skerritt.blog/big-o/*
 - yesterday was a merge conflict - we have to write the program design in pseudocode - i have added the pseudocode from yesterday, peter mentioned last time we shouldnt but the raw code in the report
-- i am pretty sure the complexity of detect_quality is O(1) i hsave corrected it :) - because this function will be called once no matter how long the fastq file, indexig, as well as max/min(most of the time) have the complexity of 1. else it would have the compelxity of O(m) for length of the read  - to get the maximum and average.
+-yesterday I run the program with the peter file and I got a problem with the quality. I used another file I tested with the two programs and it runs (using another file) so I added into the directory, I''l move to the correct directory test
+
 
 ## 1. Introduction
 
@@ -30,17 +31,13 @@ The quality score is encrypted using the ASCII code into two systems Phred +33 a
 
 ![](qscores.gif)
 
-*Table 1 Phred+33/+64 scale* - **add source**
+*Table 1 Phred+33/+64 scale* - **source:usearchv11 page**
  
 Every ASCII character represents the error propability of each nucleotide to be correct, the values are from 0 to 1,  as lower the value more certain that the nucleotide is correct, while 1 means that the base is certainly wrong ( see *Table 1*). Bases with a quality score close to 1 are seen as an undeterminated based and represented as 'N'.
 
 The quality, length and number of reads have an tremendous effect on the final results of experiments. Since the desired 'quality/quantity ratio' of the reads is depending on the further approach, we generated the program 'fastqtrimmer.py'.
 
-This program allows to trim and filter Next-Generation Sequencing data from  Illumina platforms. Whereby, the  trimming and filtering parameters, quality, number of unknown bases and read length, can be defined by the user. 
-
-Further the program allows to generate a statistic summary file of the FASTQ file.
-
-*Note*: The statistic function is implemented as a feature and thus wont be described in depth, in the chapters.
+This program allows to trim and filter Next-Generation Sequencing data from  Illumina platforms. Whereby, the  trimming and filtering parameters, quality, number of unknown bases and read length, can be defined by the user.
 
 ## 2. Theory
 As described in the introduction every read in a FASTQ file consists of four lines. This convention is the base of the program. Thus, the file get read into a list and all following operations are perforemd by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
@@ -51,7 +48,7 @@ The final outputfile should only contain reads with a defined maximum of unknown
 
 In addition for filtering and trimming the quality score has to be adjusted to the determined Phred scale. 
 
-The program is based on two trimming steps.The first one remove a user-defined number of nucleotides at 5' and 3' sense, according to a phred value (P= *default= 20*), the second step sum the quality of each base  then is divided by the length sequence keep the one with the P value: 
+The program is based on two trimming steps.The first one remove a user-defined number of nucleotides at 3' and 5' sense, according to a phred value (P= *default= 20*), the second step sum the quality of each base  then is divided by the length sequence keep the one with the P value: 
 
 To not overwhelm the user with to many options, the trimming and quality parameters are optional.
 
@@ -65,7 +62,7 @@ As part of design, the program can be used to remove sequencing adapters at the 
  
 ## 3. Algorithm Design
 
-For this programming a linaer algortihm is used and following programming structures are included:
+This programming uses these programming structures:
 - Sequences
 - Binary Selection
 - Repetiton
@@ -76,6 +73,7 @@ The general idea of the algorithm is to transfrom the input file into a list, an
 
 *Figure 2-Algorithm Scheme*
 
+*Note*: The binary selection between the trim/filter and the statistic operation are not mentioned.
 
 ## 4.Program Design
 ### 4.1. Main
@@ -131,7 +129,7 @@ After the arguments of the user got passed to the run-function, following steps 
             count 'N', determinte length
             return True
          
-         if all filters return True:
+         if all filter return True:
            convert bytearray to ASCII string
            write all four lines of read into outputfile
            
@@ -151,10 +149,10 @@ After the arguments of the user got passed to the run-function, following steps 
 
 
 ### 4.2. Statistics
-Additonally, to the trimming function the program has a statisitc function implemented. This operation provides instead of a trimmed and filtered FASTQ file, a statistics-summary file for the given FASTQ file. Containing: the mean quality of a read, the  mean quality of the top and worst 10% (**find better definition**), the average spot length, as well as the amount of bases and the total number of reads.
+Additonally, to the trimming function the program has a statisitc function implemented. This operation provides instead of a trimmed and filtered FASTQ file, a statistics-summary file for the given FASTQ file. Containing: the mean quality of a read, the  mean quality of the top and calculate the worst 10% of the reads (**find better definition**), the average spot length, as well as the amount of bases and the total number of reads.
 This operation will only be contuct, when it is explicitelly specified by the user (see 5. Program Manual).
 
-- **Statistics**: this function provide the average of quality in the reads, the best and the worst 10% of the reads accoring to the quality.
+- **Statistics**: this function provide the average of quality in the reads, the best and the worst 10% of the reads accoring to the quiality.
 
 ```{p}
     run(takes argparse arguments)
@@ -270,7 +268,7 @@ To evaluate the runtime in Big O terms a small overview over the functions and t
 | [Reading into a list](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)  | *O(n)*   | 
 | [detect_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)   |   *O(1)*  | 
 | [trimming_list()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
-| [trim_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n * m)* reduced to  *O(n)* |
+| [trim_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(2n)* reduced to  *O(n)* |
 | [filter_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
 | [filter_bases_length()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
 | [write_outputfile()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
@@ -279,16 +277,22 @@ To evaluate the runtime in Big O terms a small overview over the functions and t
 *Table 2* Big O analysis in the main functions of the program. Where n is the number of lines, and m the length of the read.
 *Note*: This table only represents the an overview over the O-complexity.
 
-*Calculation*: O(n + 1 + n + n*m + n + n + n + 1) = *O(n)*
+O(n + 1 + n + 2n + n + n + n + 1) = *O(n)*
 
-The length of a read (m), has a minor impact on the running time, thus can be ignored. The major factor for an linear increase in runtime is the number of lines (n).
+The length of a read, has a minor impact on the running time, thus can be ignored. The major factor for an linear increase in runtime is the number of lines (n).
 
 
 
 ### 6.2. Further Insights
+The main reasons for a slowdown in our runtime are the multiple function calls and
+s. An alternative approach could be to store the lines in a Numpy Array. 
+An alternative approach to improve runtime performance could be to use packages such as NumPy. Hereby, we would suggest storing
+the lines in a NumPy Array and passing the NumPy Array(NumPy Array with Sequence string and NumPy Array with Quality string) to the functions, instead of passing each line separately to the function.
 
+To visualize the function calls and get a better understanding for the runtime performance we used the library [Python Call Graph](https://pycallgraph.readthedocs.io/en/master/). A cutout of those results are visible in Figure X. Since the programm passes the strings individually to the functions, the amount of function calls is noticably high. Considering that for creating this scheme a fastq-file with 1000 reads was used and a common fastq file is much bigger, an reduction of these function calls should be strived. Further there is a significant difference between the several trim and filter functions in runtime. Especially, the functions trim_quality() and filter_quality() require a huge amount of time to compute. Comparing those two functions, which both get a bytearray as input and perform stat
+![](pycallgraph_25.11.png)
 
-To visualize the function calls and get a better understanding for the runtime performance we used the library [Python Call Graph](https://pycallgraph.readthedocs.io/en/master/). A cutout of those results are visible in Figure X. Since the programm passes the strings individually to the functions, the amount of function calls is noticably high. Considering that for creating this scheme a FASTQ-file with 1000 reads was used and a common FASTQ file is much bigger, an reduction of these function calls should be strived. 
+![](overview_runtime.png)
 
 *Figure 3-Cutout of the scheme generated by PyCallGraph. Script run with a FASTQ file with 1000 reads.*
 
@@ -296,7 +300,7 @@ To visualize the function calls and get a better understanding for the runtime p
 ## 7. Discussion
 One of the biggest liminatios is that the program works using files from Illumina, it is not able to read files from 454, Nano, SOLID or PacBio due the quality detection.
 
-The bottleneck of the program is the detection of the Phred scale. The quality detection is extremely sensitive around the value 75 (=K), which is a quality score of 42 on Phred 33 scale and a quality score of 11 on Phred scale 64. In case the read has considerably low quality (lower than 11) on a Phred scale 64, the Phred scale will be determined incorrectly as Phred scale 33. Since the quality of the first reads is commonly the lowest we choose the quality of the 100st read (which is in a common FASTQ file still an early position) for detection. In further steps there could be an error handling implemented, which uses the next read in case the quality scale of the first read can not be determined. As an alternative, another algorithm for the phred scale determination should be considered. However, using the 100st position implifies that a very small FASTQ file can not be feed to the program.
+The main bottleneck of the program is the detection of the Phred scale. The quality detection is extremely sensitive around the value 75 (=K), which is a quality score of 42 on Phred 33 scale and a quality score of 11 on Phred scale 64. In case the read has considerably low quality (lower than 11) on a Phred scale 64, the Phred scale will be determined incorrectly as Phred scale 33. Since the quality of the first reads is commonly the lowest we choose the quality of the 100st read (which is in a common FASTQ file still an early position) for detection. In further steps there could be an error handling implemented, which uses the next read in case the quality scale of the first read can not be determined. As an alternative, another algorithm for the phred scale determination should be considered. However, using the 100st position implifies that a very small FASTQ file can not be feed to the program.
 
 Further to avoid two iterations over the list, it should be aspired to trim, filter and write into the outputfile in one iteration. However, the current modularization into two seperat steps allows to modify the code, without messing up the program and makes it easier to read, at least to our experience.
 
@@ -304,14 +308,11 @@ The algorithm relies on the uniform strucutre of a FASTQ file, any additional li
 
 Considering the inconsistent usage of the Phred scale, the maintance of the progam should be questioned. Any changes in the quality scale or the common format of the FASTQ file will make this program useless. 
 
+As visualized in 6.2. the program consists of multiple function calls. To decrease function calls and conceivably improve runtime performance, the usage of other datatypes, like arrays or tuples should be aspired. 
+
 The implementation of the ends trimming based on the length is an advantage because is faster than the overlapping detection algorithm but, if is not well known the correct adapter size it could carry a proble removing less or more nucleotides turning the program less precise.
 
 The main strength of the program is the easy handling. For every person, who knows how to use a command line.
-
-Further, a Big-O complexity of *O(n)* is considered a not-ideal, but desirable complexity. Instead of a linear increase of the runtime, a logarithmic increase should be aspired. However we doubt that there is an applicable logarithimic algorithm design for this approach. 
-
-The usage of a dynamically-typed language, like Python comes with the disadvantage each element of a bad runtime performance. To improve the runtime in further steps the usage of NumPy arrays instead of lists could be used.
-The program is written in the dynamically-typed language Python, which means no explicetlz declaration of variabe is required but also implements that each variable contains extra inforamtion about there datatype. Thus, each element in our list contains its own infomration like the reference count and the datatype. As an alternative approach a libray such as NumPy could be used. As all lines in a FASTQ file are strings, storing them in a fixed-type array (NumPy array) could increase efficency. Hereby, we would suggest storing the lines in a NumPy Array and passing the NumPy Array(NumPy Array with Sequence string and NumPy Array with Quality string) to the functions, instead of passing each line separately to the function. This would also increase the numerous function calls (visualized 6.2.).
 
 Overall, the program is functional and provides the desired output.
 
@@ -327,9 +328,10 @@ Del Fabbro, C., Scalabrin, S., Morgante, M., & Giorgi, F. M. (2013). An extensiv
 Didion, J. P., Martin, M., & Collins, F. S. (2017). Atropos: specific, sensitive, and speedy trimming of sequencing reads. *PeerJ*, 5, e3720.
 
 Liao, Y., & Shi, W. (2020). Read trimming is not required for mapping and quantification of RNA-seq reads at the gene level. *NAR Genomics and Bioinformatics*, 2(3), lqaa068.
+usearch page: https://drive5.com/usearch/manual/quality_score.html
 
 ## 9. List of Figures
 
 1. Figure: Structural example of a Fastq format
 2. Figure: Algorithm Scheme
-3. Figure: Cutout of the scheme generated by PyCallGraph. Script run with a FASTQ file with 1000 reads
+3. Figure:Cutout of the scheme generated by PyCallGraph. Script run with a FASTQ file with 1000 reads
