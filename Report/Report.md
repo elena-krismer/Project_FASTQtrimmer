@@ -42,6 +42,8 @@ The quality, length, and the number of reads have a tremendous effect on the fin
 		
 This program allows to trim and filter Next-Generation Sequencing data from Illumina platforms. Whereby, the trimming and filtering parameters, quality, number of unknown bases and read length, can be defined by the user.
 
+## Contribution
+
 ## 2. Theory
 As described in the introduction every read in a FASTQ file consists of four lines. This convention is the base of the program. Thus, the file gets read into a list and all following operations are performed by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
 
@@ -93,18 +95,17 @@ After the arguments of the user got passed to the run-function, the following st
 - **Determining Phred Scale**: input is the quality line as bytearray from 100st read.
 ```{p}
     detect_quality()
-     if mean(ASCII decimals) < 75:
-      phred_scale = 33
-    elif max(ASCII decimals ) >= 75:
-      phred_scale = 64
+     	if mean(ASCII decimals) < 75:
+      		phred_scale = 33
+    	elif max(ASCII decimals ) >= 75:
+      		phred_scale = 64
 ```
 
 - **Trimming**: The 'main' trimming function (trimming_list) passes the strings to the function trim_user and trim_quality. The function trim_user slices the given number of characters from the input strings. Trim_quality takes the quality line (converted to a bytearray) and the sequence line as input.
+
 ```{p}
     def trimming_list()
-     position_sequence = 1
-     positon_quality = 3
-     
+     	
     while read list in an interval of four
          convert ASCII characters to bytearray
          trim_user: trimming bases list[position_sequence, position_quality]
@@ -129,15 +130,15 @@ After the arguments of the user got passed to the run-function, the following st
     def write_outputfile()
     while reading trimmed list in interval of four:
           def filter_quality
-            adjust quality score to phred scale, calculate mean of bytearray string
-            when average bigger than quality score return True
+            	adjust quality score to phred scale, calculate mean of bytearray string
+            	when average bigger than quality score return True
           def filter_unkown_bases_length
-            count 'N', determinte length
-            return True
+            	count 'N', determine length
+            	return True
          
          if all filters return True:
-           convert bytearray to ASCII string
-           write all four lines of read into outputfile
+           	convert bytearray to ASCII string
+           	write all four lines of read into outputfile
            
          else: count as filtered read
          
@@ -166,25 +167,25 @@ This operation will only be conducted when it is explicitly specified by the use
     
     fastq_statistics()
       open file read into
-        sequence_list
-        quality_list
+        	sequence_list
+        	quality_list
     
     detect_quality()
     
     statistics_numbases(sequence_list)
-       count bases in sequence_list
-       pass results to fastq_statistics
+       		count bases in sequence_list
+      		pass results to fastq_statistics
     
     statistic_quality(quality_list - as bytearray)
-         create list with length of read
-         create list with average quality
-       sort average_quality_list
-       slice lower and upper tenpercent of the list and calculate mean
-       calculate mean with length_of_read_list
-       pass results to fastq_statistics
+         		create list with length of read
+         		create list with average quality
+       		sort average_quality_list
+      		slice lower and upper tenpercent of the list and calculate mean
+       		calculate mean with length_of_read_list
+       		pass results to fastq_statistics
      
     fastq_statistics()
-       write summary
+       		write summary
        
 ```
 
@@ -314,6 +315,7 @@ Additionally, the modularization of the program allows changes(for instance only
 Overall, the program is functional and provides the desired output.
 
 ## 8. References
+
 Bush, S. J. (2020). Read trimming has minimal effect on bacterial SNP calling accuracy. *bioRxiv.*
 
 Chen, S., Zhou, Y., Chen, Y., & Gu, J. (2018). fastp: an ultra-fast all-in-one FASTQ preprocessor. *Bioinformatics*, 34(17), i884-i890.
