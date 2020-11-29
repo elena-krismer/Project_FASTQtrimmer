@@ -5,7 +5,6 @@ The following program wil trim and filter your FASTQ file according to quality, 
 ## Program Manual
 This program allows you to filter and trim your FASTQ file. Additionally, a feature will provide you an overview of your FASTQ file, like average quality and number of unknown bases.
 
-In order to run the program
 
 
 ### 1. Trimming and Filtering 
