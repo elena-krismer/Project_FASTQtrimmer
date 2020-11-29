@@ -5,6 +5,9 @@ The following program wil trim and filter your FASTQ file according to quality, 
 ## Program Manual
 This program allows you to filter and trim your FASTQ file. Additionally, a feature will provide you an overview of your FASTQ file, like average quality and number of unknown bases.
 
+In order to run the program
+
+
 ### 1. Trimming and Filtering 
 The following program will trim and filter your FASTQ file according to quality, length and unknown (N's) bases. The trimming based on quality will trim the ends of the read lower than a quality of 20. To run the program you must provide a FASTQ file in the standard FASTQ format (see Chapter 5.3). Compressed as well as uncompressed files can be feed to the program. The output consists of two output files - a FASTQ file with filtered and trimmed reads and a summary file which contains information about the number of filtered + trimmed reads.
 
