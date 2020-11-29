@@ -1,8 +1,8 @@
 # Project
 
 To do/think of/ not forget?
-- which time to we use when writting the theory future, present, conjunktiv; will be filter, should,... i am confused lol 'has to be adjusted to the ohred scle/will be adjust/must be adjusted/is adjusted????
-- yesterday was a merge conflict - we have to write the program design in pseudocode - i have added the pseudocode from yesterday, peter mentioned last time we shouldnt but the raw code in the report
+- which time to we use when writting the theory future, present, conjunktiv; will be filter, should,... i am confused lol 'has to be adjusted to the ohred scle/will be adjust/must be adjusted/is adjusted???? ***After asking my metegnomics project friends and my mexican profrssor( no native reference lol) they said if is like a process is bettter present. I changed some lines there**
+- yesterday was a merge conflict - we have to write the program design in pseudocode - i have added the pseudocode from yesterday, peter mentioned last time we shouldnt but the raw code in the report ***should we remove the gray code?** I think we can keep it because is very useful 
 
 -yesterday I run the program with the peter file and I got a problem with the quality. I used another file I tested with the two programs and it runs (using another file) so I added into the directory, I''l move to the correct directory test
 
@@ -27,7 +27,7 @@ There are two types of trimming based on 1) sequence and 2) quality. The first o
 *Figure 1-Structural example of a FASTQ format*
 
 
-The quality score is encrypted using the ASCII code into two systems Phred +33 and +64. '33' and  '64' represent the first value in the scales, a quality score of 0, encoded as bytes (33 ASCII character = !; 64 ASCII character = @). The conversion between these two scales is relatively easy, as the quality score in encoded as decimals on Phred +64 scale, is always 33 higher than the quality score encoded in decimals on the Phred +33 scale. For example using the Phred +33 a quality of 20 will be represented by *“5”* which is the 53 number in ASCII code while *“T”* in +64 system (see the *Table 1*)
+The quality score is encrypted using the ASCII code into two systems Phred +33 and +64. '33' and  '64' represent the first value in the scales, a quality score of 0, encoded as bytes (33 ASCII character = !; 64 ASCII character = @). The conversion between these two scales is relatively easy, as the quality score in encoded as decimals on Phred +64 scale, is always 33 higher than the quality score encoded in decimals on the Phred +33 scale. For example using the Phred +33 a quality of 20 represented by *“5”* which is the 53 number in ASCII code while *“T”* in +64 system (see the *Table 1*)
 
 ![](qscores.gif)
 
@@ -44,7 +44,7 @@ As described in the introduction every read in a FASTQ file consists of four lin
 
 The output of the program consists of two files the trimmed and filtered FASTQ file and the summaryfile, containing the count of trimmed and filtered reads. For trimming it has to be noticed that the position 'x' in the sequence line corresponds to position 'x' in the quality line. Thus when trimming the same amount of characters has to be trimmed from both lines. 
 
-The final outputfile should only contain reads with a defined maximum of unknown bases, minimum average quality and minimum lenght of the sequence. The sequence/quality line must therefore meet all three criteria. When the filters are passed the four positions of the read will are called and written into the ouputfile, else the read is counted as 'filtered' for the summaryfile.
+The final outputfile should only contain reads with a defined maximum of unknown bases, minimum average quality and minimum lenght of the sequence. The sequence/quality line must therefore meet all three criteria. When the filters are passed the four positions of the read are called and written into the ouputfile, else the read is counted as 'filtered' for the summaryfile.
 
 In addition for filtering and trimming the quality score has to be adjusted to the determined Phred scale. 
 
@@ -288,7 +288,7 @@ The length of a read, has a minor impact on the running time, thus can be ignore
 
 ### 6.2. Further Insights
 
-To visualize the function calls and get a better understanding for the runtime performance we used the library [Python Call Graph](https://pycallgraph.readthedocs.io/en/master/). A cutout of those results are visible in Figure X. Since the programm passes the strings individually to the functions, the amount of function calls is noticably high. 
+To visualize the function calls and get a better understanding for the runtime performance we used the library [Python Call Graph](https://pycallgraph.readthedocs.io/en/master/). A cutout of those results are visible in *Figure 3*. Since the programm passes the strings individually to the functions, the amount of function calls is noticably high. 
 
 ![](pycallgraph_25.11.png)
 
