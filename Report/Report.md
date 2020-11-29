@@ -36,7 +36,7 @@ To do/think of/ not forget?
 - yesterday was a merge conflict - we have to write the program design in pseudocode - i have added the pseudocode from yesterday, peter mentioned last time we shouldnt but the raw code in the report
 -yesterday I run the program with the peter file and I got a problem with the quality. I used another file I tested with the two programs and it runs (using another file) so I added into the directory, I''l move to the correct directory test
 
-- should put the whole picture or a cutout in 6.2.? i am not sure if the whole picture is clear
+- should put the whole picture or a cutout in 6.2.? i am not sure if the whole picture is clear  *I think the whole picture explain the process*
 
 - work on theory part
 
