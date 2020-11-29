@@ -100,6 +100,8 @@ Besides filtering and trimming the quality score has to be adjusted to the deter
 
 To not overwhelm the user with too many options, the trimming and quality parameters are optional.
 
+
+ 
  
 ## 3. Algorithm Design <a name="3">
 
@@ -129,6 +131,7 @@ After the arguments of the user got passed to the run-function, the following st
 - **Reading into a list**: after reading the file the lines are stored into a list.
 
 - **Determining Phred Scale**: input is the quality line as bytearray from 100th read.
+
 ```{p}
     detect_quality()
      	if mean(ASCII decimals) < 75:
@@ -141,12 +144,11 @@ After the arguments of the user got passed to the run-function, the following st
 
 ```{p}
     def trimming_list()
-     	
-    while read list in an interval of four
-         convert ASCII characters to bytearray
-         trim_user: trimming bases list[position_sequence, position_quality]
-         trim_quality: list[position_sequence, position_quality]
-         count quality trims `
+    	while read list in an interval of four
+         	convert ASCII characters to bytearray
+         	trim_user: trimming bases list[position_sequence, position_quality]
+         	trim_quality: list[position_sequence, position_quality]
+         	count quality trims `
      
      def trim_user()
          slice characters from sequence and and bytearray
@@ -157,18 +159,23 @@ After the arguments of the user got passed to the run-function, the following st
             count number of characters to trim from 5' end
             count number of characters to trim from 3' end
          slice sequence and bytearray
-         count trimming    
+         count trimming 
+	 
+    def trimming_list() return list to def_run()
+    
 ```
 
 - **Filtering and Writing in Outputfile**:
 
 ```{p}
     def write_outputfile()
-    while reading trimmed list in interval of four:
-          def filter_quality
+   	 while reading trimmed list in interval of four:
+          
+	  def filter_quality
             	adjust quality score to phred scale, calculate mean of bytearray string
             	when average bigger than quality score return True
-          def filter_unkown_bases_length
+          
+	  def filter_unkown_bases_length
             	count 'N', determine length
             	return True
          
@@ -201,22 +208,22 @@ This operation will only be conducted when it is explicitly specified by the use
 - **Statistics**
 
 ```{p}
-    run(takes argparse arguments)
+    def run(takes argparse arguments)
     if outputfile false
        statistics
     
-    fastq_statistics()
+    def fastq_statistics()
       open file read into
         	sequence_list
         	quality_list
     
-    detect_quality()
+    def detect_quality() detect phred scale
     
-    statistics_numbases(sequence_list)
+    def statistics_numbases(sequence_list)
        		count bases in sequence_list
       		pass results to fastq_statistics
     
-    statistic_quality(quality_list - as bytearray)
+    def statistic_quality(quality_list - as bytearray)
          		create list with length of read
          		create list with average quality
        		sort average_quality_list
@@ -224,8 +231,9 @@ This operation will only be conducted when it is explicitly specified by the use
        		calculate mean with length_of_read_list
        		pass results to fastq_statistics
      
-    fastq_statistics()
-       		write summary
+    def fastq_statistics()
+    		write results from statistics_numbases and statistic_quality into summary	
+       	
        
 ```
 
@@ -309,14 +317,14 @@ To evaluate the runtime in Big O terms a small overview of the functions, their 
 
 | Function            | Big O analysis  |  
 | ------------------- |     :---:    |
-| [Reading into a list](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)  | *O(n)*   | 
-| [detect_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)   |   *O(1)*  | 
-| [trimming_list()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
-| [trim_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(2n)* reduced to  *O(n)* |
-| [filter_quality()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
-| [filter_bases_length()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
-| [write_outputfile()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py) | *O(n)* |
-| [write_summary()](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/fastqtrimmer_features.py)   | *O(1)* |
+| Reading into a list | *O(n)*   | 
+| detect_quality()  |   *O(1)*  | 
+| trimming_list() | *O(n)* |
+| trim_quality() | *O(2n)* reduced to  *O(n)* |
+| filter_quality() | *O(n)* |
+| filter_bases_length() | *O(n)* |
+| write_outputfile() | *O(n)* |
+| write_summary()   | *O(1)* |
 
 *Table 2* Big O analysis in the main functions of the program. Where n is the number of lines, and m the length of the read.
 *Note*: This table only represents an overview of the O-complexity.
