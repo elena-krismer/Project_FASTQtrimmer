@@ -43,10 +43,9 @@ To do/think of/ not forget?
 
 ## 1. Introduction<a name="1">
 
-Next-Generation Sequencing (NGS) has played an important role in understanding the biology mechanisms from a genomics perspective. In the early 2000s, the price of sequence a genome was immense but with time, with decreasing sequencing costs, the genomic data production has increased. Even though generating data became easier, computational storage and data analysis remains still a challenge. As the raw output genomic data  contains sequencing errors, prep-processing is required to perform analysis. Different pipelines can be used to preprocess the data some of them share steps like a quality check, duplicate removal,  and trimming reads. Read trimming is the process to remove low-quality bases or adapters while preserving the longest high-quality part of an NGS read. Trimming step lead to more reads mapping to annotated genes, mitigate the effects of adapter contamination, widely assumed to increase the accuracy of SNP calling and potentially could reduce the computational time (Didion et al., 2017; Del Fabbro et al., 2013;  Bush, 2020) on another hand there are studies where still discussing the trimming effect in RNA-seq data suggesting that read trimming is a redundant process in the quantification of RNA-seq expression data (Liao et Shi, 2020). 
+Next-Generation Sequencing (NGS) has played an important role in understanding the biology mechanisms from a genomics perspective. In the early 2000s, the price to sequence a genome was immense. Overtime the genomic data production has increased, with the to decreasing sequencing costs. Even though generating data became easier, computational storage and data analysis remains still a challenge. As the raw output genomic data  contains sequencing errors, prep-processing is required to perform analysis. Different pipelines can be used to preprocess the data some of them share steps like a quality check, duplicate removal,  and trimming reads. Read trimming is the process to remove low-quality bases or adapters while preserving the longest high-quality part of an NGS read. This step ameliorates mapping more reads to annotated genes, mitigates the effects of adapter contamination, plus it is widely assumed that trimming increases the accuracy of SNP calling and potentially could reduce the computational time (Didion et al., 2017; Del Fabbro et al., 2013;  Bush, 2020). On the other hand, is the relevance of trimming in RNA-seq data is still discussed (Liao et Shi, 2020). 
 
-
-Didion and colleagues mention that several trimming tools had been developed however were ablre to provide the accuracy there is not one that simultaneously provides the accuracy, computational efficiency, and feature set to work with the types and volumes of data (Didion et al., 2017) reason why different tools are still emerging. The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic (Bush, 2020).
+There have been several trimming tools developed. However, there is not one that simultaneously provides the accuracy, computational efficiency, and feature set to work with the types and volumes of data (Didion et al., 2017). Therefore, the development and enhancment of trimming tools is still emerging. The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic (Bush, 2020).
 
 There are two types of trimming based on 1) sequence and 2) quality. The first one can cut sequence adapters while the second one is based on the quality based on a Phred score. Both perspectives use a FASTQ file, which keeps the information of the sequencing and is conformed by: 
 
@@ -61,14 +60,21 @@ There are two types of trimming based on 1) sequence and 2) quality. The first o
 *Figure 1-Structural example of a FASTQ format*
 
 
-The quality score is encrypted using the ASCII code into two systems Phred +33 and +64. '33' and  '64' represent the first value in the scales, a quality score of 0, encoded as bytes (33 ASCII character = !; 64 ASCII character = @). The conversion between these two scales is relatively easy, as the quality score is encoded as decimals on Phred +64 scale, which is always 33 higher than the quality score encoded in decimals on the Phred +33 scale. For example, using the Phred +33 a quality of 20 will be represented by *“5”* which is the 53 number in ASCII code while *“T”* in +64 system (see the *Table 1*).
+
+The fourth line in the read contains the quality score. The quality score (*Q*) decimals are logarithmically related to the error probability (*P*)( the probability that the base call is wrong) and is calculated as follow (Ochoa et al., 2013):
+
+*Q = −10log10P*
+
+The error probability, for each nucleotide, ranging from 0 to 1. Thus, 1 represents a probability of 100% for the nucleotide to be wrong and nucleotides with a p_error close to 0 to be correct( see *Table 1*). Bases with a high error probability are seen as an undetermined base and represented as 'N'.
+
+The quality score is encrypted using the ASCII code into two systems Phred +33 and +64. '33' and  '64' represent the first value in the scales, a quality score of 0, encoded as bytes (33 ASCII character = !; 64 ASCII character = @). The conversion between these two scales is relatively easy, as the quality score is encoded as decimals on Phred +64 scale, which is always 33 higher than the quality score encoded in decimals on the Phred +33 scale. For example, using the Phred +33 a quality of 20 will be represented by *“5”* which is the 53 number in ASCII code while *“T”* in +64 system (see the *Table 1*) (Ochoa et al., 2013).
 
 
 ![](qscores.gif)
 
 *Table 1 Phred+33/+64 scale* - **source:usearchv11 page**
  
-Every ASCII character represents the error probability of each nucleotide to be correct, the values range from 0 to 1, as lower the value more certain that the nucleotide is correct, while 1 means that the base is certainly wrong ( see *Table 1*). Bases with a quality score close to 1 are seen as an undetermined base and represented as 'N'.
+
 		
 The quality, length, and the number of reads have a tremendous effect on the final results of experiments. Since the desired 'quality/quantity ratio' of the reads is depending on the further approach, we generated the program 'fastqtrimmer.py'.
 		
@@ -79,9 +85,12 @@ This program allows to trim and filter Next-Generation Sequencing data from Illu
 
 ## Contribution
 
+Report
+Code
+
 ## 2. Theory <a name="2">
 
-As described in the introduction every read in a FASTQ file consists of four lines. This convention is the base of the program. Thus, the file gets read into a list and all following operations are performed by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line and so on).
+As described in the introduction every read in a FASTQ file consists of four lines. This convention is the base of the program. Thus, the file gets read into a list and all following operations are performed by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line).
 
 The output of the program consists of two files the trimmed and filtered FASTQ file and the summary file, containing the count of trimmed and filtered reads. For trimming it has to be noticed that the position 'x' in the sequence line corresponds to position 'x' in the quality line. Thus when trimming the same amount of characters has to be trimmed from both lines. 
 
@@ -363,7 +372,9 @@ Liao, Y., & Shi, W. (2020). Read trimming is not required for mapping and quanti
 
 usearch page: https://drive5.com/usearch/manual/quality_score.html
 
-VanderPlas, J. (2016) Python Data Science Handbook. *O'Reilly Media*.
+Ochoa I, Asnani H, Bharadia D, Chowdhury M, Weissman T, Yona G. (2013). QualComp: a new lossy compressor for quality scores based on rate distortion theory. *BMC Bioinformatics*. 2013;14:187.
+
+VanderPlas, J. (2016). Python Data Science Handbook. *O'Reilly Media*.
 
 ## 9. List of Figures
 
