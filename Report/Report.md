@@ -1,13 +1,9 @@
 <img align="right" width="300" height="100" src="DTU.jpg"><br /> <br /><br /><br /><br /><br /><br />
-# 22110 - Python and Unix for Bioinformaticians <br /> <br /><br /><br />
-# Project 8: Read trimmer for Next-Generation-Sequencing data<br /><br /><br />
+# 22110 - Python and Unix for Bioinformaticians <br /> <br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br />
+# Project 8: Read trimmer for Next-Generation-Sequencing data<br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br />
 # Students:
 ## Elena Krismer (s202425)
-## Carolina Rocha (s203014)
-
-
-
-
+## Carolina Rocha (s203014)<br /> <br /><br /><br /><br /> <br /><br /><br />
 
 
 
