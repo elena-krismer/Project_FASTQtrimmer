@@ -119,35 +119,27 @@ def trim_user(seq_line, end3, end5):
 
 
 # functions trims quality lower than 20 from each end
+# string, bytearray, integer as input
 def trim_quality(seq_line, qual_arr, phred):
     end5, count, pos, end3 = 0, 0, 0, 0
     # converting quality score from 20 to given phred scale
     phred_ascii = phred + 20
-    # starting 5' end, counting characters to trim
-    for pos in qual_arr:
-        if pos < phred_ascii:
-            end5 += 1
-            pos += 1
-        else:
-            break
-    # starting 3' end
-    pos = (len(qual_arr) - 1)
-    for pos in qual_arr:
-        if pos < phred_ascii:
-            end3 += 1
-            pos -= 1
-        else:
-            break
-    # if qual_arr[pos] < phred_ascii:
-    #   while qual_arr[pos] < phred_ascii:
-    #      end5 += 1
-    #      pos += 1
-    # while pos >= 0:
-    #     pos -= 1
-    #     if qual_arr[pos] < phred_ascii:
-    #         while qual_arr[pos] < phred_ascii:
-    #             end3 += 1
-    #             pos -= 1
+    # length_arr to not extend bytearray during iteration
+    length_arr = len(qual_arr) - 1
+    pos = length_arr
+    # determine amount of characters to slice
+    while pos < len(qual_arr) - 2:
+        pos += 1
+        if qual_arr[pos] < phred_ascii:
+            while qual_arr[pos] < phred_ascii and pos != length_arr:
+                end5 += 1
+                pos += 1
+    while pos >= 0:
+        pos -= 1
+        if qual_arr[pos] < phred_ascii:
+            while qual_arr[pos] < phred_ascii and pos != -1:
+                end3 += 1
+                pos -= 1
     # trim 5' and 3' end, count for summaryfile
     if end3 != 0:
         qual_arr = qual_arr[:-end3]
@@ -199,6 +191,7 @@ def trimming_list(file_list, end3, end5, phred):
     return file_list, trimmed
 
 
+# writing trimmed file, decoding quality line
 def write_outputfile(file_list, outputfile, qual, phred, nbases, length):
     pos, filtered = 0, 0
     with open(outputfile, 'w') as outputfile:
@@ -256,9 +249,9 @@ def run(args):
             print('Error in fileformat.')
             sys.exit(1)
 
-        # determining quality scale
+        # determining phred scale using 100st read
         qual_arr = bytearray()
-        qual_arr.extend(map(ord, file_list[7]))
+        qual_arr.extend(map(ord, file_list[101]))
         phred = detect_quality(qual_arr)
         # trimming list
         func_return = trimming_list(file_list, end3, end5, phred)
