@@ -67,7 +67,7 @@ The fourth line in the read contains the quality score. The quality score (*Q*) 
 
 The error probability, for each nucleotide, ranging from 0 to 1. Thus, 1 represents a probability of 100% for the nucleotide to be wrong and nucleotides with a p_error close to 0 to be correct( see *Table 1*). Bases with a high error probability are seen as an undetermined base and represented as 'N'.
 
-The quality score is encrypted using the ASCII code into two systems Phred +33 and +64. '33' and  '64' represent the first value in the scales, a quality score of 0, encoded as bytes (33 ASCII character = !; 64 ASCII character = @). The conversion between these two scales is relatively easy, as the quality score is encoded as decimals on Phred +64 scale, which is always 33 higher than the quality score encoded in decimals on the Phred +33 scale. For example, using the Phred +33 a quality of 20 will be represented by *“5”* which is the 53 number in ASCII code while *“T”* in +64 system (see the *Table 1*) (Ochoa et al., 2013).
+The quality score is encrypted using the ASCII code into two systems, Phred +33 and +64. '33' and  '64' represent the first value in the scales, a quality score of 0 encoded as bytes (33 ASCII character = !; 64 ASCII character = @). The conversion between these two scales is relatively easy, as the quality score is encoded as decimals on Phred +64 scale, which is always 33 higher than the quality score encoded in decimals on the Phred +33 scale. For example, using the Phred +33 a quality of 20 will be represented by *“5”* which is the 53 number in ASCII code while *“T”* in +64 system (see the *Table 1*) (Ochoa et al., 2013).
 
 
 ![](qscores.gif)
