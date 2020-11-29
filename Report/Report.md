@@ -1,8 +1,8 @@
-# 22110 - Python and Unix for Bioinformaticians<img align="right" width="200" height="100" src="DTU.jpg"><br /><br /> <br /><br /><br />
-#  "Read trimmer for Next-Generation-Sequencing data"<br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br />
+# 22110 - Python and Unix for Bioinformaticians<img align="right" width="200" height="100" src="DTU.jpg"><br /><br /> <br /><br /><br /><br /><br />
+#  "Read trimmer for Next-Generation-Sequencing data"<br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 # Students:
 ## Elena Krismer (s202425)
-## Carolina Rocha (s203014)<br /> <br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br />
+## Carolina Rocha (s203014)<br /> <br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 
 ## The presend file is a summary of the project. In order to see online version click [here!](https://github.com/elena-krismer/Project_FASTQtrimmer)<br /><br /><br />
 ## Content:
