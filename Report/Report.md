@@ -1,3 +1,21 @@
+<img align="right" width="300" height="100" src="DTU.jpg">
+
+
+# 22110 - Python and Unix for Bioinformaticians
+
+# Project 8: Read trimmer for Next-Generation-Sequencing data
+
+
+# Students: 
+   # Elena Krismer (s202425)
+   # Carolina Rocha (s203014)
+
+
+
+
+
+
+
 # Project FASTQ trimmer
 
 ### 1. [Introduction](#1)
