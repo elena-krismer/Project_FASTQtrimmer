@@ -217,7 +217,7 @@ def write_summary(summaryfile, trimmed, filtered, infile):
                 datetime.now(), infile, filtered, trimmed))
     sum_file.close()
 
-
+# 'main' function, gets as input all command line arguments
 def run(args):
     file_list = list()
     infile, outputfile, summaryfile, statisticfile = args.input, args.output, args.sum_output, args.stat_output
