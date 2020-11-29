@@ -1,5 +1,5 @@
 # 22110 - Python and Unix for Bioinformaticians
-<img align="right" width="200" height="100" src="DTU.jpg">
+<img align="right" width="300" height="100" src="DTU.jpg"><br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br />
 # Project 8: Read trimmer for Next-Generation-Sequencing data<br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br />
 # Students:
 ## Elena Krismer (s202425)
