@@ -43,9 +43,9 @@ To do/think of/ not forget?
 
 ## 1. Introduction<a name="1">
 
-Next-Generation Sequencing (NGS) has played an important role in understanding the biology mechanisms from a genomics perspective. In the early 2000s, the price to sequence a genome was immense. Overtime the genomic data production has increased, with the to decreasing sequencing costs. Even though generating data became easier, computational storage and data analysis remains still a challenge. As the raw output genomic data  contains sequencing errors, prep-processing is required to perform analysis. Different pipelines can be used to preprocess the data some of them share steps like a quality check, duplicate removal,  and trimming reads. Read trimming is the process to remove low-quality bases or adapters while preserving the longest high-quality part of an NGS read. This step ameliorates mapping more reads to annotated genes, mitigates the effects of adapter contamination, plus it is widely assumed that trimming increases the accuracy of SNP calling and potentially could reduce the computational time (Didion et al., 2017; Del Fabbro et al., 2013;  Bush, 2020). On the other hand, is the relevance of trimming in RNA-seq data is still discussed (Liao et Shi, 2020). 
+Next-Generation Sequencing (NGS) has played and is still playing an important role in understanding biological mechanisms from a genomics perspective. In the early 2000s, the price to sequence a genome was immense. But with the decreasing sequencing costs, the genomic data production could be increased. Even though generating data became easier, computational storage and data analysis remain still a challenge. As the raw output genomic data contains sequencing errors, prep-processing is required to perform analysis. Different pipelines can be used to preprocess the data some of them share steps like a quality check, duplicate removal, and trimming reads. Read trimming is the process to remove low-quality bases or adapters while preserving the longest high-quality part of an NGS read. This step ameliorates mapping more reads to annotated genes, mitigates the effects of adapter contamination, plus it is widely assumed that trimming increases the accuracy of SNP calling and potentially could reduce the computational time (Didion et al., 2017; Del Fabbro et al., 2013; Bush, 2020). On the other hand, is the relevance of trimming in RNA-seq data is still discussed (Liao et Shi, 2020).
 
-There have been several trimming tools developed. However, there is not one that simultaneously provides the accuracy, computational efficiency, and feature set to work with the types and volumes of data (Didion et al., 2017). Therefore, the development and enhancment of trimming tools is still emerging. The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic (Bush, 2020).
+There have been several trimming tools developed. Given that, there is not one tool that simultaneously provides the accuracy, computational efficiency, and feature set to work with the types and volumes of data, the development and enhancement of trimming tools is still an emerging field. (Didion et al., 2017). The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic (Bush, 2020).
 
 There are two types of trimming based on 1) sequence and 2) quality. The first one can cut sequence adapters while the second one is based on the quality based on a Phred score. Both perspectives use a FASTQ file, which keeps the information of the sequencing and is conformed by: 
 
@@ -98,14 +98,8 @@ The final output file should only contain reads with a defined maximum of unknow
 
 Besides filtering and trimming the quality score has to be adjusted to the determined Phred scale. 
 
-
 To not overwhelm the user with too many options, the trimming and quality parameters are optional.
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;Filter=\frac{sum(i+1)}{readlength}{>P}" />
-
-
-where the *i* is the Phred quality of the *i*-th base
- 
  
 ## 3. Algorithm Design <a name="3">
 
@@ -188,6 +182,7 @@ After the arguments of the user got passed to the run-function, the following st
           write summary file with count of filtered and trimmed reads
 ```
 
+
 **Following procedures should be mentioned explicitly, as they are fundamental for a valid output:**
 
 - The determined Phred scale gets passed to the trim_quality and filter_quality function to adjust the quality score.
@@ -196,7 +191,10 @@ After the arguments of the user got passed to the run-function, the following st
 
 - During the first iteration over the list, the quality line will be converted to a bytearray and will only be translated into an ASCII character string when the read gets written into the output file.
 
+
+
 ### 4.2. Statistics <a name="4.2">
+	
 Additionally to the trimming function, the program has a statistic function implemented. This operation provides instead of a trimmed and filtered FASTQ file a statistics-summary file for the given FASTQ file. Containing: the mean quality of a read, the mean quality of the best tenth and worst tenth of the reads, the average spot length, as well as the number of bases and the total number of reads.
 This operation will only be conducted when it is explicitly specified by the user (see 5. Program Manual).
 
@@ -342,6 +340,7 @@ Since the programm passes the strings individually to the functions, the amount 
 
 
 ## 7. Discussion <a name="7">
+	
 One of the biggest limitations is that the program works using files from Illumina, it is not able to read files from 454, Nano, SOLID, or PacBio platforms due to quality detection.
 
 The main bottleneck of the program is the detection of the Phred scale. The quality detection is extremely sensitive around the decimal 75 (= K), which is a quality score of 42 on Phred +33 scale and a quality score of 11 on Phred +64 scale. In case the read has considerably low quality (lower than 11) on a Phred scale +64, the Phred scale will be determined incorrectly as Phred scale +33. Since the quality of the first reads is commonly the lowest, we chose the quality of the 100th read (which is in a common FASTQ file still an early position) for detection. In further steps, there could be an error handling implemented, which uses the next read in case the quality scale of the first read can not be determined. As an alternative, another algorithm for the Phred scale determination should be considered. However, using the 100th position implies that a very small FASTQ file can not be fed to the program.
