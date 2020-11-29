@@ -1,6 +1,6 @@
 # Project FASTQ trimmer
 
-The following program wil trim and filter your FASTQ file according to quality, length and unknown bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter [1](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/Report/Report.md#Project)).
+The following program wil trim and filter your FASTQ file according to quality, length and unknown bases. The trimming based on quality, will trimm the ends of the read lower than a quality of 20. To run the programm you must a provide a FASTQ file in the standard FASTQ format (see Chapter [1](https://github.com/elena-krismer/Project_FASTQtrimmer/blob/master/Report/Report.md#1-Introduction)).
 
 ## Program Manual
 This program allows you to filter and trim your FASTQ file. Additionally, a feature will provide you an overview of your FASTQ file, like average quality and number of unknown bases.
