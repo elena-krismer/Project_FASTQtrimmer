@@ -1,12 +1,11 @@
 # 22110 - Python and Unix for Bioinformaticians<img align="right" width="200" height="100" src="DTU.jpg"><br /><br /> <br /><br /><br />
-#  "Read trimmer for Next-Generation-Sequencing data"<br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br />
+#  "Read trimmer for Next-Generation-Sequencing data"<br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br />
 # Students:
 ## Elena Krismer (s202425)
-## Carolina Rocha (s203014)<br /> <br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br />
+## Carolina Rocha (s203014)<br /> <br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br />
 
-
-
-# Content
+## The presend file is a summary of the project. In order to see online version click [here!](https://github.com/elena-krismer/Project_FASTQtrimmer)<br /><br /><br />
+## Content:
 
 ### 1. [Introduction](#1)
 
@@ -34,26 +33,16 @@
 
 ### 7. [Conclusion](#7)
 
-### 8. [Reference](#8)
+### 8. [Reference](#8)<br /><br /><br /><br /> <br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 
 
-
-To do/think of/ not forget?
-- which time to we use when writting the theory future, present, conjunktiv; will be filter, should,... i am confused lol 'has to be adjusted to the ohred scle/will be adjust/must be adjusted/is adjusted???? ***After asking my metegnomics project friends and my mexican profrssor( no native reference lol) they said if is like a process is bettter present. I changed some lines there**
-- yesterday was a merge conflict - we have to write the program design in pseudocode - i have added the pseudocode from yesterday, peter mentioned last time we shouldnt but the raw code in the report ***should we remove the gray code?** I think we can keep it because is very useful 
-
--yesterday I run the program with the peter file and I got a problem with the quality. I used another file I tested with the two programs and it runs (using another file) so I added into the directory, I''l move to the correct directory test
-
-- should put the whole picture or a cutout in 6.2.? i am not sure if the whole picture is clear  *I think the whole picture explain the process*
-
-- work on theory part
 
 
 ## 1. Introduction<a name="1">
 
-Next-Generation Sequencing (NGS) has played and is still playing an important role in understanding biological mechanisms from a genomics perspective. In the early 2000s, the price to sequence a genome was immense. But with the decreasing sequencing costs, the genomic data production could be increased. Even though generating data became easier, computational storage and data analysis remain still a challenge. As the raw output genomic data contains sequencing errors, prep-processing is required to perform analysis. Different pipelines can be used to preprocess the data some of them share steps like a quality check, duplicate removal, and trimming reads. Read trimming is the process to remove low-quality bases or adapters while preserving the longest high-quality part of an NGS read. This step ameliorates mapping more reads to annotated genes, mitigates the effects of adapter contamination, plus it is widely assumed that trimming increases the accuracy of SNP calling and potentially could reduce the computational time (Didion et al., 2017; Del Fabbro et al., 2013; Bush, 2020). On the other hand, is the relevance of trimming in RNA-seq data is still discussed (Liao et Shi, 2020).
+Next-Generation Sequencing (NGS) has been playing an important role in understanding biological mechanisms from a genomics perspective. In the early 2000s, the price to sequence a genome was immense. But with the decreasing sequencing costs, the genomic data production could be increased. Even though generating data became easier, computational storage and data analysis remain still a challenge. As the raw output genomic data contains sequencing errors, prep-processing is required to perform analysis. Different pipelines can be used to preprocess the data some of them share steps like a quality check, duplicate removal, and trimming reads. Read trimming is the process to remove low-quality bases or adapters while preserving the longest high-quality part of an NGS read. This step ameliorates mapping more reads to annotated genes, mitigates the effects of adapter contamination, plus it is widely assumed that trimming increases the accuracy of SNP calling and potentially could reduce the computational time (Didion *et al*., 2017; Del Fabbro *et al*., 2013; Bush, 2020). On the other hand, is the relevance of trimming in RNA-seq data is still discussed (Liao *et al*., Shi, 2020).
 
-There have been several trimming tools developed. Given that, there is not one tool that simultaneously provides the accuracy, computational efficiency, and feature set to work with the types and volumes of data, the development and enhancement of trimming tools is still an emerging field. (Didion et al., 2017). The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic (Bush, 2020).
+There have been several trimming tools developed. Given that, there is not one tool that simultaneously provides the accuracy, computational efficiency, and feature set to work with the types and volumes of data, the development and enhancement of trimming tools is still an emerging field. (Didion *et al*., 2017). The most common tools for trimming are Atropos, fastp, Trim Galore, and Trimmomatic (Bush, 2020).
 
 There are two types of trimming based on 1) sequence and 2) quality. The first one can cut sequence adapters while the second one is based on the quality based on a Phred score. Both perspectives use a FASTQ file, which keeps the information of the sequencing and is conformed by: 
 
@@ -68,7 +57,7 @@ There are two types of trimming based on 1) sequence and 2) quality. The first o
 *Figure 1-Structural example of a FASTQ format*
 
 
-The fourth line in the read contains the quality score. The quality score (*Q*) decimals are logarithmically related to the error probability (*P*)( the probability that the base call is wrong) and is calculated as follow (Ochoa et al., 2013):
+The fourth line in the read contains the quality score. The quality score (*Q*) decimals are logarithmically related to the error probability (*P*)( the probability that the base call is wrong) and is calculated as follow (Ochoa *et al*., 2013):
 
 *Q = −10log10P*
 
@@ -104,7 +93,7 @@ The final outputfile should only contain reads with a defined maximum of unknown
 
 As described in the introduction every read in a FASTQ file consists of four lines. This convention is the base of the program. Thus, the file gets read into a list and all following operations are performed by calling these certain positions of the list (list position 1 for the sequence line, list position 3 for the quality line).
 
-The output of the program consists of two files the trimmed and filtered FASTQ file and the summary file, containing the count of trimmed and filtered reads. For trimming it has to be noticed that the position 'x' in the sequence line corresponds to position 'x' in the quality line. Thus when trimming the same amount of characters has to be trimmed from both lines. 
+The output of the program consists of two files the trimmed and filtered FASTQ file and the summary file, containing the count of trimmed and filtered reads. For trimming it has to be noticed that the position *'x'* in the sequence line corresponds to position *'x'* in the quality line. Thus when trimming the same amount of characters has to be trimmed from both lines. 
 
 The final output file should only contain reads with a defined maximum of unknown bases, minimum average quality, and the minimum length of the sequence. The sequence/quality line must therefore meet all three criteria. When the filters are passed the four positions of the read will are called and written into the output file, else the read is counted as 'filtered' for the summary file.
 
@@ -122,7 +111,7 @@ For this program, a linear algorithm is used and the following programming struc
 - Binary Selection
 - Repetition
 
-The general idea of the algorithm is to transform the input file into a list, and while iterating in steps of four over the list performing several operations on the elements on the list. By using binary selection, the list elements are either written into the 'main' output file or counted for the secondary output file. The main algorithm and an example for a FASTQ read is represented in Figure *2*.
+The general idea of the algorithm is to transform the input file into a list, and while iterating in steps of four over the list performing several operations on the elements on the list. By using binary selection, the list elements are either written into the 'main' output file or counted for the secondary output file. The main algorithm and an example for a FASTQ read is represented in *Figure 2*.
 
 ![](flowchart_update.png)
 
@@ -134,10 +123,10 @@ The general idea of the algorithm is to transform the input file into a list, an
 
 This program is written in Python.
 
-### 4.1. <essentialMain part <a name="4.1">
+### 4.1. Essential Main Part <a name="4.1">
 
 ##### Main steps:
-To create a command-line interface the argparse library is used. To run the program the user must define the FASTQ filename and the name of the output file. All further commands are optional and the minimum quality is specified as 20.
+To create a command-line interface the argparse library is implemented. To run the program the user must define the FASTQ filename and the name of the output file. All further commands are optional and the minimum quality is specified as 20.
 After the arguments of the user got passed to the run-function, the following steps are conducted:
 
 - **Reading into a list**: after reading the file the lines are stored into a list.
@@ -208,7 +197,7 @@ After the arguments of the user got passed to the run-function, the following st
 
 - The sequence and the quality line always get passed together to the trimming functions, to avoid a shift in the quality score of the bases.
 
-- During the first iteration over the list, the quality line will be converted to a bytearray and will only be translated into an ASCII character string when the read gets written into the output file.
+- During the first iteration over the list, the quality line is converted to a bytearray and only is translated into an ASCII character string when the read gets written into the output file.
 
 
 
@@ -294,7 +283,7 @@ To perform statistics you have to specify the name of your FASTQ input file (-in
 
 ### 5.3. Examples: <a name="5.3">
 
-Following command trims 6 bases from each end of the read, filters all reads with a quality lower than 30, shorter than 50 nucleotides and more than two unknown bases.
+The following command trims 6 bases from each end of the read, filters all reads with a quality lower than 30, shorter than 50 nucleotides and more than two unknown bases.
 
 
 ```{p}
@@ -338,7 +327,7 @@ To evaluate the runtime in Big O terms a small overview of the functions, their 
 | write_outputfile() | *O(n)* |
 | write_summary()   | *O(1)* |
 
-*Table 2* Big O analysis in the main functions of the program. Where n is the number of lines, and m the length of the read.
+*Table 2* Big O analysis in the main functions of the program. 
 *Note*: This table only represents an overview of the O-complexity.
 
 O(n + 1 + n + 2n + n + n + n + 1) = *O(n)*
